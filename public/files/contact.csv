@@ -1,0 +1,5 @@
+Unique ID,Contact Type,Business Name,GSTIN No.,Contact Person,Email,PAN,Phone No.,Alternate Phone No.,Address,City,State,Pincode
+10001,C,Presto Enerprise,09GBCDE9238F1A1,Prajwal,prajwal.p@mobisofttech.co.in,GBCDE9238F,12569874530,,Address,Mumbai,Karnataka,400012
+10002,C,Trivani Egg.,09SDGFE2274K1A1,Ted Mosby,prajwalweb@gmail.com,SDGFE2274K,12569874530,12569874530,Address,Mumbai,Meghalaya,400012
+10003,I,Siddharth Srivastva,09OBCPE9234D1A1,Sheldon Cooper,prajwalweb@gmail.com,OBCPE9234D,12569874530,,Address,Mumbai,Chattisgarh,400012
+10004,I,Sugam Anand,09KBCDE8738E1A1,Barney Stinson,prajwalweb@gmail.com,KBCDE8738E,12569874530,,Address,Mumbai,Maharashtra,400012

@@ -1,0 +1,6 @@
+unique_id,contact_type,business_name,gstin_no,contact_person,email,pan_no,phone_no,alternate_no,address,city,state,pincode
+10001,C,Presto Enerprise,09GBCDE9238F1A1,Amit Kumar,amit.k@gmail.com,GBCDE9238F,9734516272,,Address,Kanpur,UTTARPRADESH,208016
+10002,C,Trivani Egg.,09SDGFE2274K1A1,Asim Ali,contactus@trivaniengg.com,SDGFE2274K,9734616272,9735234533,Address,Kanpur,UTTARPRADESH,208016
+10003,I,Siddharth Srivastva,09OBCPE9234D1A1,Siddharth Srivastva,ssrivatsva@gmail.com,OBCPE9234D,9734716272,,Address,Kanpur,UTTARPRADESH,208016
+10004,I,Sugam Anand,09KBCDE8738E1A1,Sugam Anand,sanand@gmail.com,KBCDE8738E,9734816272,,Address,Kanpur,UTTARPRADESH,208016
+10005,I,Krishnamraju Mutyala,09IBCDE4234Z1A1,Krishnamraju Mutyala,kraju@gmail.com,IBCDE4234Z,9734916272,,Address,Kanpur,UTTARPRADESH,208016

@@ -1,0 +1,9 @@
+item_sku,item_type,item_hsn_sac,"item_description
+",item_unit,item_sale_price,item_purchase_price,"item_discount
+","item_notes
+"
+10001,G,1019010,Description,Mtr,1000,700,10,Notes
+10002,G,1019020,Description,Mtr,1000,700,10,Notes
+10003,G,1019090,Description,Mtr,1000,700,10,Notes
+10004,G,1011020,Description,Mtr,1000,700,10,Notes
+10005,G,1011010,Description,Mtr,1000,700,10,Notes
