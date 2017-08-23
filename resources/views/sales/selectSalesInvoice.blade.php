@@ -46,7 +46,7 @@
 						<div class="latest-right">
 							<h4>Services invoice</h4>
 						</div>
-						<a href="../servicesSalesInvoice/{{encrypt($data)}}">
+						<a href="../goodsSalesInvoice/{{encrypt($data)}}">
 							<button type="button" class="btn btn-info btn-block" value="SEND">Create Invoice</button>
 						</a>
 						<div class="clearfix"></div>

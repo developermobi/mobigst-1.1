@@ -20,11 +20,11 @@
 <div class="content">
 	<div class="train w3-agile">
 		<div class="container">
-			<h2>Sales Invoices</h2>
+			<h2>Advance Receipt</h2>
 			<div class="row">
 				<div class="col-md-4" style="padding: 20px 14px;">
-					<a href="../selectSalesInvoice/{{$data['gstin_id']}}">
-						<button class="btn btn-success" type="button" style="float: left;"> + New Sales Invoice</button>
+					<a href="../createAdvanceReceipt/{{$data['gstin_id']}}">
+						<button class="btn btn-success" type="button" style="float: left;"> + New Advance Receipt </button>
 					</a>
 				</div>
 				<div class="col-md-4">
@@ -68,20 +68,18 @@
 							<th>Invoice ID</th>
 							<th>Contact</th>
 							<th>Created Date</th>
-							<th>Due Date</th>
 							<th>Total Amount</th>
 							<th>Status</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
-						@if(!empty($data['data']['salesInvoiceData']))
-						@foreach($data['data']['salesInvoiceData'] as $key => $value)
+						@if(!empty($data['data']['advanceReceiptData']))
+						@foreach($data['data']['advanceReceiptData'] as $key => $value)
 						<tr>
-							<td>{{$value->invoice_no}}</td>
+							<td>{{$value->receipt_no}}</td>
 							<td>{{$value->contact_name}}</td>
 							<td>{{$value->created_date}}</td>
-							<td>{{$value->due_date}}</td>
 							<td>{{$value->total_amount}}</td>
 							<td>
 								@if($value->status == '0')
@@ -91,8 +89,8 @@
 								@endif
 							</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editSalesInvoice/{{encrypt($value->si_id)}}">Edit</a>
-								<a class='btn btn-sm btn-warning' onclick=cancelInvoice(this); data-id='{{$value->si_id}}'>Cancel</a>
+								<a class='btn btn-sm btn-info' href="editAdvanceReceipt/{{encrypt($value->ar_id)}}">Edit</a>
+								<a class='btn btn-sm btn-warning' onclick=cancelAdvanceReceipt(this); data-id='{{$value->ar_id}}'>Cancel</a>
 							</td>
 						</tr>
 						@endforeach

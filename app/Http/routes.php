@@ -239,8 +239,28 @@ Route::get('sales/editSalesInvoice/{id}', [
 	'as' => 'sales/editSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@editSalesInvoice'
 	]);
 
+Route::get('createCdnote/{id}', [
+	'as' => 'createCdnote/{id}', 'uses' => 'Api\V1\SalesController@createCdnote'
+	]);
+
 Route::get('cdnote/{id}', [
 	'as' => 'cdnote/{id}', 'uses' => 'Api\V1\SalesController@cdnote'
+	]);
+
+Route::get('cdnote/editCdnote/{id}', [
+	'as' => 'cdnote/editCdnote/{id}', 'uses' => 'Api\V1\SalesController@editCdnote'
+	]);
+
+Route::get('createAdvanceReceipt/{id}', [
+	'as' => 'createAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@createAdvanceReceipt'
+	]);
+
+Route::get('advanceReceipt/{id}', [
+	'as' => 'advanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@advanceReceipt'
+	]);
+
+Route::get('advanceReceipt/editAdvanceReceipt/{id}', [
+	'as' => 'advanceReceipt/editAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@editAdvanceReceipt'
 	]);
 
 $api->version('v1', function ($api) {
@@ -279,6 +299,30 @@ $api->version('v1', function ($api) {
 	$api->post('updateSalesInvoice/{si_id}', 'App\Http\Controllers\Api\V1\SalesController@updateSalesInvoice');
 });
 
+$api->version('v1', function ($api) {
+	$api->get('getInvoice/{gstin}', 'App\Http\Controllers\Api\V1\SalesController@getInvoice');
+});
+
+$api->version('v1', function ($api) {
+	$api->get('getInvoiceInfo/{si_id}', 'App\Http\Controllers\Api\V1\SalesController@getInvoiceInfo');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('saveCdnote', 'App\Http\Controllers\Api\V1\SalesController@saveCdnote');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('cancelCdnote/{id}', 'App\Http\Controllers\Api\V1\SalesController@cancelCdnote');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('saveAdvanceReceipt', 'App\Http\Controllers\Api\V1\SalesController@saveAdvanceReceipt');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('cancelAdvanceReceipt/{id}', 'App\Http\Controllers\Api\V1\SalesController@cancelAdvanceReceipt');
+});
+
 
 
 
@@ -295,6 +339,10 @@ $api->version('v1', function ($api) {
 | PURCHASE PAGES AND API'S
 |--------------------------------------------------------------------------
 */
+
+
+
+
 
 
 

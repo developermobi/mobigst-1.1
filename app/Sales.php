@@ -118,6 +118,18 @@ class Sales extends Model{
 
 
 
+	public static function checkInvoiceNumber($gstin_id,$invoice_no){
+
+		$checkInvoiceNumber = DB::table('sales_invoice')
+		->where('gstin_id',$gstin_id)
+		->where('invoice_no',$invoice_no)
+		->get();
+
+		return $checkInvoiceNumber;
+	}
+
+
+
 	public static function insertSalesInvoice($salesInvoiceData){
 
 		$salesInvoiceData['created_at'] = date('Y-m-d H:i:s');
@@ -141,8 +153,9 @@ class Sales extends Model{
 
 
 
-	public static function getIC($gstin_id){
+	public static function getSIC($gstin_id){
 		$getIC = DB::table('invoice_count')
+		->where('invoice_type',1)
 		->where('gstin_id',$gstin_id)
 		->get();
 
@@ -153,6 +166,7 @@ class Sales extends Model{
 
 	public static function updateIC($data){
 		$updateData = DB::table('invoice_count')
+		->where('invoice_type',1)
 		->where('gstin_id', $data['gstin_id'])
 		->update($data);
 
@@ -162,6 +176,7 @@ class Sales extends Model{
 
 
 	public static function addIC($input){
+		$input['invoice_type'] = '1';
 		$addIC = DB::table('invoice_count')
 		->insert($input);
 
@@ -249,4 +264,206 @@ class Sales extends Model{
 
 		return  $updateData;
 	}
+
+
+
+	public static function getCdnoteInvoiceCount($gstin_id){
+
+		$business = DB::table('invoice_count')
+		->where('gstin_id',$gstin_id)
+		->where('invoice_type',2)
+		->get();
+
+		return $business;
+	}
+
+
+
+	public static function getInvoice($gstin){
+
+		$invoice = DB::table('sales_invoice')
+		->select('si_id','invoice_no')
+		->where('gstin_id',$gstin)
+		->where('status',1)
+		->get();
+
+		return $invoice;
+	}
+
+
+
+	public static function getInvoiceInfo($si_id){
+
+		$invoice = DB::table('sales_invoice')
+		->where('si_id',$si_id)
+		->where('status',1)
+		->get();
+
+		return $invoice;
+	}
+
+
+
+	public static function getCDNC($gstin_id){
+		$getCDNC = DB::table('invoice_count')
+		->where('invoice_type',2)
+		->where('gstin_id',$gstin_id)
+		->get();
+
+		return $getCDNC;
+	}
+
+
+
+	public static function updateCDNC($data){
+		$updateData = DB::table('invoice_count')
+		->where('invoice_type',2)
+		->where('gstin_id', $data['gstin_id'])
+		->update($data);
+
+		return  $updateData;
+	}
+
+
+
+	public static function addCDNC($input){
+		$input['invoice_type'] = '2';
+		$addCDNC = DB::table('invoice_count')
+		->insert($input);
+
+		return $addCDNC;
+	}
+
+
+
+	public static function insertCdnote($cdnData){
+
+		$cdnData['created_at'] = date('Y-m-d H:i:s');
+		$cdnData['created_date'] = date('Y-m-d');
+		$insertCdnote = DB::table('cd_note')
+		->insertGetId($cdnData);
+
+		return $insertCdnote;
+	}
+
+
+
+	public static function creditDebitNoteData($gstin_id){
+		$from_date = date('Y')."-04-01";
+		$to_date = date('Y', strtotime('+1 years'))."-03-31";
+		$creditDebitNoteData = DB::table('cd_note')
+		->where('gstin_id',$gstin_id)
+		->where('status',1)
+		->whereBetween('created_date', [$from_date, $to_date])
+		->get();
+
+		return $creditDebitNoteData;
+	}
+
+
+
+	public static function cancelCdnote($cdn_id){
+
+		$data['status'] = '0';
+		$updateData = DB::table('cd_note')
+		->where('cdn_id', $cdn_id)
+		->update($data);
+
+		return  $updateData;
+	}
+
+
+
+	public static function getCdnoteData($cdn_id){
+		
+		$getData = DB::table('cd_note')
+		->where('cdn_id',$cdn_id)
+		->where('status',1)
+		->get();
+
+		return $getData;
+	}
+
+
+
+	public static function getAdvanceReceiptCount($gstin_id){
+
+		$business = DB::table('invoice_count')
+		->where('gstin_id',$gstin_id)
+		->where('invoice_type',3)
+		->get();
+
+		return $business;
+	}
+
+
+
+	public static function getARC($gstin_id){
+		$getARC = DB::table('invoice_count')
+		->where('invoice_type',3)
+		->where('gstin_id',$gstin_id)
+		->get();
+
+		return $getARC;
+	}
+
+
+
+	public static function updateARC($data){
+		$updateData = DB::table('invoice_count')
+		->where('invoice_type',3)
+		->where('gstin_id', $data['gstin_id'])
+		->update($data);
+
+		return  $updateData;
+	}
+
+
+
+	public static function addARC($input){
+		$input['invoice_type'] = '3';
+		$addARC = DB::table('invoice_count')
+		->insert($input);
+
+		return $addARC;
+	}
+
+
+
+	public static function insertAdvanceReceipt($salesInvoiceData){
+
+		$salesInvoiceData['created_at'] = date('Y-m-d H:i:s');
+		$salesInvoiceData['created_date'] = date('Y-m-d');
+		$insertAdvanceReceipt = DB::table('advance_receipt')
+		->insertGetId($salesInvoiceData);
+
+		return $insertAdvanceReceipt;
+	}
+
+
+
+	public static function advanceReceiptData($gstin_id){
+		$from_date = date('Y')."-04-01";
+		$to_date = date('Y', strtotime('+1 years'))."-03-31";
+		$advanceReceiptData = DB::table('advance_receipt')
+		->where('gstin_id',$gstin_id)
+		->where('status',1)
+		->whereBetween('created_date', [$from_date, $to_date])
+		->get();
+
+		return $advanceReceiptData;
+	}
+
+
+
+	public static function cancelAdvanceReceipt($ar_id){
+
+		$data['status'] = '0';
+		$updateData = DB::table('advance_receipt')
+		->where('ar_id', $ar_id)
+		->update($data);
+
+		return  $updateData;
+	}
+
 }
