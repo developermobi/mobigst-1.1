@@ -197,10 +197,10 @@ class Sales extends Model{
 
 
 
-	public static function getSalesInvoiceData($si_id){
+	public static function getSalesInvoiceData($invoice_id){
 		
 		$getData = DB::table('sales_invoice')
-		->where('si_id',$si_id)
+		->where('invoice_no',$invoice_id)
 		->where('status',1)
 		->get();
 
@@ -304,6 +304,18 @@ class Sales extends Model{
 
 
 
+	public static function checkCdnoteNumber($gstin_id,$note_no){
+
+		$checkCdnoteNumber = DB::table('cd_note')
+		->where('gstin_id',$gstin_id)
+		->where('note_no',$note_no)
+		->get();
+
+		return $checkCdnoteNumber;
+	}
+
+
+
 	public static function getCDNC($gstin_id){
 		$getCDNC = DB::table('invoice_count')
 		->where('invoice_type',2)
@@ -374,14 +386,37 @@ class Sales extends Model{
 
 
 
-	public static function getCdnoteData($cdn_id){
+	public static function getCdnoteData($note_no){
 		
 		$getData = DB::table('cd_note')
-		->where('cdn_id',$cdn_id)
+		->where('note_no',$note_no)
 		->where('status',1)
 		->get();
 
 		return $getData;
+	}
+
+
+
+	public static function updateCdnote($data,$cdn_id){
+
+		$updateData = DB::table('cd_note')
+		->where('cdn_id', $cdn_id)
+		->update($data);
+
+		return  $updateData;
+	}
+
+
+
+	public static function deleteNoteDetailByDcnId($invoice_no){
+		
+		$data['status'] = '0';
+		$updateData = DB::table('invoice_details')
+		->where('invoice_no', $invoice_no)
+		->update($data);
+
+		return  $updateData;
 	}
 
 
@@ -461,6 +496,41 @@ class Sales extends Model{
 		$data['status'] = '0';
 		$updateData = DB::table('advance_receipt')
 		->where('ar_id', $ar_id)
+		->update($data);
+
+		return  $updateData;
+	}
+
+
+
+	public static function getAdvanceReceiptData($receipt_no){
+		
+		$getData = DB::table('advance_receipt')
+		->where('receipt_no',$receipt_no)
+		->where('status',1)
+		->get();
+
+		return $getData;
+	}
+
+
+
+	public static function updateAdvanceReceipt($data,$ar_id){
+
+		$updateData = DB::table('advance_receipt')
+		->where('ar_id', $ar_id)
+		->update($data);
+
+		return  $updateData;
+	}
+
+
+
+	public static function deleteReceiptDetailByArId($invoice_no){
+		
+		$data['status'] = '0';
+		$updateData = DB::table('invoice_details')
+		->where('invoice_no', $invoice_no)
 		->update($data);
 
 		return  $updateData;

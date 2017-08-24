@@ -23,9 +23,6 @@
 			width: 1300px;
 		}
 	}
-	input { 
-		text-align: center;
-	}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -176,7 +173,11 @@
 						<thead>
 							<tr>
 								<!-- <th rowspan="2">SR. NO.</th> -->
-								<th rowspan="2" width="20%">ITEM</th>
+								<th rowspan="2" width="20%">ITEM
+									<span style="float: right;cursor: pointer;">
+										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
+									</span>
+								</th>
 								<th rowspan="2">HSN/SAC</th>
 								<th rowspan="2">QTY</th>
 								<th rowspan="2">Cost</th>
@@ -239,12 +240,72 @@
 							</td>
 							<td>
 								<a href="#">
-									<button class="btn btn-success" type="button" id="save_invoice">Save Invoice</button>
+									<button class="btn btn-success" type="button" id="save_invoice">Save Note</button>
 								</a>
 							</td>
 						</tr>
 					</table>
 				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Add Item Modal -->
+<div class="modal fade" id="addItemModal" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header modal-header-success">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Item</h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" id="itemForm">
+					<input type="hidden" class="form-control" name="business_id" value="{{$data['business_id']}}">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="item_description">Item Description<span>*</span> :</label>
+								<input type="text" class="form-control" placeholder="Item Description" name="item_description">
+							</div>
+							<div class="form-group">
+								<label for="item_type">Item Type:</label>
+								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+							</div>
+							<div class="form-group">
+								<label for="code">Item/SKU Code:</label>
+								<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
+							</div>
+							<div class="form-group">
+								<label for="purpr">Purchase Price:</label>
+								<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="hsn">HSN/SAC Code:</label>
+								<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
+							</div>
+							<div class="form-group">
+								<label for="unit">Unit:</label>
+								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+							</div>
+							<div class="form-group">
+								<label for="selling">Selling Price:</label>
+								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
+							</div>
+							
+							<div class="form-group">
+								<label for="dis">Discount(%):</label>
+								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -404,5 +465,6 @@
 </script>
 
 <script src="{{URL::asset('app/js/cdnote.js')}}"></script>
+<script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

@@ -37,7 +37,6 @@
 	var year=date.getFullYear();
 	var month=date.getMonth();
 	$(document).ready(function() {
-		$(".contact_name").select2();
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01')
@@ -52,38 +51,34 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
+						<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Credit / Debit Notes </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Edit Sales Invoice</h2>
+			<h2 style="margin-top: 0px;"> Edit Advance Receipt </h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
-					<input type="hidden" name="si_id" id="si_id" value="{{$data['data']['invoice_data'][0]->si_id}}">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Invoice Number</th>
-								<th>Invoice date</th>
-								<th>REF. P.O</th>
-								<th>Due date</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="text" class="form-control" name="invoice_no" id="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" style="text-align:center;"readonly /></td>
-								<td><input type="text" class="form-control datepicker" name="invoice_date" value="{{$data['data']['invoice_data'][0]->invoice_date}}" /></td>
-								<td><input type="text" class="form-control" name="reference" value="{{$data['data']['invoice_data'][0]->reference}}" /></td>
-								<td><input type="text" class="form-control datepicker" name="due_date" value="{{$data['data']['invoice_data'][0]->due_date}}" /></td>
-							</tr>
-						</tbody>
-					</table>
+					<input type="hidden" name="ar_id" id="ar_id" value="{{$data['data']['invoice_data'][0]->ar_id}}">
 					<div class="row">
 						<div class="col-md-6">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Advance Receipt No:</th>
+										<th>Advance Receipt Date:</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="text" class="form-control" name="receipt_no" value="{{$data['data']['invoice_data'][0]->receipt_no}}" style="text-align:center;" /></td>
+										<td><input type="text" class="form-control datepicker" placeholder="Date" value="{{$data['data']['invoice_data'][0]->receipt_date}}" name="receipt_date"></td>
+									</tr>
+								</tbody>
+							</table>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -93,10 +88,7 @@
 								<tbody>
 									<tr>
 										<td id="tddd">
-											<input type="hidden" name="" id="contact_name_hidden" value="{{$data['data']['invoice_data'][0]->contact_name}}">
-											<select class="form-control contact_name" name="contact_name" onchange="getContactInfo(this);">
-												<option value="{{$data['data']['invoice_data'][0]->contact_name}}">{{$data['data']['invoice_data'][0]->contact_name}}</option>
-											</select>
+											<input type="text" class="form-control" id="contact_name" name="contact_name" value="{{$data['data']['invoice_data'][0]->contact_name}}">
 										</td>
 									</tr>
 								</tbody>
@@ -107,11 +99,11 @@
 									<td>Place of Supply</td>
 								</tr>
 								<tr>
-									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" /></td>
 									<td>
-										<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
-											<option value="{{$data['data']['invoice_data'][0]->place_of_supply}}">{{$data['data']['invoice_data'][0]->place_of_supply}}</option>
-										</select>
+										<input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" />
+									</td>
+									<td>
+										<input type="text" class="form-control" id="place_of_supply" placeholder="15 digit No." name="place_of_supply" value="{{$data['data']['invoice_data'][0]->place_of_supply}}" />
 									</td>
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
@@ -181,7 +173,7 @@
 							<thead>
 								<tr>
 									<!-- <th rowspan="2">SR. NO.</th> -->
-									<th rowspan="2" width="20%"> ITEM 
+									<th rowspan="2" width="20%">ITEM
 										<span style="float: right;cursor: pointer;">
 											<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 										</span>
@@ -278,20 +270,6 @@
 										<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 									</td>
 								</tr>
-								<tr>
-									<td colspan="16">
-										<p style="float: left;"><input type="checkbox" id="advance_setting"> Advanced Settings Reverse Charge</p>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="5">Tax under Reverse Charge</td>
-									<td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
-								</tr>
 							</tbody>
 						</table>
 						<table class="table table-bordered">
@@ -317,7 +295,7 @@
 								</td>
 								<td>
 									<a href="#">
-										<button class="btn btn-success" type="button" id="update_invoice">Update Invoice</button>
+										<button class="btn btn-success" type="button" id="update_invoice">Update Receipt</button>
 									</a>
 								</td>
 							</tr>
@@ -420,10 +398,10 @@
 						</div>
 						<div class="col-md-12">
 							<center><h3>Settings</h3></center>
-							<a href="../../contacts/{{encrypt($data['business_id'])}}">
+							<a href="../contacts/{{encrypt($data['business_id'])}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Contacts List</button>
 							</a>
-							<a href="../../importitem">
+							<a href="../importitem">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Items List</button>
 							</a>
 						</div>
@@ -432,6 +410,7 @@
 			</div>
 		</div>
 	</div>
+
 
 	<script>
 	/*$(document).ready(function() {
@@ -445,7 +424,7 @@
 
 		var new_row= '<tr>'+
 		'<td>'+
-		'<select class="form-control item_name" name="item_name" onchange="getItemInfo(this);calculateTotal(this)">'+
+		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getItemInfo(this);calculateTotal(this)">'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
@@ -568,9 +547,11 @@
 	$('#place_of_supply').css('pointer-events','none');
 	$('#tddd').css('pointer-events','none');
 	$('#contact_gstin').css('pointer-events','none');
+	$('.note_no').css('pointer-events','none');
+	$('.invoice_no').css('pointer-events','none');
 </script>
 
-<script src="{{URL::asset('app/js/salesinvoice.js')}}"></script>
+<script src="{{URL::asset('app/js/advanceReceipt.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

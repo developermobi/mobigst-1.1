@@ -675,6 +675,7 @@ function convert_number(number){
 
 function deleteInvoiceDetail(id_no,obj){
 	var id = id_no;
+
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
@@ -742,7 +743,7 @@ function updateSalesInvoice(){
 			}
 		},
 		complete:function(){
-			$("#update_invoice").prop('disabled', false).text('Save');
+			$("#update_invoice").prop('disabled', false).text('Update Invoice');
 		}
 	});
 }

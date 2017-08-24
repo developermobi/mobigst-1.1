@@ -88,14 +88,14 @@
 							<td>{{$value->invoice_no}}</td>
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editCdnote/{{encrypt($value->cdn_id)}}">Edit</a>
+								<a class='btn btn-sm btn-info' href="editCdnote/{{encrypt($value->note_no)}}">Edit</a>
 								<a class='btn btn-sm btn-warning' onclick=cancelCdnote(this); data-id='{{$value->cdn_id}}'>Cancel</a>
 							</td>
 						</tr>
 						@endforeach
 						@else
 						<tr>
-							<td colspan="7">No Invoice found. Click on add sales invoice button to add one.</td>
+							<td colspan="7">No Credit / Debit Note found. Click on add credit/debit note button to add one.</td>
 						</tr>
 						@endif
 					</tbody>

@@ -203,16 +203,16 @@ function login(){
 				$.removeCookie("tokenEmail");
 
 				var date = new Date();
-				var minutes = 60;
+				var minutes = 180;
 				date.setTime(date.getTime() + (minutes * 60 * 1000));
 
-				$.cookie("token", response.data[0]['remember_token'],{
+				$.cookie("token", response.data[0].remember_token,{
 					expires : date
 				});
-				$.cookie("tokenId", response.data[0]['user_id'],{
+				$.cookie("tokenId", response.data[0].user_id,{
 					expires : date
 				});
-				$.cookie("tokenEmail", response.data[0]['email'],{
+				$.cookie("tokenEmail", response.data[0].email,{
 					expires : date
 				});
 

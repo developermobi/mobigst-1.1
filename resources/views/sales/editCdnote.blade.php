@@ -3,7 +3,7 @@
 @section('title', 'MobiTAX GST')
 
 @section('content')
-{{dd($data)}}
+
 <style type="text/css">
 	a:hover, a:link{
 		text-decoration: none;
@@ -33,10 +33,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript">
+	var date=new Date();
+	var year=date.getFullYear();
+	var month=date.getMonth();
 	$(document).ready(function() {
-		$(".contact_name").select2();
+		//$(".invoice_no").select2();
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
+			startDate: new Date(year, month, '01')
 		});
 	});
 </script>
@@ -44,24 +48,40 @@
 <div class="content">
 	<div class="train w3-agile">
 		<div class="container">
-			<h2>Edit Sales Invoice</h2>
+			<div class="row">
+				<div class="col-md-10">
+					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
+						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+						<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Credit / Debit Notes </a>
+					</div>
+				</div>
+				<div class="col-md-2" style="padding-top: 45px;">
+					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
+				</div>
+			</div>
+			<h2 style="margin-top: 0px;">Edit Credit / Debit Note</h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
-					<input type="hidden" name="si_id" id="si_id" value="{{$data['data']['invoice_data'][0]->si_id}}">
+					<input type="hidden" name="cdn_id" id="cdn_id" value="{{$data['data']['invoice_data'][0]->cdn_id}}">
 					<table class="table table-bordered">
 						<thead>
 							<tr>
 								<th>Credit / Debit Note Number</th>
 								<th>Issue date</th>
+								<th>Note Type</th>
 								<th>Invoice ID</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td><input type="text" class="form-control" name="note_no" value="{{$data['data']['invoice_data'][0]->note_no}}" readonly /></td>
+								<td><input type="text" class="form-control note_no" name="note_no" value="{{$data['data']['invoice_data'][0]->note_no}}" /></td>
 								<td><input type="text" class="form-control datepicker" name="note_issue_date" value="{{$data['data']['invoice_data'][0]->note_issue_date}}" /></td>
-								<td><input type="text" class="form-control" name="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" /></td>
+								<td>
+									<label class="radio-inline"><input type="radio" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '1'){echo "checked";}?> value="1">CREDIT</label>
+									<label class="radio-inline"><input type="radio" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '2'){echo "checked";}?> value="2">DEBIT</label>
+								</td>
+								<td><input type="text" class="form-control invoice_no" name="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -76,7 +96,7 @@
 								<tbody>
 									<tr>
 										<td id="tddd">
-											<input type="text" name="" id="contact_name" name="contact_name" value="{{$data['data']['invoice_data'][0]->contact_name}}">
+											<input type="text" class="form-control" id="contact_name" name="contact_name" value="{{$data['data']['invoice_data'][0]->contact_name}}">
 										</td>
 									</tr>
 								</tbody>
@@ -87,9 +107,11 @@
 									<td>Place of Supply</td>
 								</tr>
 								<tr>
-									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" /></td>
 									<td>
-										<input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->place_of_supply}}" />
+										<input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" />
+									</td>
+									<td>
+										<input type="text" class="form-control" id="place_of_supply" placeholder="15 digit No." name="place_of_supply" value="{{$data['data']['invoice_data'][0]->place_of_supply}}" />
 									</td>
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
@@ -159,7 +181,11 @@
 							<thead>
 								<tr>
 									<!-- <th rowspan="2">SR. NO.</th> -->
-									<th rowspan="2" width="20%">ITEM</th>
+									<th rowspan="2" width="20%">ITEM
+										<span style="float: right;cursor: pointer;">
+											<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
+										</span>
+									</th>
 									<th rowspan="2">HSN/SAC</th>
 									<th rowspan="2">QTY</th>
 									<th rowspan="2">Cost</th>
@@ -185,7 +211,6 @@
 							<tbody>
 								@if(!empty($data['data']['invoice_details']))
 								@foreach($data['data']['invoice_details'] as $key => $value)
-								<input type="hidden" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" />
 								<tr>
 									<td>
 										<select class="form-control item_name" name="item_name" id="item_name"  onchange="getItemInfo(this);calculateTotal(this)">
@@ -235,7 +260,7 @@
 									<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="{{$data['data']['invoice_details'][0]->cess_percentage}}"/></td>
 									<td><input type="text" class="form-control cess_amount" name="cess_amount" value="{{$value->cess_amount}}"/></td>
 									<td><input type="text" class="form-control total" name="total" id="total" value="{{$value->total}}" /></td>
-									<td><i class="fa fa-trash-o ibtnDel"></i></td>
+									<td><i class="fa fa-trash-o ibtnDel"></i><input type="hidden" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" /></td>
 								</tr>
 								@endforeach
 								@endif
@@ -252,20 +277,6 @@
 									<td colspan="17">
 										<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 									</td>
-								</tr>
-								<tr>
-									<td colspan="16">
-										<p style="float: left;"><input type="checkbox" id="advance_setting"> Advanced Settings Reverse Charge</p>
-									</td>
-								</tr>
-								<tr>
-									<td colspan="5">Tax under Reverse Charge</td>
-									<td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
-									<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
 								</tr>
 							</tbody>
 						</table>
@@ -292,12 +303,117 @@
 								</td>
 								<td>
 									<a href="#">
-										<button class="btn btn-success" type="button" id="update_invoice">Update Invoice</button>
+										<button class="btn btn-success" type="button" id="update_invoice">Update Note</button>
 									</a>
 								</td>
 							</tr>
 						</table>
 					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Add Item Modal -->
+	<div class="modal fade" id="addItemModal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header modal-header-success">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add Item</h4>
+				</div>
+				<div class="modal-body">
+					<form role="form" id="itemForm">
+						<input type="hidden" class="form-control" name="business_id" value="{{$data['business_id']}}">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="item_description">Item Description<span>*</span> :</label>
+									<input type="text" class="form-control" placeholder="Item Description" name="item_description">
+								</div>
+								<div class="form-group">
+									<label for="item_type">Item Type:</label>
+									<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+								</div>
+								<div class="form-group">
+									<label for="code">Item/SKU Code:</label>
+									<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
+								</div>
+								<div class="form-group">
+									<label for="purpr">Purchase Price:</label>
+									<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="hsn">HSN/SAC Code:</label>
+									<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
+								</div>
+								<div class="form-group">
+									<label for="unit">Unit:</label>
+									<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+								</div>
+								<div class="form-group">
+									<label for="selling">Selling Price:</label>
+									<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
+								</div>
+
+								<div class="form-group">
+									<label for="dis">Discount(%):</label>
+									<input type="text" class="form-control" placeholder="Discount" name="item_discount">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
+					<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Quick Action -->
+	<div class="modal fade" id="quick" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-6">
+							<center><h3>Sales</h3></center>
+							<a href="../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;" >View Sales Invoice</button>
+							</a>
+							<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Credit/Debit Note</button>
+							</a>
+							<a href="../../advanceReceipt/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Advance Receipt</button>
+							</a>
+						</div>
+						<div class="col-md-6">
+							<center><h3>Purchase</h3></center>
+							<a href="purches_invoice.html">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
+							</a>
+							<a href="purch_credit_debit_list.html">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
+							</a>
+							<a href="advance_paymnt.html">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
+							</a>
+						</div>
+						<div class="col-md-12">
+							<center><h3>Settings</h3></center>
+							<a href="../contacts/{{encrypt($data['business_id'])}}">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Contacts List</button>
+							</a>
+							<a href="../importitem">
+								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Items List</button>
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -402,7 +518,7 @@
 		}
 		var result = confirm("Do you want to delete this item ?");
 		if (result) {
-			var id_no = $("#id_no").val();
+			var id_no = $(this).closest('tr').find('.id_no').val();
 			deleteInvoiceDetail(id_no,this);
 
 			$(this).closest("tr").remove();
@@ -439,8 +555,11 @@
 	$('#place_of_supply').css('pointer-events','none');
 	$('#tddd').css('pointer-events','none');
 	$('#contact_gstin').css('pointer-events','none');
+	$('.note_no').css('pointer-events','none');
+	$('.invoice_no').css('pointer-events','none');
 </script>
 
 <script src="{{URL::asset('app/js/cdnote.js')}}"></script>
+<script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

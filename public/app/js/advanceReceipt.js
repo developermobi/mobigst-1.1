@@ -1,18 +1,5 @@
 $(function(){
 
-	/*$("#tt_taxable_value").val('0');
-	$("#tt_taxable_value").prop('disabled', true);
-	$("#tt_cgst_amount").val('0');
-	$("#tt_cgst_amount").prop('disabled', true);
-	$("#tt_sgst_amount").val('0');
-	$("#tt_sgst_amount").prop('disabled', true);
-	$("#tt_igst_amount").val('0');
-	$("#tt_igst_amount").prop('disabled', true);
-	$("#tt_cess_amount").val('0');
-	$("#tt_cess_amount").prop('disabled', true);
-	$("#tt_total").val('0');
-	$("#tt_total").prop('disabled', true);*/
-
 	var business_id = $("#business_id").val();
 
 	getStates();
@@ -130,7 +117,7 @@ $(function(){
 	});
 
 	$('#update_invoice').click(function(){
-		updateSalesInvoice();
+		updateAdvanceReceipt();
 	});
 
 });
@@ -675,6 +662,7 @@ function convert_number(number){
 
 function deleteInvoiceDetail(id_no,obj){
 	var id = id_no;
+
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
@@ -700,15 +688,15 @@ function deleteInvoiceDetail(id_no,obj){
 
 
 
-function updateSalesInvoice(){
+function updateAdvanceReceipt(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-	var si_id = $("#si_id").val();
+	var ar_id = $("#ar_id").val();
 	
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/updateSalesInvoice/"+si_id,
+		"url": SERVER_NAME+"/api/updateAdvanceReceipt/"+ar_id,
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -742,7 +730,7 @@ function updateSalesInvoice(){
 			}
 		},
 		complete:function(){
-			$("#update_invoice").prop('disabled', false).text('Save');
+			$("#update_invoice").prop('disabled', false).text('Update Invoice');
 		}
 	});
 }

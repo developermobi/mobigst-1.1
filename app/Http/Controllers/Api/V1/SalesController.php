@@ -349,8 +349,8 @@ class SalesController extends Controller{
 
 
 	public function editSalesInvoice($id){
-		$si_id = decrypt($id);
-		$getData = Sales::getSalesInvoiceData($si_id);
+		$invoice_id = decrypt($id);
+		$getData = Sales::getSalesInvoiceData($invoice_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no);
@@ -442,68 +442,60 @@ class SalesController extends Controller{
 		$salesInvoiceData['grand_total'] = $input['grand_total'];
 		
 		$insertSalesInvoice = Sales::updateSalesInvoice($salesInvoiceData,$si_id);
-		if($insertSalesInvoice > 0){
 
-			$invoiceDetailData = array();
-			$deleteInvoiceDetailBySiId = Sales::deleteInvoiceDetailBySiId($input['invoice_no']);
+		$invoiceDetailData = array();
+		$deleteInvoiceDetailBySiId = Sales::deleteInvoiceDetailBySiId($input['invoice_no']);
 
-			if(is_array($input['total'])){
-				foreach ($input['total'] as $key => $value) {
-					$invoiceDetailData['invoice_no'] = $input['invoice_no'];
-					$invoiceDetailData['invoice_type'] = '1';
-					$invoiceDetailData['item_name'] = $input['item_name'][$key];
-					$invoiceDetailData['item_value'] = $input['item_value'][$key];
-					$invoiceDetailData['item_type'] = "Goods";
-					$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
-					$invoiceDetailData['quantity'] = $input['quantity'][$key];
-					$invoiceDetailData['rate'] = $input['rate'][$key];
-					$invoiceDetailData['discount'] = $input['discount'][$key];
-					$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
-					$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
-					$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
-					$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
-					$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
-					$invoiceDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
-					$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
-					$invoiceDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
-					$invoiceDetailData['total'] = $input['total'][$key];
-					$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
-				}
-				$returnResponse['status'] = "success";
-				$returnResponse['code'] = "201";
-				$returnResponse['message'] = "Invoice updated successfully.";
-				$returnResponse['data'] = $insertSalesInvoice;
-				return $returnResponse;
-			}else{
+		if(is_array($input['total'])){
+			foreach ($input['total'] as $key => $value) {
 				$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 				$invoiceDetailData['invoice_type'] = '1';
-				$invoiceDetailData['item_name'] = $input['item_name'];
+				$invoiceDetailData['item_name'] = $input['item_name'][$key];
+				$invoiceDetailData['item_value'] = $input['item_value'][$key];
 				$invoiceDetailData['item_type'] = "Goods";
-				$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
-				$invoiceDetailData['quantity'] = $input['quantity'];
-				$invoiceDetailData['rate'] = $input['rate'];
-				$invoiceDetailData['discount'] = $input['discount'];
-				$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
-				$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
-				$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
-				$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
-				$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
-				$invoiceDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
-				$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
-				$invoiceDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
-				$invoiceDetailData['total'] = $input['total'];
+				$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
+				$invoiceDetailData['quantity'] = $input['quantity'][$key];
+				$invoiceDetailData['rate'] = $input['rate'][$key];
+				$invoiceDetailData['discount'] = $input['discount'][$key];
+				$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
+				$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
+				$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
+				$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
+				$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
+				$invoiceDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
+				$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
+				$invoiceDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
+				$invoiceDetailData['total'] = $input['total'][$key];
 				$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
-
-				$returnResponse['status'] = "success";
-				$returnResponse['code'] = "201";
-				$returnResponse['message'] = "Invoice updated successfully.";
-				$returnResponse['data'] = $insertSalesInvoice;
-				return $returnResponse;
 			}
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Invoice updated successfully.";
+			$returnResponse['data'] = $insertSalesInvoice;
+			return $returnResponse;
 		}else{
-			$returnResponse['status'] = "failed";
-			$returnResponse['code'] = "400";
-			$returnResponse['message'] = "Error while updating invoice. Please try again.";
+			$invoiceDetailData['invoice_no'] = $input['invoice_no'];
+			$invoiceDetailData['invoice_type'] = '1';
+			$invoiceDetailData['item_name'] = $input['item_name'];
+			$invoiceDetailData['item_type'] = "Goods";
+			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
+			$invoiceDetailData['quantity'] = $input['quantity'];
+			$invoiceDetailData['rate'] = $input['rate'];
+			$invoiceDetailData['discount'] = $input['discount'];
+			$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
+			$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
+			$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
+			$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
+			$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
+			$invoiceDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
+			$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
+			$invoiceDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
+			$invoiceDetailData['total'] = $input['total'];
+			$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Invoice updated successfully.";
 			$returnResponse['data'] = $insertSalesInvoice;
 			return $returnResponse;
 		}
@@ -631,7 +623,190 @@ class SalesController extends Controller{
 	public function saveCdnote(Request $request){
 		$input = $request->all();
 
+		$checkCdnoteNumber = Sales::checkCdnoteNumber($input['gstin_id'],$input['note_no']);
+
+		if(sizeof($checkCdnoteNumber) > 0){
+			$returnResponse['status'] = "failed";
+			$returnResponse['code'] = "400";
+			$returnResponse['message'] = "Duplicate note number. Please change note number.";
+			$returnResponse['data'] = $checkCdnoteNumber;
+			return $returnResponse;
+		}else{
+			$cdnoteData = array();
+			$cdnoteData['gstin_id'] = $input['gstin_id'];
+			$cdnoteData['note_type'] = $input['note_type'];
+			$cdnoteData['note_no'] = $input['note_no'];
+			$cdnoteData['invoice_no'] = $input['invoice_no'];
+			$cdnoteData['contact_name'] = $input['contact_name'];
+			$cdnoteData['note_issue_date'] = $input['note_issue_date'];
+			$cdnoteData['contact_gstin'] = $input['contact_gstin'];
+			$cdnoteData['place_of_supply'] = $input['place_of_supply'];
+			$cdnoteData['bill_address'] = $input['bill_address'];
+			$cdnoteData['bill_pincode'] = $input['bill_pincode'];
+			$cdnoteData['bill_city'] = $input['bill_city'];
+			$cdnoteData['bill_state'] = $input['bill_state'];
+			$cdnoteData['bill_country'] = $input['bill_country'];
+			$cdnoteData['sh_address'] = $input['sh_address'];
+			$cdnoteData['sh_pincode'] = $input['sh_pincode'];
+			$cdnoteData['sh_city'] = $input['sh_city'];
+			$cdnoteData['sh_state'] = $input['sh_state'];
+			$cdnoteData['sh_country'] = $input['sh_country'];
+			$cdnoteData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
+			$cdnoteData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
+			$cdnoteData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
+			$cdnoteData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
+			$cdnoteData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+			$cdnoteData['total_amount'] = $input['total_amount'];
+			$cdnoteData['grand_total'] = $input['grand_total'];
+			$cdnoteData['total_in_words'] = $input['total_in_words'];
+			$cdnoteData['total_tax'] = $input['total_tax'];
+			
+			$insertCdnote = Sales::insertCdnote($cdnoteData);
+			if($insertCdnote > 0){
+
+				$getCDNC = Sales::getCDNC($input['gstin_id']);
+				if(sizeof($getCDNC) > 0){
+					$count_data = array();
+					$count_data['gstin_id'] = $input['gstin_id'];
+					$count_data['invoice_type'] = 2;
+					$count_data['count'] = $getCDNC[0]->count + 1;
+					$updateIC = Sales::updateCDNC($count_data);
+				}else{
+					$add_count_data = array();
+					$add_count_data['gstin_id'] = $input['gstin_id'];
+					$count_data['invoice_type'] = 2;
+					$add_count_data['count'] = '1';
+					$addIC = Sales::addCDNC($add_count_data);
+				}
+
+				$cdnoteDetailData = array();
+
+				if(is_array($input['total'])){
+					foreach ($input['total'] as $key => $value) {
+						$cdnoteDetailData['invoice_no'] = $input['note_no'];
+						$cdnoteDetailData['invoice_type'] = '2';
+						$cdnoteDetailData['item_name'] = $input['item_name'][$key];
+						$cdnoteDetailData['item_value'] = $input['item_value'][$key];
+						$cdnoteDetailData['item_type'] = "Goods";
+						$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
+						$cdnoteDetailData['quantity'] = $input['quantity'][$key];
+						$cdnoteDetailData['rate'] = $input['rate'][$key];
+						$cdnoteDetailData['discount'] = $input['discount'][$key];
+						$cdnoteDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
+						$cdnoteDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
+						$cdnoteDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
+						$cdnoteDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
+						$cdnoteDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
+						$cdnoteDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
+						$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
+						$cdnoteDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
+						$cdnoteDetailData['total'] = $input['total'][$key];
+						$insertInvoiceDetails = Sales::insertInvoiceDetails($cdnoteDetailData);
+					}
+					$returnResponse['status'] = "success";
+					$returnResponse['code'] = "201";
+					$returnResponse['message'] = "Note created successfully.";
+					$returnResponse['data'] = $insertCdnote;
+					return $returnResponse;
+				}else{
+					$cdnoteDetailData['invoice_no'] = $input['note_no'];
+					$cdnoteDetailData['invoice_type'] = '1';
+					$cdnoteDetailData['item_name'] = $input['item_name'];
+					$cdnoteDetailData['item_type'] = "Goods";
+					$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
+					$cdnoteDetailData['quantity'] = $input['quantity'];
+					$cdnoteDetailData['rate'] = $input['rate'];
+					$cdnoteDetailData['discount'] = $input['discount'];
+					$cdnoteDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
+					$cdnoteDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
+					$cdnoteDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
+					$cdnoteDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
+					$cdnoteDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
+					$cdnoteDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
+					$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
+					$cdnoteDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
+					$cdnoteDetailData['total'] = $input['total'];
+					$insertInvoiceDetails = Sales::insertInvoiceDetails($cdnoteDetailData);
+
+					$returnResponse['status'] = "success";
+					$returnResponse['code'] = "201";
+					$returnResponse['message'] = "Note created successfully.";
+					$returnResponse['data'] = $insertCdnote;
+					return $returnResponse;
+				}
+			}else{
+				$returnResponse['status'] = "failed";
+				$returnResponse['code'] = "400";
+				$returnResponse['message'] = "Error while creating invoice. Please try again.";
+				$returnResponse['data'] = $insertCdnote;
+				return $returnResponse;
+			}
+		}
+		return $returnResponse;
+	}
+
+
+
+	public function cancelCdnote($id){
+		$getData = Sales::cancelCdnote($id);
+
+		if (sizeof($getData) > 0) {
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Note cncelled successfully.";
+			$returnResponse['data'] = $getData;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "Something went wrong while cancelling note.";
+			$returnResponse['data'] = $getData;
+		}
+		return response()->json($returnResponse);
+	}
+
+
+
+	public function editCdnote($id){
+		$note_no = decrypt($id);
+		$getData = Sales::getCdnoteData($note_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('sales.editCdnote')->with('data', $returnResponse);
+	}
+
+
+
+	public function updateCdnote(Request $request,$cdn_id){
+		$input = $request->all();
+
 		$cdnoteData = array();
+		$cdnoteData['cdn_id'] = $input['cdn_id'];
 		$cdnoteData['gstin_id'] = $input['gstin_id'];
 		$cdnoteData['note_type'] = $input['note_type'];
 		$cdnoteData['note_no'] = $input['note_no'];
@@ -659,143 +834,66 @@ class SalesController extends Controller{
 		$cdnoteData['grand_total'] = $input['grand_total'];
 		$cdnoteData['total_in_words'] = $input['total_in_words'];
 		$cdnoteData['total_tax'] = $input['total_tax'];
-		//return $cdnoteData;
-		$insertCdnote = Sales::insertCdnote($cdnoteData);
-		if($insertCdnote > 0){
+		
+		$insertCdnote = Sales::updateCdnote($cdnoteData,$cdn_id);
 
-			$getCDNC = Sales::getCDNC($input['gstin_id']);
-			if(sizeof($getCDNC) > 0){
-				$count_data = array();
-				$count_data['gstin_id'] = $input['gstin_id'];
-				$count_data['invoice_type'] = 2;
-				$count_data['count'] = $getCDNC[0]->count + 1;
-				$updateIC = Sales::updateCDNC($count_data);
-			}else{
-				$add_count_data = array();
-				$add_count_data['gstin_id'] = $input['gstin_id'];
-				$count_data['invoice_type'] = 2;
-				$add_count_data['count'] = '1';
-				$addIC = Sales::addCDNC($add_count_data);
-			}
+		$invoiceDetailData = array();
+		$deleteNoteDetailByDcnId = Sales::deleteNoteDetailByDcnId($input['note_no']);
 
-			$cdnoteDetailData = array();
-
-			if(is_array($input['total'])){
-				foreach ($input['total'] as $key => $value) {
-					$cdnoteDetailData['invoice_no'] = $input['note_no'];
-					$cdnoteDetailData['invoice_type'] = '2';
-					$cdnoteDetailData['item_name'] = $input['item_name'][$key];
-					$cdnoteDetailData['item_value'] = $input['item_value'][$key];
-					$cdnoteDetailData['item_type'] = "Goods";
-					$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
-					$cdnoteDetailData['quantity'] = $input['quantity'][$key];
-					$cdnoteDetailData['rate'] = $input['rate'][$key];
-					$cdnoteDetailData['discount'] = $input['discount'][$key];
-					$cdnoteDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
-					$cdnoteDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
-					$cdnoteDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
-					$cdnoteDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
-					$cdnoteDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
-					$cdnoteDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
-					$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
-					$cdnoteDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
-					$cdnoteDetailData['total'] = $input['total'][$key];
-					$insertInvoiceDetails = Sales::insertInvoiceDetails($cdnoteDetailData);
-				}
-				$returnResponse['status'] = "success";
-				$returnResponse['code'] = "201";
-				$returnResponse['message'] = "Note created successfully.";
-				$returnResponse['data'] = $insertCdnote;
-				return $returnResponse;
-			}else{
+		if(is_array($input['total'])){
+			foreach ($input['total'] as $key => $value) {
 				$cdnoteDetailData['invoice_no'] = $input['note_no'];
-				$cdnoteDetailData['invoice_type'] = '1';
-				$cdnoteDetailData['item_name'] = $input['item_name'];
+				$cdnoteDetailData['invoice_type'] = '2';
+				$cdnoteDetailData['item_name'] = $input['item_name'][$key];
+				$cdnoteDetailData['item_value'] = $input['item_value'][$key];
 				$cdnoteDetailData['item_type'] = "Goods";
-				$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
-				$cdnoteDetailData['quantity'] = $input['quantity'];
-				$cdnoteDetailData['rate'] = $input['rate'];
-				$cdnoteDetailData['discount'] = $input['discount'];
-				$cdnoteDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
-				$cdnoteDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
-				$cdnoteDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
-				$cdnoteDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
-				$cdnoteDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
-				$cdnoteDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
-				$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
-				$cdnoteDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
-				$cdnoteDetailData['total'] = $input['total'];
+				$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
+				$cdnoteDetailData['quantity'] = $input['quantity'][$key];
+				$cdnoteDetailData['rate'] = $input['rate'][$key];
+				$cdnoteDetailData['discount'] = $input['discount'][$key];
+				$cdnoteDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
+				$cdnoteDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
+				$cdnoteDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
+				$cdnoteDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
+				$cdnoteDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
+				$cdnoteDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
+				$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
+				$cdnoteDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
+				$cdnoteDetailData['total'] = $input['total'][$key];
 				$insertInvoiceDetails = Sales::insertInvoiceDetails($cdnoteDetailData);
-
-				$returnResponse['status'] = "success";
-				$returnResponse['code'] = "201";
-				$returnResponse['message'] = "Note created successfully.";
-				$returnResponse['data'] = $insertCdnote;
-				return $returnResponse;
 			}
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Invoice updated successfully.";
+			$returnResponse['data'] = $insertCdnote;
+			return $returnResponse;
 		}else{
-			$returnResponse['status'] = "failed";
-			$returnResponse['code'] = "400";
-			$returnResponse['message'] = "Error while creating invoice. Please try again.";
+			$cdnoteDetailData['invoice_no'] = $input['note_no'];
+			$cdnoteDetailData['invoice_type'] = '1';
+			$cdnoteDetailData['item_name'] = $input['item_name'];
+			$cdnoteDetailData['item_type'] = "Goods";
+			$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
+			$cdnoteDetailData['quantity'] = $input['quantity'];
+			$cdnoteDetailData['rate'] = $input['rate'];
+			$cdnoteDetailData['discount'] = $input['discount'];
+			$cdnoteDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
+			$cdnoteDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
+			$cdnoteDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
+			$cdnoteDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
+			$cdnoteDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
+			$cdnoteDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
+			$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
+			$cdnoteDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
+			$cdnoteDetailData['total'] = $input['total'];
+			$insertInvoiceDetails = Sales::insertInvoiceDetails($cdnoteDetailData);
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Note updated successfully.";
 			$returnResponse['data'] = $insertCdnote;
 			return $returnResponse;
 		}
 		return $returnResponse;
-	}
-
-
-
-	public function cancelCdnote($id){
-		$getData = Sales::cancelCdnote($id);
-
-		if (sizeof($getData) > 0) {
-			$returnResponse['status'] = "success";
-			$returnResponse['code'] = "200";
-			$returnResponse['message'] = "Note cncelled successfully.";
-			$returnResponse['data'] = $getData;
-		}else{
-			$returnResponse['status'] = "success";
-			$returnResponse['code'] = "204";
-			$returnResponse['message'] = "Something went wrong while cancelling note.";
-			$returnResponse['data'] = $getData;
-		}
-		return response()->json($returnResponse);
-	}
-
-
-
-	public function editCdnote($id){
-		$cdn_id = decrypt($id);
-		$getData = Sales::getCdnoteData($cdn_id);
-
-		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no);
-			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
-			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
-			if(sizeof($getGstinInfo) > 0){
-				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
-				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
-			}
-
-			$data = array();
-			$data['invoice_data'] = $getData;
-			$data['invoice_details'] = $getInvoiceDetail;
-
-			if(sizeof($getBusinessByGstin) > 0){
-				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
-			}
-
-			$returnResponse['status'] = "success";
-			$returnResponse['code'] = "200";
-			$returnResponse['message'] = "Data found.";
-			$returnResponse['data'] = $data;
-		}else{
-			$returnResponse['status'] = "success";
-			$returnResponse['code'] = "204";
-			$returnResponse['message'] = "No data found.";
-			$returnResponse['data'] = $getData;
-		}
-		return view('sales.editCdnote')->with('data', $returnResponse);
 	}
 
 
@@ -1007,6 +1105,135 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 		return response()->json($returnResponse);
+	}
+
+
+
+	public function editAdvanceReceipt($id){
+		$receipt_no = decrypt($id);
+		$getData = Sales::getAdvanceReceiptData($receipt_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('sales.editAdvanceReceipt')->with('data', $returnResponse);
+	}
+
+
+
+	public function updateAdvanceReceipt(Request $request,$ar_id){
+		$input = $request->all();
+
+		$advanceReceiptData = array();
+		$advanceReceiptData['gstin_id'] = $input['gstin_id'];
+		$advanceReceiptData['receipt_no'] = $input['receipt_no'];
+		$advanceReceiptData['receipt_date'] = $input['receipt_date'];
+		$advanceReceiptData['contact_gstin'] = $input['contact_gstin'];
+		$advanceReceiptData['place_of_supply'] = $input['place_of_supply'];
+		$advanceReceiptData['contact_name'] = $input['contact_name'];
+		$advanceReceiptData['bill_address'] = $input['bill_address'];
+		$advanceReceiptData['bill_pincode'] = $input['bill_pincode'];
+		$advanceReceiptData['bill_city'] = $input['bill_city'];
+		$advanceReceiptData['bill_state'] = $input['bill_state'];
+		$advanceReceiptData['bill_country'] = $input['bill_country'];
+		$advanceReceiptData['sh_address'] = $input['sh_address'];
+		$advanceReceiptData['sh_pincode'] = $input['sh_pincode'];
+		$advanceReceiptData['sh_city'] = $input['sh_city'];
+		$advanceReceiptData['sh_state'] = $input['sh_state'];
+		$advanceReceiptData['sh_country'] = $input['sh_country'];
+		$advanceReceiptData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
+		$advanceReceiptData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
+		$advanceReceiptData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
+		$advanceReceiptData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
+		$advanceReceiptData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		$advanceReceiptData['total_amount'] = $input['total_amount'];
+		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
+		$advanceReceiptData['total_tax'] = $input['total_tax'];
+		$advanceReceiptData['grand_total'] = $input['grand_total'];
+		
+		$insertCdnote = Sales::updateAdvanceReceipt($advanceReceiptData,$ar_id);
+
+		$invoiceDetailData = array();
+		$deleteReceiptDetailByArId = Sales::deleteReceiptDetailByArId($input['receipt_no']);
+
+		if(is_array($input['total'])){
+			foreach ($input['total'] as $key => $value) {
+				$invoiceDetailData['invoice_no'] = $input['receipt_no'];
+				$invoiceDetailData['invoice_type'] = '3';
+				$invoiceDetailData['item_name'] = $input['item_name'][$key];
+				$invoiceDetailData['item_value'] = $input['item_value'][$key];
+				$invoiceDetailData['item_type'] = "Goods";
+				$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
+				$invoiceDetailData['quantity'] = $input['quantity'][$key];
+				$invoiceDetailData['rate'] = $input['rate'][$key];
+				$invoiceDetailData['discount'] = $input['discount'][$key];
+				$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
+				$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
+				$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
+				$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
+				$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
+				$invoiceDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
+				$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
+				$invoiceDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
+				$invoiceDetailData['total'] = $input['total'][$key];
+				$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
+			}
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Receipt updated successfully.";
+			$returnResponse['data'] = $insertCdnote;
+			return $returnResponse;
+		}else{
+			$invoiceDetailData['invoice_no'] = $input['receipt_no'];
+			$invoiceDetailData['invoice_type'] = '3';
+			$invoiceDetailData['item_name'] = $input['item_name'];
+			$invoiceDetailData['item_type'] = "Goods";
+			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
+			$invoiceDetailData['quantity'] = $input['quantity'];
+			$invoiceDetailData['rate'] = $input['rate'];
+			$invoiceDetailData['discount'] = $input['discount'];
+			$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
+			$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
+			$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
+			$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
+			$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
+			$invoiceDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
+			$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
+			$invoiceDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
+			$invoiceDetailData['total'] = $input['total'];
+			$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Receipt updated successfully.";
+			$returnResponse['data'] = $insertCdnote;
+			return $returnResponse;
+		}
+		return $returnResponse;
 	}
 
 

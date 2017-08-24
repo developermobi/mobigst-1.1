@@ -316,12 +316,22 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
+	$api->post('updateCdnote/{cdn_id}', 'App\Http\Controllers\Api\V1\SalesController@updateCdnote');
+});
+
+$api->version('v1', function ($api) {
 	$api->post('saveAdvanceReceipt', 'App\Http\Controllers\Api\V1\SalesController@saveAdvanceReceipt');
 });
 
 $api->version('v1', function ($api) {
 	$api->post('cancelAdvanceReceipt/{id}', 'App\Http\Controllers\Api\V1\SalesController@cancelAdvanceReceipt');
 });
+
+$api->version('v1', function ($api) {
+	$api->post('updateAdvanceReceipt/{ar_id}', 'App\Http\Controllers\Api\V1\SalesController@updateAdvanceReceipt');
+});
+
+
 
 
 

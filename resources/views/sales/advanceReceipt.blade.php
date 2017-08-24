@@ -89,14 +89,14 @@
 								@endif
 							</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editAdvanceReceipt/{{encrypt($value->ar_id)}}">Edit</a>
-								<a class='btn btn-sm btn-warning' onclick=cancelAdvanceReceipt(this); data-id='{{$value->ar_id}}'>Cancel</a>
+								<a class='btn btn-sm btn-info' href="editAdvanceReceipt/{{encrypt($value->receipt_no)}}"> Edit </a>
+								<a class='btn btn-sm btn-warning' onclick=cancelAdvanceReceipt(this); data-id='{{$value->ar_id}}'> Cancel </a>
 							</td>
 						</tr>
 						@endforeach
 						@else
 						<tr>
-							<td colspan="7">No Invoice found. Click on add sales invoice button to add one.</td>
+							<td colspan="7">No Advance Receipt found. Click on add advance recipt button to add one.</td>
 						</tr>
 						@endif
 					</tbody>

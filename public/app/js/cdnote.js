@@ -23,7 +23,7 @@ $(function(){
 	});
 
 	$('#update_invoice').click(function(){
-		updateSalesInvoice();
+		updateCdnote();
 	});
 
 });
@@ -517,6 +517,7 @@ function convert_number(number){
 
 function deleteInvoiceDetail(id_no,obj){
 	var id = id_no;
+
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
@@ -542,15 +543,15 @@ function deleteInvoiceDetail(id_no,obj){
 
 
 
-function updateSalesInvoice(){
+function updateCdnote(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-	var si_id = $("#si_id").val();
+	var cdn_id = $("#cdn_id").val();
 	
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/updateSalesInvoice/"+si_id,
+		"url": SERVER_NAME+"/api/updateCdnote/"+cdn_id,
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -584,7 +585,7 @@ function updateSalesInvoice(){
 			}
 		},
 		complete:function(){
-			$("#update_invoice").prop('disabled', false).text('Save');
+			$("#update_invoice").prop('disabled', false).text('Update Note');
 		}
 	});
 }

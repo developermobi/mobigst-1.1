@@ -3,7 +3,7 @@
 @section('title', 'MobiTAX GST')
 
 @section('content')
-
+{{dd($data)}}
 <style type="text/css">
 	a:hover, a:link{
 		text-decoration: none;
@@ -51,7 +51,7 @@
 			<div class="row">
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
-						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+						<a href="../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
 						<a href="../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
 					</div>
 				</div>
@@ -211,6 +211,7 @@
 							<tbody>
 								@if(!empty($data['data']['invoice_details']))
 								@foreach($data['data']['invoice_details'] as $key => $value)
+								<input type="hidden" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" />
 								<tr>
 									<td>
 										<select class="form-control item_name" name="item_name" id="item_name"  onchange="getItemInfo(this);calculateTotal(this)">
@@ -260,7 +261,7 @@
 									<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="{{$data['data']['invoice_details'][0]->cess_percentage}}"/></td>
 									<td><input type="text" class="form-control cess_amount" name="cess_amount" value="{{$value->cess_amount}}"/></td>
 									<td><input type="text" class="form-control total" name="total" id="total" value="{{$value->total}}" /></td>
-									<td><i class="fa fa-trash-o ibtnDel"></i><input type="hidden" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" /></td>
+									<td><i class="fa fa-trash-o ibtnDel"></i></td>
 								</tr>
 								@endforeach
 								@endif
@@ -531,7 +532,7 @@
 		}
 		var result = confirm("Do you want to delete this item ?");
 		if (result) {
-			var id_no = $(this).closest('tr').find('.id_no').val();
+			var id_no = $("#id_no").val();
 			deleteInvoiceDetail(id_no,this);
 
 			$(this).closest("tr").remove();
