@@ -1,40 +1,126 @@
 $(function(){
 
-	var gstin_id = $("#gstin_id").val();
+	$("#tt_taxable_value").val('0');
+	$("#tt_taxable_value").prop('disabled', true);
+	$("#tt_cgst_amount").val('0');
+	$("#tt_cgst_amount").prop('disabled', true);
+	$("#tt_sgst_amount").val('0');
+	$("#tt_sgst_amount").prop('disabled', true);
+	$("#tt_igst_amount").val('0');
+	$("#tt_igst_amount").prop('disabled', true);
+	$("#tt_cess_amount").val('0');
+	$("#tt_cess_amount").prop('disabled', true);
+	$("#tt_total").val('0');
+	$("#tt_total").prop('disabled', true);
 
-	getInvoice(gstin_id);
+	var business_id = $("#business_id").val();
+
+	getStates();
+	getContact(business_id);
 
 	if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === 'undefined'){
 		window.location.href = SERVER_NAME;
 	}
 
 	$(".item_name").change(function(event){
-		var invoice_no = $("#invoice_no").val();
-		if(invoice_no == ''){
-			alert('Please select invoice first');
+		var place_of_supply = $("#place_of_supply").val();
+		if(place_of_supply == ''){
+			alert('Please select place of supply first');
 			$(".item_name").val('');
 		}else{
-			$('#noedit').css('pointer-events','none');
+			$('#place_of_supply').css('pointer-events','none');
+			$('#tddd').css('pointer-events','none');
+			$('#contact_gstin').css('pointer-events','none');
+		}
+	});
+
+	$(".place_of_supply").change(function(event){
+		var place_of_supply = $("#place_of_supply").val();
+		if(place_of_supply != ''){
+			$(".item_name").prop('disabled', false);
+		}else{
+			alert('Please select place of supply first');
+			$(".item_name").prop('disabled', true);
+		}
+
+		var customer_state = $("#customer_state").val();
+
+		if(place_of_supply == customer_state){
+			$(".cgst_percentage").val('0');
+			$(".cgst_percentage").prop('disabled', false);
+			$(".cgst_amount").val('0');
+			$(".cgst_amount").prop('disabled', false);
+			$(".sgst_percentage").val('0');
+			$(".sgst_percentage").prop('disabled', false);
+			$(".sgst_amount").val('0');
+			$(".sgst_amount").prop('disabled', false);
+			$(".igst_percentage").val('0');
+			$(".igst_percentage").prop('disabled', true);
+			$(".igst_amount").val('0');
+			$(".igst_amount").prop('disabled', true);
+		}else{
+			$(".cgst_percentage").val('0');
+			$(".cgst_percentage").prop('disabled', true);
+			$(".cgst_amount").val('0');
+			$(".cgst_amount").prop('disabled', true);
+			$(".sgst_percentage").val('0');
+			$(".sgst_percentage").prop('disabled', true);
+			$(".sgst_amount").val('0');
+			$(".sgst_amount").prop('disabled', true);
+			$(".igst_percentage").val('0');
+			$(".igst_percentage").prop('disabled', false);
+			$(".igst_amount").val('0');
+			$(".igst_amount").prop('disabled', false);
+		}
+	});
+
+	$('#advance_setting').change(function() {
+		if ($(this).is(':checked')) {
+			$("#tt_taxable_value").val('0');
+			$("#tt_taxable_value").prop('disabled', false);
+			$("#tt_cgst_amount").val('0');
+			$("#tt_cgst_amount").prop('disabled', false);
+			$("#tt_sgst_amount").val('0');
+			$("#tt_sgst_amount").prop('disabled', false);
+			$("#tt_igst_amount").val('0');
+			$("#tt_igst_amount").prop('disabled', false);
+			$("#tt_cess_amount").val('0');
+			$("#tt_cess_amount").prop('disabled', false);
+			$("#tt_total").val('0');
+			$("#tt_total").prop('disabled', false);
+		}else{
+			$("#tt_taxable_value").val('0');
+			$("#tt_taxable_value").prop('disabled', true);
+			$("#tt_cgst_amount").val('0');
+			$("#tt_cgst_amount").prop('disabled', true);
+			$("#tt_sgst_amount").val('0');
+			$("#tt_sgst_amount").prop('disabled', true);
+			$("#tt_igst_amount").val('0');
+			$("#tt_igst_amount").prop('disabled', true);
+			$("#tt_cess_amount").val('0');
+			$("#tt_cess_amount").prop('disabled', true);
+			$("#tt_total").val('0');
+			$("#tt_total").prop('disabled', true);
 		}
 	});
 
 	$('#save_invoice').click(function(){
-		saveCdnote();
+		savePurchaseInvoice();
 	});
 
 	$('#update_invoice').click(function(){
-		updateCdnote();
+		updatePurchaseInvoice();
 	});
 
 });
 
 
-function getInvoice(gstin){
+function getContact(business_id){
 
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/getSalesInvoice/"+gstin,
+		"url": SERVER_NAME+"/api/getContact/"+business_id,
 		"method": "GET",
 		"headers": {
 			"cache-control": "no-cache",
@@ -45,14 +131,15 @@ function getInvoice(gstin){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response.data;
+			var contact_name_hidden = $('#contact_name_hidden').val();
+			var data = response['data'];
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].invoice_no+"' data-attr='"+data[i].si_id+"'>"+data[i].invoice_no+"</option>";
+					option += "<option value='"+data[i]['contact_name']+"' data-attr='"+data[i]['contact_id']+"'>"+data[i]['contact_name']+"</option>";
 				});
 			}
-			$(".invoice_no").append(option);
+			$(".contact_name").append(option);
 		},
 		complete:function(){
 		}
@@ -61,14 +148,46 @@ function getInvoice(gstin){
 
 
 
-function getInvoiceInfo(obj){
+function getStates(){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getStates",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response['data'];
+			var option = "<option value=''></option>";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i]['state_name']+"'>"+data[i]['state_name']+"</option>";
+				});
+			}
+			$(".place_of_supply").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
+function getContactInfo(obj){
 	
-	var si_id = $(obj).find(':selected').attr('data-attr');
+	var contact_id = $(obj).find(':selected').attr('data-attr');
 	
 	$.ajax({
 		"async": false,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/getInvoiceInfo/"+si_id,
+		"url": SERVER_NAME+"/api/getContactInfo/"+contact_id,
 		"method": "GET",
 		"dataType":"JSON",
 		beforeSend:function(){
@@ -76,21 +195,17 @@ function getInvoiceInfo(obj){
 		},
 		success:function(response){
 			if(response.code == 302){
-				$("#bill_address").val(response.data[0].bill_address);
-				$("#bill_pincode").val(response.data[0].bill_pincode);
-				$("#bill_city").val(response.data[0].bill_city);
-				$("#bill_state").val(response.data[0].bill_state);
-				$("#bill_country").val(response.data[0].bill_country);
-				$("#contact_gstin").val(response.data[0].contact_gstin);
-				$("#place_of_supply").val(response.data[0].place_of_supply);
-				$("#sh_address").val(response.data[0].sh_address);
-				$("#sh_pincode").val(response.data[0].sh_pincode);
-				$("#sh_city").val(response.data[0].sh_city);
-				$("#sh_state").val(response.data[0].sh_state);
-				$("#sh_country").val(response.data[0].sh_country);
-				$("#contact_name").val(response.data[0].contact_name);
+				$("#bill_address").val(response.data[0]['address']);
+				$("#bill_pincode").val(response.data[0]['pincode']);
+				$("#bill_city").val(response.data[0]['city']);
+				$("#bill_state").val(response.data[0]['state']);
+				$("#bill_country").val(response.data[0]['country']);
+				$("#contact_gstin").val(response.data[0]['gstin_no']);
+				$("#place_of_supply").val(response.data[0]['state']);
+				//$("#customer_state").val(response.data[0]['state']);
 
 				var place_of_supply = $("#place_of_supply").val();
+
 				var customer_state = $("#customer_state").val();
 				if(place_of_supply == customer_state){
 					$(".cgst_percentage").val('0');
@@ -144,11 +259,11 @@ function getItem(business_id){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response.data;
+			var data = response['data'];
 			var option = "<option value=''></option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].item_description+"' data-attr='"+data[i].item_id+"'>"+data[i].item_description+"</option>";
+					option += "<option value='"+data[i]['item_description']+"' data-attr='"+data[i]['item_id']+"'>"+data[i]['item_description']+"</option>";
 				});
 			}
 			$(".item_name").append(option);
@@ -179,10 +294,10 @@ function getItemInfo(obj){
 			var hsn_sac_no = $(obj).closest("tr").find("#hsn_sac_no");
 			var total = $(obj).closest("tr").find("#total");
 			if(response.code == 302){
-				$(hsn_sac_no).val(response.data[0].item_hsn_sac);
-				$(rate).val(response.data[0].item_sale_price);
-				$(item_value).val(response.data[0].item_sale_price);
-				$(total).val(response.data[0].item_sale_price);
+				$(hsn_sac_no).val(response.data[0]['item_hsn_sac']);
+				$(rate).val(response.data[0]['item_sale_price']);
+				$(item_value).val(response.data[0]['item_sale_price']);
+				$(total).val(response.data[0]['item_sale_price']);
 			}
 			calCgstAmount(obj);
 			calculateTotal(obj);
@@ -255,6 +370,18 @@ function calculateCESS(obj){
 
 function calculateQuantity(obj){
 	var quantity = $(obj).closest("tr").find(".quantity").val();
+
+	if(quantity == '0'){
+		swal({
+			title: "Failed!",
+			text: "Item quantity can not be zero",
+			type: "error",
+			confirmButtonText: "Close",
+		});
+		$(obj).closest("tr").find(".quantity").val("1");
+		calculateQuantity(obj);
+		return false;
+	}
 
 	if(quantity != ''){
 		var item_value_element = $(obj).closest("tr").find(".item_value");
@@ -393,14 +520,24 @@ function calculateTotal(obj){
 
 
 
-function saveCdnote(){
+function savePurchaseInvoice(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
+	
+	if($("#contact_name").val() == ''){
+		swal({
+			title: "Failed!",
+			text: "Please Select Contact",
+			type: "error",
+			confirmButtonText: "Close",
+		});
+		return false;
+	}
 	
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/saveCdnote",
+		"url": SERVER_NAME+"/api/savePurchaseInvoice",
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -543,15 +680,15 @@ function deleteInvoiceDetail(id_no,obj){
 
 
 
-function updateCdnote(){
+function updatePurchaseInvoice(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-	var cdn_id = $("#cdn_id").val();
-	
+	var pi_id = $("#pi_id").val();
+
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/updateCdnote/"+cdn_id,
+		"url": SERVER_NAME+"/api/updatePurchaseInvoice/"+pi_id,
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -585,7 +722,7 @@ function updateCdnote(){
 			}
 		},
 		complete:function(){
-			$("#update_invoice").prop('disabled', false).text('Update Note');
+			$("#update_invoice").prop('disabled', false).text('Update Invoice');
 		}
 	});
 }

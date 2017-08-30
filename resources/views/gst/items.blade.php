@@ -20,16 +20,29 @@
 	}
 </style>
 
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
 <div class="train w3-agile">
 	<div class="container">
-		<h2>List Of Items</h2>
+		<div class="row">
+			<div class="col-md-10">
+				<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
+					<a href="/index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i> </a>
+					<a href="../business" class="btn btn-default"> Business </a>
+					<a href="../importitem" class="btn btn-default"> Import Item </a>
+				</div>
+			</div>
+		</div>
+		<h2 style="margin-top: 0px;">List Of Items</h2>
 		<div class="row" style="padding: 15px 0px;">
 			<div class="col-md-12">
 				<a href="addservices"><button class="btn btn-success" style="float: left;"> Add Item </button></a>
 			</div>
 		</div>
 		<div class="table-responsive">
-			<table class="table table-striped table-bordered">
+			<table class="table table-striped table-bordered item_table">
 				<thead>
 					<tr>
 						<th>Item Description</th>
@@ -42,7 +55,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					@if(!empty($data) && $data->count())
+					@if(!empty($data))
 					@foreach($data as $key => $value)
 					<tr>
 						<td>{{$value->item_description}}</td>
@@ -65,15 +78,15 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<span style="float: right;"><?php echo $data->render(); ?></span>
-			</div>
-		</div>
 	</div>
 </div>
 
 <script src="{{URL::asset('app/js/additem.js')}}"></script>
+<script type="text/javascript">
+	$(document).ready( function () {
+		$('.item_table').DataTable();
+	} );
+</script>
 
 
 @endsection

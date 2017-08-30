@@ -20,9 +20,19 @@
 
 <div class="about-section w3-layouts">
 	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
+					<a href="/index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i> </a>
+					<a href="../business" class="btn btn-default"> Business </a>
+					<a href="../importcontact" class="btn btn-default"> Import Contact </a>
+					<a href="javascript:void();" class="btn btn-default" onclick="window.history.go(-1); return false;"> <span style="color: #000;">Back to List</span> </a>
+				</div>
+			</div>
+		</div>
 		<div class="about-grids">
 			<div class="about-grid1 wow fadeInLeft animated animated" data-wow-delay="0.4s">
-				<h2 style="margin-top:1em;">Edit Customer Or Vendor</h2>
+				<h2 style="margin-top:0px;">Edit Customer Or Vendor</h2>
 				<form id="updateCustomerForm" role="form">
 					<input type="hidden" class="form-control" id="contact_id"  value="{{$data['data'][0]->contact_id}}">
 					<div class="row">

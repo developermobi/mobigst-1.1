@@ -20,11 +20,11 @@
 <div class="content">
 	<div class="train w3-agile">
 		<div class="container">
-			<h2>Sales Invoices</h2>
+			<h2>Purchase Invoices</h2>
 			<div class="row">
 				<div class="col-md-4" style="padding: 20px 14px;">
-					<a href="../selectSalesInvoice/{{$data['gstin_id']}}">
-						<button class="btn btn-success" type="button" style="float: left;"> + New Sales Invoice</button>
+					<a href="../selectPurchaseInvoice/{{$data['gstin_id']}}">
+						<button class="btn btn-success" type="button" style="float: left;"> + New Purchase Invoice</button>
 					</a>
 				</div>
 				<div class="col-md-4">
@@ -74,8 +74,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						@if(!empty($data['data']['salesInvoiceData']))
-						@foreach($data['data']['salesInvoiceData'] as $key => $value)
+						@if(!empty($data['data']['purchaseInvoiceData']))
+						@foreach($data['data']['purchaseInvoiceData'] as $key => $value)
 						<tr>
 							<td>{{$value->invoice_no}}</td>
 							<td>{{$value->contact_name}}</td>
@@ -83,14 +83,14 @@
 							<td>{{$value->due_date}}</td>
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editSalesInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
-								<a class='btn btn-sm btn-warning' onclick=cancelInvoice(this); data-id='{{$value->si_id}}'>Cancel</a>
+								<a class='btn btn-sm btn-info' href="editPurchaseInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
+								<a class='btn btn-sm btn-warning' onclick=cancelPurchaseInvoice(this); data-id='{{$value->pi_id}}'>Cancel</a>
 							</td>
 						</tr>
 						@endforeach
 						@else
 						<tr>
-							<td colspan="7">No Invoice found. Click on add sales invoice button to add one.</td>
+							<td colspan="7">No Invoice found. Click on add purchase invoice button to add one.</td>
 						</tr>
 						@endif
 					</tbody>
@@ -145,6 +145,6 @@
 	</div>
 </div>
 
-<script src="{{URL::asset('app/js/sales.js')}}"></script>
+<script src="{{URL::asset('app/js/purchase.js')}}"></script>
 
 @endsection

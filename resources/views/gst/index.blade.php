@@ -17,10 +17,7 @@
 					<a href="login">
 						<button type="button" class="btn-block btn-info">start free trial</button>
 					</a>
-					<p>
-						file all GST returns for your clients with automated data reconciliation No download
-						requird
-					</p>
+					<p>File all GST returns for your clients with automated data reconciliation No download requird.</p>
 				</div>
 			</div>
 			<div class="col-md-3 train-grid wow fadeInDownBig animated animated" data-wow-delay="0.4s">
@@ -32,10 +29,7 @@
 					<a href="bill_book">
 						<button type="button" class="btn-block btn-info" disabled>prepare free bills</button>
 					</a>
-					<p>
-						prepare GST compliant invoics using GST Billbook for FREE for you and your 
-						clients
-					</p>
+					<p>Prepare GST compliant invoics using GST Billbook for FREE for you and your clients.</p>
 				</div>
 			</div>
 			<div class="col-md-3 train-grid wow fadeInUpBig animated animated" data-wow-delay="0.4s">
@@ -43,14 +37,11 @@
 					<div class="train-img">
 						<img src="{{URL::asset('images/gst3.png')}}"/>
 					</div>
-					<h4>GST Enterprise software</h4>
+					<h4>GST Enterprise Software</h4>
 					<a href="quotation">
 						<button type="button" class="btn-block btn-info" disabled>get quotation</button>
 					</a>
-					<p>
-						Cloud based GST Software for Enerprises. Simply GST Returns, generate GST compliant
-						invoices & much more
-					</p>
+					<p>Cloud based GST Software for Enerprises. Simply GST Returns, generate GST compliant invoices & much more.</p>
 				</div>
 			</div>
 			<div class="col-md-3 train-grid wow fadeInRight animated animated" data-wow-delay="0.4s">
@@ -60,10 +51,7 @@
 					</div>
 					<h4>Free <br> E-filling</h4>
 					<button disabled type="button" class="btn-block btn-info">start filing</button>
-					<p>
-						e-file your income tax return online for Free - All ITRs supported. Get done 
-						in 7 min
-					</p>
+					<p>E-file your income tax return online for Free - All ITRs supported. Get done in 7 minutes.</p>
 				</div>
 			</div>
 			<div class="clearfix"></div>
@@ -76,10 +64,7 @@
 					</div>
 					<h4>CA – Assisted<br> filling</h4>
 					<button disabled type="button" class="btn-block btn-info">see plans</button>
-					<p>
-						get an expert CA to File Your IT Return. Phone & email Support. Plans start 
-						from Rs.499
-					</p>
+					<p>Get an expert CA to File Your IT Return. Phone & email Support. Plans start from Rs.499</p>
 				</div>
 			</div>
 			<div class="col-md-3 train-grid wow fadeInDownBig animated animated" data-wow-delay="0.4s">
@@ -89,7 +74,7 @@
 					</div>
 					<h4>File business Tax Returns</h4>
 					<button disabled type="button" class="btn-block btn-info">get CA</button>
-					<p>get a CA to file your business tax returns</p>
+					<p>Get a CA to file your business tax returns</p>
 				</div>
 			</div>
 			<div class="col-md-3 train-grid wow fadeInUpBig animated animated" data-wow-delay="0.4s">
@@ -99,9 +84,7 @@
 					</div>
 					<h4>Save Taxes & Grow Wealth</h4>
 					<button disabled type="button" class="btn-block btn-info">Invest now</button>
-					<p>
-						save Taxes or Grow your money by investing in our hand-picked mutual funds & ELSS
-					</p>
+					<p>Save Taxes or Grow your money by investing in our hand-picked mutual funds & ELSS.</p>
 				</div>
 			</div>
 			<div class="col-md-3 train-grid wow fadeInRight animated animated" data-wow-delay="0.4s">
@@ -111,7 +94,7 @@
 					</div>
 					<h4>Startup <br> Program</h4>
 					<button disabled type="button" class="btn-block btn-info">Know More</button>
-					<p>A proven step-by-step framework to help you launch the next big thing</p>
+					<p>A proven step-by-step framework to help you launch the next big thing.</p>
 				</div>
 			</div>
 			<div class="clearfix"></div>

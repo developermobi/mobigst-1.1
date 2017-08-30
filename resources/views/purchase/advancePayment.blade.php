@@ -20,11 +20,11 @@
 <div class="content">
 	<div class="train w3-agile">
 		<div class="container">
-			<h2>Sales Invoices</h2>
+			<h2>Advance Payment</h2>
 			<div class="row">
 				<div class="col-md-4" style="padding: 20px 14px;">
-					<a href="../selectSalesInvoice/{{$data['gstin_id']}}">
-						<button class="btn btn-success" type="button" style="float: left;"> + New Sales Invoice</button>
+					<a href="../createAdvancePayment/{{$data['gstin_id']}}">
+						<button class="btn btn-success" type="button" style="float: left;"> + New Advance Payment </button>
 					</a>
 				</div>
 				<div class="col-md-4">
@@ -68,29 +68,35 @@
 							<th>Invoice ID</th>
 							<th>Contact</th>
 							<th>Created Date</th>
-							<th>Due Date</th>
 							<th>Total Amount</th>
+							<th>Status</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
-						@if(!empty($data['data']['salesInvoiceData']))
-						@foreach($data['data']['salesInvoiceData'] as $key => $value)
+						@if(!empty($data['data']['advanceReceiptData']))
+						@foreach($data['data']['advanceReceiptData'] as $key => $value)
 						<tr>
-							<td>{{$value->invoice_no}}</td>
+							<td>{{$value->payment_no}}</td>
 							<td>{{$value->contact_name}}</td>
 							<td>{{$value->created_date}}</td>
-							<td>{{$value->due_date}}</td>
-							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
+							<td>{{$value->total_amount}}</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editSalesInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
-								<a class='btn btn-sm btn-warning' onclick=cancelInvoice(this); data-id='{{$value->si_id}}'>Cancel</a>
+								@if($value->status == '0')
+								Cancelled
+								@else
+								Active
+								@endif
+							</td>
+							<td>
+								<a class='btn btn-sm btn-info' href="editAdvancePayment/{{encrypt($value->payment_no)}}"> Edit </a>
+								<a class='btn btn-sm btn-warning' onclick=cancelAdvancePayment(this); data-id='{{$value->ap_id}}'> Cancel </a>
 							</td>
 						</tr>
 						@endforeach
 						@else
 						<tr>
-							<td colspan="7">No Invoice found. Click on add sales invoice button to add one.</td>
+							<td colspan="7">No Advance Payment found. Click on add advance payment button to add one.</td>
 						</tr>
 						@endif
 					</tbody>

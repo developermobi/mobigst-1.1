@@ -300,7 +300,7 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-	$api->get('getInvoice/{gstin}', 'App\Http\Controllers\Api\V1\SalesController@getInvoice');
+	$api->get('getSalesInvoice/{gstin}', 'App\Http\Controllers\Api\V1\SalesController@getInvoice');
 });
 
 $api->version('v1', function ($api) {
@@ -337,13 +337,6 @@ $api->version('v1', function ($api) {
 
 
 
-
-
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | PURCHASE PAGES AND API'S
@@ -351,25 +344,111 @@ $api->version('v1', function ($api) {
 */
 
 
+Route::get('purchase/{id}', [
+	'as' => 'purchase/{id}', 'uses' => 'Api\V1\PurchaseController@purchase'
+	]);
+
+Route::get('selectPurchaseInvoice/{id}', [
+	'as' => 'selectPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@selectPurchaseInvoice'
+	]);
+
+Route::get('goodsPurchaseInvoice/{id}', [
+	'as' => 'goodsPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@goodsPurchaseInvoice'
+	]);
+
+Route::get('purchase/editPurchaseInvoice/{id}', [
+	'as' => 'purchase/editPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@editPurchaseInvoice'
+	]);
+
+Route::get('createVcdnote/{id}', [
+	'as' => 'createVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@createVcdnote'
+	]);
+
+Route::get('vcdnote/{id}', [
+	'as' => 'vcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@vcdnote'
+	]);
+
+Route::get('vcdnote/editVcdnote/{id}', [
+	'as' => 'vcdnote/editVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@editVcdnote'
+	]);
+
+Route::get('createAdvancePayment/{id}', [
+	'as' => 'createAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@createAdvancePayment'
+	]);
+
+Route::get('advancePayment/{id}', [
+	'as' => 'advancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@advancePayment'
+	]);
+
+Route::get('advancePayment/editAdvancePayment/{id}', [
+	'as' => 'advancePayment/editAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@editAdvancePayment'
+	]);
 
 
+$api->version('v1', function ($api) {
+	$api->get('getContact/{business_id}', 'App\Http\Controllers\Api\V1\PurchaseController@getContact');
+});
 
+$api->version('v1', function ($api) {
+	$api->get('getStates', 'App\Http\Controllers\Api\V1\PurchaseController@getStates');
+});
 
+$api->version('v1', function ($api) {
+	$api->get('getContactInfo/{contact_id}', 'App\Http\Controllers\Api\V1\PurchaseController@getContactInfo');
+});
 
+$api->version('v1', function ($api) {
+	$api->get('getItem/{business_id}', 'App\Http\Controllers\Api\V1\PurchaseController@getItem');
+});
 
+$api->version('v1', function ($api) {
+	$api->get('getItemInfo/{item_id}', 'App\Http\Controllers\Api\V1\PurchaseController@getItemInfo');
+});
 
+$api->version('v1', function ($api) {
+	$api->post('savePurchaseInvoice', 'App\Http\Controllers\Api\V1\PurchaseController@savePurchaseInvoice');
+});
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| This route group applies the "web" middleware group to every route
-| it contains. The "web" middleware group is defined in your HTTP
-| kernel and includes session state, CSRF protection, and more.
-|
-*/
+$api->version('v1', function ($api) {
+	$api->post('cancelPurchaseInvoice/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelPurchaseInvoice');
+});
 
-Route::group(['middleware' => ['web']], function () {
-    //
+$api->version('v1', function ($api) {
+	$api->post('deleteInvoiceDetail/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@deleteInvoiceDetail');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('updatePurchaseInvoice/{pi_id}', 'App\Http\Controllers\Api\V1\PurchaseController@updatePurchaseInvoice');
+});
+
+$api->version('v1', function ($api) {
+	$api->get('getInvoice/{gstin}', 'App\Http\Controllers\Api\V1\PurchaseController@getInvoice');
+});
+
+$api->version('v1', function ($api) {
+	$api->get('getPurchaseInvoiceInfo/{pi_id}', 'App\Http\Controllers\Api\V1\PurchaseController@getPurchaseInvoiceInfo');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('saveVcdnote', 'App\Http\Controllers\Api\V1\PurchaseController@saveVcdnote');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('cancelVcdnote/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelVcdnote');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('updateVcdnote/{vcdn_id}', 'App\Http\Controllers\Api\V1\PurchaseController@updateVcdnote');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('saveAdvancePayment', 'App\Http\Controllers\Api\V1\PurchaseController@saveAdvancePayment');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('cancelAdvancePayment/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelAdvancePayment');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('updateAdvancePayment/{ap_id}', 'App\Http\Controllers\Api\V1\PurchaseController@updateAdvancePayment');
 });

@@ -51,18 +51,18 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Credit / Debit Notes </a>
+						<a href="../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Vendor Credit / Debit Notes </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Edit Credit / Debit Note</h2>
+			<h2 style="margin-top: 0px;">Edit Vendor Credit / Debit Note</h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
-					<input type="hidden" name="cdn_id" id="cdn_id" value="{{$data['data']['invoice_data'][0]->cdn_id}}">
+					<input type="hidden" name="vcdn_id" id="vcdn_id" value="{{$data['data']['invoice_data'][0]->vcdn_id}}">
 					<table class="table table-bordered">
 						<thead>
 							<tr>
@@ -115,66 +115,6 @@
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
 							</table>
-							<p>
-								@if($data['data']['invoice_data'][0]->place_of_supply == '1')
-								<input type="checkbox" id="same_address" checked>
-								@else
-								<input type="checkbox" id="same_address">
-								@endif
-								Shipping Address is Same as billing address</p>
-							</div>
-							<div class="col-md-3">
-								<table class="table table-bordered">
-									<thead>
-										<tr>
-											<th>Billing Address </th>
-										</tr> 
-									</thead>
-									<tbody>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_address" name="bill_address" placeholder="Address" value="{{$data['data']['invoice_data'][0]->bill_address}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_pincode" name="bill_pincode" placeholder="Pincode" value="{{$data['data']['invoice_data'][0]->bill_pincode}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_city" name="bill_city" placeholder="City" value="{{$data['data']['invoice_data'][0]->bill_city}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_state" name="bill_state" placeholder="State" value="{{$data['data']['invoice_data'][0]->bill_state}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_country" name="bill_country" placeholder="Country" value="{{$data['data']['invoice_data'][0]->bill_country}}"></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div class="col-md-3">
-								<table class="table table-bordered">
-									<thead>
-										<tr>
-											<th>Shipping Address</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_address" name="sh_address" placeholder="Address" value="{{$data['data']['invoice_data'][0]->sh_address}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_pincode" name="sh_pincode" placeholder="Pincode" value="{{$data['data']['invoice_data'][0]->sh_pincode}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_city" name="sh_city" placeholder="City" value="{{$data['data']['invoice_data'][0]->sh_city}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_state" name="sh_state" placeholder="State" value="{{$data['data']['invoice_data'][0]->sh_state}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_country" name="sh_country" placeholder="Country" value="{{$data['data']['invoice_data'][0]->sh_country}}"></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
 						</div>
 						<table class="table table-bordered order-list">
 							<thead>
@@ -259,13 +199,12 @@
 									<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="{{$data['data']['invoice_details'][0]->cess_percentage}}"/></td>
 									<td><input type="text" class="form-control cess_amount" name="cess_amount" value="{{$value->cess_amount}}"/></td>
 									<td><input type="text" class="form-control total" name="total" id="total" value="{{$value->total}}" /></td>
-									<td><i class="fa fa-trash-o ibtnDel"></i><input type="hidden" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" /></td>
+									<td><i class="fa fa-trash-o ibtnDel"></i><input type="text" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" /></td>
 								</tr>
 								@endforeach
 								@endif
 								<tr id="t2">
 									<td colspan="5">Total Inv. Val</td>
-									<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
 									<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="{{$data['data']['invoice_data'][0]->total_cgst_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="{{$data['data']['invoice_data'][0]->total_igst_amount}}" /></td>
@@ -393,13 +332,13 @@
 						</div>
 						<div class="col-md-6">
 							<center><h3>Purchase</h3></center>
-							<a href="purches_invoice.html">
+							<a href="../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
 							</a>
-							<a href="purch_credit_debit_list.html">
+							<a href="../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
 							</a>
-							<a href="advance_paymnt.html">
+							<a href="../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
 							</a>
 						</div>
@@ -558,7 +497,7 @@
 	$('.invoice_no').css('pointer-events','none');
 </script>
 
-<script src="{{URL::asset('app/js/cdnote.js')}}"></script>
+<script src="{{URL::asset('app/js/vcdnote.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

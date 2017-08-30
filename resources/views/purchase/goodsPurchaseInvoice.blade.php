@@ -52,14 +52,14 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../sales/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Sales Invoices </a>
+						<a href="../purchase/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Purchase Invoices </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Create Sales Invoice</h2>
+			<h2 style="margin-top: 0px;">Create Purchase Invoice</h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
@@ -117,9 +117,9 @@
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
 							</table>
-							<p><input type="checkbox" id="same_address"> Shipping Address is Same as billing address</p>
+							<!-- <p><input type="checkbox" id="same_address"> Shipping Address is Same as billing address</p> -->
 						</div>
-						<div class="col-md-3">
+						<!-- <div class="col-md-3">
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -170,7 +170,7 @@
 									</tr>
 								</tbody>
 							</table>
-						</div>
+						</div> -->
 					</div>
 					<table class="table table-bordered order-list">
 						<thead>
@@ -211,7 +211,7 @@
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" name="total_amount" id="total_amount" value="0" /></td>
 							</tr>
 							<tr>
 								<td colspan="17">
@@ -220,12 +220,12 @@
 							</tr>
 							<tr>
 								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Advanced Settings Reverse Charge</p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting"> Advanced Settings Reverse Charge</p>
 								</td>
 							</tr>
 							<tr>
 								<td colspan="5">Tax under Reverse Charge</td>
-								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
+								<td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
@@ -545,7 +545,7 @@
 	});
 </script>
 
-<script src="{{URL::asset('app/js/salesinvoice.js')}}"></script>
+<script src="{{URL::asset('app/js/purchaseinvoice.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

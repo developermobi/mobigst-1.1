@@ -197,7 +197,7 @@ class SalesController extends Controller{
 
 
 	public function saveSalesInvoice(Request $request){
-		$input = $request->all();
+		return $input = $request->all();
 
 		$checkInvoiceNumber = Sales::checkInvoiceNumber($input['gstin_id'],$input['invoice_no']);
 
@@ -583,7 +583,7 @@ class SalesController extends Controller{
 
 
 	public function getInvoice($gstin){
-
+		
 		$getInvoice = Sales::getInvoice($gstin);
 		if(sizeof($getInvoice) > 0){
 			$returnResponse['status'] = "success";

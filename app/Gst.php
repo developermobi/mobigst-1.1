@@ -421,7 +421,7 @@ class Gst extends Model{
 		$getData = DB::table('item')
 		->where('business_id',$id)
 		->where('status',1)
-		->paginate(10);
+		->get();
 
 		return $getData;
 	}

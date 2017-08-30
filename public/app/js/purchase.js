@@ -8,7 +8,7 @@ $(function(){
 
 
 
-function cancelInvoice(obj){
+function cancelPurchaseInvoice(obj){
 
 	swal({
 		text: "Do you want to cancel this invoice ?",
@@ -22,7 +22,7 @@ function cancelInvoice(obj){
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelInvoice/"+id,
+			"url": SERVER_NAME+"/api/cancelPurchaseInvoice/"+id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -119,7 +119,7 @@ function cancelVcdnote(obj){
 function cancelAdvancePayment(obj){
 
 	swal({
-		text: "Do you want to cancel this receipt ?",
+		text: "Do you want to cancel this payment ?",
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',

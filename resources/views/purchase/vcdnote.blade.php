@@ -20,11 +20,11 @@
 <div class="content">
 	<div class="train w3-agile">
 		<div class="container">
-			<h2>Sales Invoices</h2>
+			<h2> Vendor Credit / Debit Notes </h2>
 			<div class="row">
 				<div class="col-md-4" style="padding: 20px 14px;">
-					<a href="../selectSalesInvoice/{{$data['gstin_id']}}">
-						<button class="btn btn-success" type="button" style="float: left;"> + New Sales Invoice</button>
+					<a href="../createVcdnote/{{$data['gstin_id']}}">
+						<button class="btn btn-success" type="button" style="float: left;"> + New Credit / Debit Note </button>
 					</a>
 				</div>
 				<div class="col-md-4">
@@ -38,26 +38,23 @@
 					<tr>
 						<td rowspan="2">Summary</td>
 						<td>Total Transactions</td>
-						<td>Total SGST</td>
-						<td>Total CGST</td>
-						<td>Total IGST</td>
-						<td>Total Cess</td>
-						<td>Total Value</td>
+						<td>Credit Note Transactions</td>
+						<td>Credit Note Value</td>
+						<td>Debit Note Transactions</td>
+						<td>Debit Note Value</td>
 					</tr>
 					<tr>
 						@if(!empty($data['data']['total']))
 						<td> {{$data['data']['total']['totalTransactions']}}</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$data['data']['total']['totalSGST']}}</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$data['data']['total']['totalCGST']}}</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$data['data']['total']['totalIGST']}}</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$data['data']['total']['totalCESS']}}</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$data['data']['total']['totalValue']}}</td>
+						<td>{{$data['data']['total']['creditTransaction']}}</td>
+						<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$data['data']['total']['creditValue']}}</td>
+						<td>{{$data['data']['total']['debitTransaction']}}</td>
+						<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$data['data']['total']['debitValue']}}</td>
 						@else
 						<td> 0</td>
+						<td>0</td>
 						<td> <i class="fa fa-inr" aria-hidden="true"></i> 0</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> 0</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> 0</td>
-						<td> <i class="fa fa-inr" aria-hidden="true"></i> 0</td>
+						<td>0</td>
 						<td> <i class="fa fa-inr" aria-hidden="true"></i> 0</td>
 						@endif
 					</tr>
@@ -65,32 +62,40 @@
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
-							<th>Invoice ID</th>
+							<th>CDN ID</th>
 							<th>Contact</th>
+							<th>Type</th>
 							<th>Created Date</th>
-							<th>Due Date</th>
-							<th>Total Amount</th>
+							<th>Invoice No</th>
+							<th>CDN Amount</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
-						@if(!empty($data['data']['salesInvoiceData']))
-						@foreach($data['data']['salesInvoiceData'] as $key => $value)
+						@if(!empty($data['data']['creditDebitNoteData']))
+						@foreach($data['data']['creditDebitNoteData'] as $key => $value)
 						<tr>
-							<td>{{$value->invoice_no}}</td>
+							<td>{{$value->note_no}}</td>
 							<td>{{$value->contact_name}}</td>
+							<td>
+								@if($value->note_type == 1)
+								Credit
+								@else
+								Debit
+								@endif
+							</td>
 							<td>{{$value->created_date}}</td>
-							<td>{{$value->due_date}}</td>
+							<td>{{$value->invoice_no}}</td>
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editSalesInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
-								<a class='btn btn-sm btn-warning' onclick=cancelInvoice(this); data-id='{{$value->si_id}}'>Cancel</a>
+								<a class='btn btn-sm btn-info' href="editVcdnote/{{encrypt($value->note_no)}}">Edit</a>
+								<a class='btn btn-sm btn-warning' onclick=cancelVcdnote(this); data-id='{{$value->vcdn_id}}'>Cancel</a>
 							</td>
 						</tr>
 						@endforeach
 						@else
 						<tr>
-							<td colspan="7">No Invoice found. Click on add sales invoice button to add one.</td>
+							<td colspan="7">No Credit / Debit Note found. Click on add credit/debit note button to add one.</td>
 						</tr>
 						@endif
 					</tbody>

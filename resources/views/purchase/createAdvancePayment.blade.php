@@ -52,36 +52,34 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../sales/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Sales Invoices </a>
+						<a href="../advanceReceipt/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Advance Payment </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Create Sales Invoice</h2>
+			<h2 style="margin-top: 0px;">Create Advance Payment</h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Invoice Number</th>
-								<th>Invoice date</th>
-								<th>REF. P.O</th>
-								<th>Due date</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="text" class="form-control" name="invoice_no" value="{{$data['invoice_no']}}" style="text-align:center;" /></td>
-								<td><input type="text" class="form-control datepicker" name="invoice_date" /></td>
-								<td><input type="text" class="form-control" name="reference" /></td>
-								<td><input type="text" class="form-control datepicker" name="due_date" /></td>
-							</tr>
-						</tbody>
-					</table>
 					<div class="row">
+						<div class="col-md-6">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Advance Payment No:</th>
+										<th>Advance Payment Date:</th>
+									</tr> 
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="text" class="form-control" name="receipt_no" value="{{$data['receipt_no']}}" style="text-align:center;" /></td>
+										<td><input type="text" class="form-control datepicker" placeholder="Date" name="receipt_date"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 						<div class="col-md-6">
 							<table class="table table-bordered">
 								<thead>
@@ -117,62 +115,9 @@
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
 							</table>
-							<p><input type="checkbox" id="same_address"> Shipping Address is Same as billing address</p>
-						</div>
-						<div class="col-md-3">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Billing Address </th>
-									</tr> 
-								</thead>
-								<tbody>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_address" name="bill_address" placeholder="Address"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_pincode" name="bill_pincode" placeholder="Pincode"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_city" name="bill_city" placeholder="City"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_state" name="bill_state" placeholder="State"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_country" name="bill_country" placeholder="Country"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col-md-3">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Shipping Address</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_address" name="sh_address" placeholder="Address"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_pincode" name="sh_pincode" placeholder="Pincode"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_city" name="sh_city" placeholder="City"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_state" name="sh_state" placeholder="State"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_country" name="sh_country" placeholder="Country"></td>
-									</tr>
-								</tbody>
-							</table>
 						</div>
 					</div>
-					<table class="table table-bordered order-list">
+					<table class="table table-bordered order-list" style="margin-top: 10px;">
 						<thead>
 							<tr>
 								<!-- <th rowspan="2">SR. NO.</th> -->
@@ -211,26 +156,12 @@
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" name="total_amount" id="total_amount" value="0" /></td>
 							</tr>
 							<tr>
 								<td colspan="17">
 									<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 								</td>
-							</tr>
-							<tr>
-								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Advanced Settings Reverse Charge</p>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="5">Tax under Reverse Charge</td>
-								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
-								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -257,7 +188,7 @@
 							</td>
 							<td>
 								<a href="#">
-									<button class="btn btn-success" type="button" id="save_invoice">Save Invoice</button>
+									<button class="btn btn-success" type="button" id="save_invoice">Save Receipt</button>
 								</a>
 							</td>
 						</tr>
@@ -545,7 +476,7 @@
 	});
 </script>
 
-<script src="{{URL::asset('app/js/salesinvoice.js')}}"></script>
+<script src="{{URL::asset('app/js/advancePayment.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

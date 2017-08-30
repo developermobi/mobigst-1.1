@@ -37,7 +37,7 @@
 	var year=date.getFullYear();
 	var month=date.getMonth();
 	$(document).ready(function() {
-		$(".contact_name").select2();
+		$(".invoice_no").select2();
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01')
@@ -52,54 +52,53 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../sales/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Sales Invoices </a>
+						<a href="../vcdnote/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Vendor Credit / Debit Notes </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Create Sales Invoice</h2>
+			<h2 style="margin-top: 0px;">Create Vendor Credit / Debit Note</h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th>Invoice Number</th>
-								<th>Invoice date</th>
-								<th>REF. P.O</th>
-								<th>Due date</th>
+								<th>Credit / Debit Note Number</th>
+								<th>Issue date</th>
+								<th>Note Type</th>
+								<th>Invoice ID</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td><input type="text" class="form-control" name="invoice_no" value="{{$data['invoice_no']}}" style="text-align:center;" /></td>
-								<td><input type="text" class="form-control datepicker" name="invoice_date" /></td>
-								<td><input type="text" class="form-control" name="reference" /></td>
-								<td><input type="text" class="form-control datepicker" name="due_date" /></td>
+								<td><input type="text" class="form-control" name="note_no" value="{{$data['note_no']}}" style="text-align:center;" /></td>
+								<td><input type="text" class="form-control datepicker" name="note_issue_date" /></td>
+								<td>
+									<label class="radio-inline"><input type="radio" name="note_type" value="1" checked>CREDIT</label>
+									<label class="radio-inline"><input type="radio" name="note_type" value="2">DEBIT</label>
+								</td>
+								<td id="noedit">
+									<select class="form-control invoice_no" id="invoice_no" name="invoice_no" onchange="getPurchaseInvoiceInfo(this);">
+										<option></option>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div class="row">
+					<div class="row noedit">
 						<div class="col-md-6">
 							<table class="table table-bordered">
 								<thead>
 									<tr>
-										<th>Customer Name 
-											<span style="float: right;cursor: pointer;">
-												<i class="fa fa-plus-circle fa-2x" title="Add New Contact" aria-hidden="true" data-toggle="modal" data-target="#addContactModal"></i>
-											</span>
-										</th>
+										<th>Customer Name</th>
 									</tr> 
 								</thead>
 								<tbody>
 									<tr>
-										<td id="tddd">
-											<select class="form-control contact_name" id="contact_name" name="contact_name" onchange="getContactInfo(this);">
-												<option></option>
-											</select>
-										</td>
+										<td><input type="text" class="form-control" name="contact_name" id="contact_name" /></td>
 									</tr>
 								</tbody>
 							</table>
@@ -111,64 +110,10 @@
 								<tr>
 									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" /></td>
 									<td>
-										<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
-										</select>
+										<input type="text" class="form-control" id="place_of_supply" placeholder="Place of Supply" name="place_of_supply" />
 									</td>
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
-							</table>
-							<p><input type="checkbox" id="same_address"> Shipping Address is Same as billing address</p>
-						</div>
-						<div class="col-md-3">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Billing Address </th>
-									</tr> 
-								</thead>
-								<tbody>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_address" name="bill_address" placeholder="Address"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_pincode" name="bill_pincode" placeholder="Pincode"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_city" name="bill_city" placeholder="City"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_state" name="bill_state" placeholder="State"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_country" name="bill_country" placeholder="Country"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col-md-3">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Shipping Address</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_address" name="sh_address" placeholder="Address"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_pincode" name="sh_pincode" placeholder="Pincode"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_city" name="sh_city" placeholder="City"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_state" name="sh_state" placeholder="State"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_country" name="sh_country" placeholder="Country"></td>
-									</tr>
-								</tbody>
 							</table>
 						</div>
 					</div>
@@ -176,7 +121,7 @@
 						<thead>
 							<tr>
 								<!-- <th rowspan="2">SR. NO.</th> -->
-								<th rowspan="2" width="20%"> ITEM 
+								<th rowspan="2" width="20%">ITEM
 									<span style="float: right;cursor: pointer;">
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
@@ -211,26 +156,12 @@
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" name="total_amount" id="total_amount" value="0" /></td>
 							</tr>
 							<tr>
 								<td colspan="17">
 									<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 								</td>
-							</tr>
-							<tr>
-								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Advanced Settings Reverse Charge</p>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="5">Tax under Reverse Charge</td>
-								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
-								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -257,79 +188,12 @@
 							</td>
 							<td>
 								<a href="#">
-									<button class="btn btn-success" type="button" id="save_invoice">Save Invoice</button>
+									<button class="btn btn-success" type="button" id="save_invoice">Save Note</button>
 								</a>
 							</td>
 						</tr>
 					</table>
 				</form>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Add Business Modal -->
-<div class="modal fade" id="addContactModal" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header modal-header-success">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Add Customer</h4>
-			</div>
-			<div class="modal-body">
-				<form role="form" id="customerForm">
-					<input type="hidden" class="form-control" name="business_id" value="{{$data['business_id']}}">
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label for="custname">Customer Or Vendor Name:</label>
-								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name">
-							</div>
-							<div class="form-group">
-								<label for="gstin">GSTIN NO:</label>
-								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no">
-							</div>
-							<div class="form-group">
-								<label for="country">Country:</label>
-								<input type="text" class="form-control" placeholder="Enter Country" name="country">
-							</div>
-							<div class="form-group">
-								<label for="conper">Contact Person:</label>
-								<input type="text" class="form-control" placeholder="Contact Person" name="contact_person">
-							</div>
-							<div class="form-group">
-								<label for="pin">Pincode:</label>
-								<input type="text" class="form-control" placeholder="Enter Pincode" name="pincode">
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label for="email">Email Id:</label>
-								<input type="email" class="form-control" placeholder="Email Id" name="email">
-							</div>
-							<div class="form-group">
-								<label for="pan">PAN:</label>
-								<input type="text" class="form-control" placeholder="Enter PAN" name="pan_no">
-							</div>
-							<div class="form-group">
-								<label for="state">State:</label>
-								<input type="text" class="form-control" placeholder="Enter State" name="state">
-							</div>
-							<div class="form-group">
-								<label for="mob">Mobile No:</label>
-								<input type="text" class="form-control" placeholder="Enter Mobile No" name="mobile_no">
-							</div>
-							<div class="form-group">
-								<label for="city">City:</label>
-								<input type="text" class="form-control" placeholder="Enter City" name="city">
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default btn-success" id="addCustomer">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -543,9 +407,12 @@
 	$(document).ready(function() {
 		$(".item_name").select2();
 	});
+
+	$('.noedit').css('pointer-events','none');
+
 </script>
 
-<script src="{{URL::asset('app/js/salesinvoice.js')}}"></script>
+<script src="{{URL::asset('app/js/vcdnote.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

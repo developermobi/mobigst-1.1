@@ -19,11 +19,11 @@ $(function(){
 	});
 
 	$('#save_invoice').click(function(){
-		saveCdnote();
+		saveVcdnote();
 	});
 
 	$('#update_invoice').click(function(){
-		updateCdnote();
+		updateVcdnote();
 	});
 
 });
@@ -34,7 +34,7 @@ function getInvoice(gstin){
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/getSalesInvoice/"+gstin,
+		"url": SERVER_NAME+"/api/getInvoice/"+gstin,
 		"method": "GET",
 		"headers": {
 			"cache-control": "no-cache",
@@ -49,7 +49,7 @@ function getInvoice(gstin){
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].invoice_no+"' data-attr='"+data[i].si_id+"'>"+data[i].invoice_no+"</option>";
+					option += "<option value='"+data[i].invoice_no+"' data-attr='"+data[i].pi_id+"'>"+data[i].invoice_no+"</option>";
 				});
 			}
 			$(".invoice_no").append(option);
@@ -61,14 +61,14 @@ function getInvoice(gstin){
 
 
 
-function getInvoiceInfo(obj){
+function getPurchaseInvoiceInfo(obj){
 	
-	var si_id = $(obj).find(':selected').attr('data-attr');
+	var pi_id = $(obj).find(':selected').attr('data-attr');
 	
 	$.ajax({
 		"async": false,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/getInvoiceInfo/"+si_id,
+		"url": SERVER_NAME+"/api/getPurchaseInvoiceInfo/"+pi_id,
 		"method": "GET",
 		"dataType":"JSON",
 		beforeSend:function(){
@@ -393,14 +393,14 @@ function calculateTotal(obj){
 
 
 
-function saveCdnote(){
+function saveVcdnote(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
 	
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/saveCdnote",
+		"url": SERVER_NAME+"/api/saveVcdnote",
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -543,15 +543,15 @@ function deleteInvoiceDetail(id_no,obj){
 
 
 
-function updateCdnote(){
+function updateVcdnote(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-	var cdn_id = $("#cdn_id").val();
+	var vcdn_id = $("#vcdn_id").val();
 	
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/updateCdnote/"+cdn_id,
+		"url": SERVER_NAME+"/api/updateVcdnote/"+vcdn_id,
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",

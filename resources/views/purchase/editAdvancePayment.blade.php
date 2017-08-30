@@ -58,34 +58,27 @@
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Edit Credit / Debit Note</h2>
+			<h2 style="margin-top: 0px;"> Edit Advance Payment </h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
-					<input type="hidden" name="cdn_id" id="cdn_id" value="{{$data['data']['invoice_data'][0]->cdn_id}}">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Credit / Debit Note Number</th>
-								<th>Issue date</th>
-								<th>Note Type</th>
-								<th>Invoice ID</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="text" class="form-control note_no" name="note_no" value="{{$data['data']['invoice_data'][0]->note_no}}" /></td>
-								<td><input type="text" class="form-control datepicker" name="note_issue_date" value="{{$data['data']['invoice_data'][0]->note_issue_date}}" /></td>
-								<td>
-									<label class="radio-inline"><input type="radio" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '1'){echo "checked";}?> value="1">CREDIT</label>
-									<label class="radio-inline"><input type="radio" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '2'){echo "checked";}?> value="2">DEBIT</label>
-								</td>
-								<td><input type="text" class="form-control invoice_no" name="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" /></td>
-							</tr>
-						</tbody>
-					</table>
+					<input type="hidden" name="ap_id" id="ap_id" value="{{$data['data']['invoice_data'][0]->ap_id}}">
 					<div class="row">
 						<div class="col-md-6">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Advance Payment No:</th>
+										<th>Advance Payment Date:</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="text" class="form-control" name="payment_no" value="{{$data['data']['invoice_data'][0]->payment_no}}" style="text-align:center;" /></td>
+										<td><input type="text" class="form-control datepicker" placeholder="Date" value="{{$data['data']['invoice_data'][0]->payment_date}}" name="payment_date"></td>
+									</tr>
+								</tbody>
+							</table>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -115,66 +108,6 @@
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
 							</table>
-							<p>
-								@if($data['data']['invoice_data'][0]->place_of_supply == '1')
-								<input type="checkbox" id="same_address" checked>
-								@else
-								<input type="checkbox" id="same_address">
-								@endif
-								Shipping Address is Same as billing address</p>
-							</div>
-							<div class="col-md-3">
-								<table class="table table-bordered">
-									<thead>
-										<tr>
-											<th>Billing Address </th>
-										</tr> 
-									</thead>
-									<tbody>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_address" name="bill_address" placeholder="Address" value="{{$data['data']['invoice_data'][0]->bill_address}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_pincode" name="bill_pincode" placeholder="Pincode" value="{{$data['data']['invoice_data'][0]->bill_pincode}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_city" name="bill_city" placeholder="City" value="{{$data['data']['invoice_data'][0]->bill_city}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_state" name="bill_state" placeholder="State" value="{{$data['data']['invoice_data'][0]->bill_state}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="bill_country" name="bill_country" placeholder="Country" value="{{$data['data']['invoice_data'][0]->bill_country}}"></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div class="col-md-3">
-								<table class="table table-bordered">
-									<thead>
-										<tr>
-											<th>Shipping Address</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_address" name="sh_address" placeholder="Address" value="{{$data['data']['invoice_data'][0]->sh_address}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_pincode" name="sh_pincode" placeholder="Pincode" value="{{$data['data']['invoice_data'][0]->sh_pincode}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_city" name="sh_city" placeholder="City" value="{{$data['data']['invoice_data'][0]->sh_city}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_state" name="sh_state" placeholder="State" value="{{$data['data']['invoice_data'][0]->sh_state}}"></td>
-										</tr>
-										<tr>
-											<td><input type="text" class="form-control" id="sh_country" name="sh_country" placeholder="Country" value="{{$data['data']['invoice_data'][0]->sh_country}}"></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
 						</div>
 						<table class="table table-bordered order-list">
 							<thead>
@@ -302,7 +235,7 @@
 								</td>
 								<td>
 									<a href="#">
-										<button class="btn btn-success" type="button" id="update_invoice">Update Note</button>
+										<button class="btn btn-success" type="button" id="update_invoice">Update Receipt</button>
 									</a>
 								</td>
 							</tr>
@@ -558,7 +491,7 @@
 	$('.invoice_no').css('pointer-events','none');
 </script>
 
-<script src="{{URL::asset('app/js/cdnote.js')}}"></script>
+<script src="{{URL::asset('app/js/advancePayment.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

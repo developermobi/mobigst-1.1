@@ -19,7 +19,16 @@
 
 <div class="train w3-agile">
 	<div class="container">
-		<h2>List Of GSTIN's</h2>
+	<div class="row">
+			<div class="col-md-10">
+				<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
+					<a href="/index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i> </a>
+					<a href="../business" class="btn btn-default"> Business </a>
+					<a href="../setting" class="btn btn-default"> Setting </a>
+				</div>
+			</div>
+		</div>
+		<h2 style="margin-top: 0px;">List Of GSTIN's</h2>
 		<div class="row" style="padding: 15px 0px;">
 			<div class="col-md-12">
 				<button class="btn btn-success business_id" style="float: left;"  data-toggle="modal" data-target="#addGstinModal" data-id="{{ decrypt(Request::segment(2)) }}"> Add New GSTIN </button>

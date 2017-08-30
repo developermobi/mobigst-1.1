@@ -21,11 +21,21 @@
 <div class="about-section w3-layouts">
 	@if(!empty($data))
 	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
+					<a href="/index" class="btn btn-default"><i class="glyphicon glyphicon-home"></i> </a>
+					<a href="../business" class="btn btn-default"> Business </a>
+					<a href="../importitem" class="btn btn-default"> Import Item </a>
+					<a href="../importitem" class="btn btn-default" onclick="window.history.go(-1); return false;"> Back to List </a>
+				</div>
+			</div>
+		</div>
 		<div class="about-grids">
 			<div class="about-grid1 wow fadeInLeft animated animated" data-wow-delay="0.4s">
-				<h2 style="padding:1em 00px;">Edit Item</h2>
+				<h2 style="margin-top: 0px;">Edit Item</h2>
 				<form id="updateItemForm" role="form">
-				<input type="hidden" class="form-control" placeholder="Item Type" name="item_id" id="item_id" value="{{$data['data'][0]->item_id}}">
+					<input type="hidden" class="form-control" placeholder="Item Type" name="item_id" id="item_id" value="{{$data['data'][0]->item_id}}">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
