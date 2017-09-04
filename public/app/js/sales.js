@@ -62,7 +62,7 @@ function cancelInvoice(obj){
 
 
 
-function cancelVcdnote(obj){
+function cancelCdnote(obj){
 
 	swal({
 		text: "Do you want to cancel this note ?",
@@ -76,7 +76,7 @@ function cancelVcdnote(obj){
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelVcdnote/"+id,
+			"url": SERVER_NAME+"/api/cancelCdnote/"+id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -116,7 +116,7 @@ function cancelVcdnote(obj){
 
 
 
-function cancelAdvancePayment(obj){
+function cancelAdvanceReceipt(obj){
 
 	swal({
 		text: "Do you want to cancel this receipt ?",
@@ -130,7 +130,7 @@ function cancelAdvancePayment(obj){
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelAdvancePayment/"+id,
+			"url": SERVER_NAME+"/api/cancelAdvanceReceipt/"+id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -167,3 +167,48 @@ function cancelAdvancePayment(obj){
 		});
 	});
 }
+
+
+
+/*function sendMail(){
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/sendMail",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",
+		beforeSend:function(){
+			$(".bodyLoaderWithOverlay").show();
+		},
+		success:function(response){
+			console.log(response);
+			return false;
+			if(response.code == 200){
+				swal({
+					title: "Success !",
+					text: response.message,
+					type: "success",
+					confirmButtonText: "OK",
+					width:'400px',
+				}).then(function () {
+					window.location.href = window.location.href;
+				});
+			}else{
+				swal({
+					title: "Failed!",
+					text: response.message,
+					type: "error",
+					confirmButtonText: "Close",
+				});
+			}
+		},
+		complete:function(){
+			$(".bodyLoaderWithOverlay").hide();
+		}
+	});
+}*/

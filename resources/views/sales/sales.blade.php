@@ -27,6 +27,9 @@
 						<button class="btn btn-success" type="button" style="float: left;"> + New Sales Invoice</button>
 					</a>
 				</div>
+				<!-- <div class="col-md-4" style="padding: 20px 14px;">
+					<button class="btn btn-success" onclick="sendMail();" type="button" style="float: left;"> Send Mail Form </button>
+				</div> -->
 				<div class="col-md-4">
 				</div>
 				<div class="col-md-4" style="padding: 20px 14px;">

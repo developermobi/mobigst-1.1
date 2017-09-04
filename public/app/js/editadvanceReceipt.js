@@ -1,6 +1,6 @@
 $(function(){
 
-	$("#tt_taxable_value").val('0');
+	/*$("#tt_taxable_value").val('0');
 	$("#tt_taxable_value").prop('disabled', true);
 	$("#tt_cgst_amount").val('0');
 	$("#tt_cgst_amount").prop('disabled', true);
@@ -11,7 +11,7 @@ $(function(){
 	$("#tt_cess_amount").val('0');
 	$("#tt_cess_amount").prop('disabled', true);
 	$("#tt_total").val('0');
-	$("#tt_total").prop('disabled', true);
+	$("#tt_total").prop('disabled', true);*/
 
 	var business_id = $("#business_id").val();
 
@@ -25,7 +25,7 @@ $(function(){
 	$(".item_name").change(function(event){
 		var place_of_supply = $("#place_of_supply").val();
 		if(place_of_supply == ''){
-			alert('Please select customer first');
+			alert('Please select place of supply first');
 			$(".item_name").val('');
 		}else{
 			$('#place_of_supply').css('pointer-events','none');
@@ -39,7 +39,7 @@ $(function(){
 		if(place_of_supply != ''){
 			$(".item_name").prop('disabled', false);
 		}else{
-			alert('Please select customer first');
+			alert('Please select place of supply first');
 			$(".item_name").prop('disabled', true);
 		}
 
@@ -94,7 +94,6 @@ $(function(){
 			$("#sh_country").val("");
 		}
 	});
-
 
 	$('#advance_setting').change(function() {
 		var total_cgst_amount = $(".total_cgst_amount").val();
@@ -155,14 +154,13 @@ $(function(){
 			$("#total_tax").val(parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount));
 		}
 	});
-	
 
 	$('#save_invoice').click(function(){
 		saveSalesInvoice();
 	});
 
 	$('#update_invoice').click(function(){
-		updateSalesInvoice();
+		updateAdvanceReceipt();
 	});
 
 });
@@ -185,11 +183,11 @@ function getContact(business_id){
 		},
 		success:function(response){
 			var contact_name_hidden = $('#contact_name_hidden').val();
-			var data = response['data'];
+			var data = response.data;
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['contact_name']+"' data-attr='"+data[i]['contact_id']+"'>"+data[i]['contact_name']+"</option>";
+					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+"</option>";
 				});
 			}
 			$(".contact_name").append(option);
@@ -217,11 +215,11 @@ function getStates(){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value=''></option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['state_name']+"'>"+data[i]['state_name']+"</option>";
+					option += "<option value='"+data[i].state_name+"'>"+data[i].state_name+"</option>";
 				});
 			}
 			$(".place_of_supply").append(option);
@@ -248,13 +246,13 @@ function getContactInfo(obj){
 		},
 		success:function(response){
 			if(response.code == 302){
-				$("#bill_address").val(response.data[0]['address']);
-				$("#bill_pincode").val(response.data[0]['pincode']);
-				$("#bill_city").val(response.data[0]['city']);
-				$("#bill_state").val(response.data[0]['state']);
-				$("#bill_country").val(response.data[0]['country']);
-				$("#contact_gstin").val(response.data[0]['gstin_no']);
-				$("#place_of_supply").val(response.data[0]['state']);
+				$("#bill_address").val(response.data[0].address);
+				$("#bill_pincode").val(response.data[0].pincode);
+				$("#bill_city").val(response.data[0].city);
+				$("#bill_state").val(response.data[0].state);
+				$("#bill_country").val(response.data[0].country);
+				$("#contact_gstin").val(response.data[0].gstin_no);
+				$("#place_of_supply").val(response.data[0].state);
 				//$("#customer_state").val(response.data[0]['state']);
 
 				var place_of_supply = $("#place_of_supply").val();
@@ -312,11 +310,11 @@ function getItem(business_id){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value=''></option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['item_description']+"' data-attr='"+data[i]['item_id']+"'>"+data[i]['item_description']+"</option>";
+					option += "<option value='"+data[i].item_description+"' data-attr='"+data[i].item_id+"'>"+data[i].item_description+"</option>";
 				});
 			}
 			$(".item_name").append(option);
@@ -347,10 +345,10 @@ function getItemInfo(obj){
 			var hsn_sac_no = $(obj).closest("tr").find("#hsn_sac_no");
 			var total = $(obj).closest("tr").find("#total");
 			if(response.code == 302){
-				$(hsn_sac_no).val(response.data[0]['item_hsn_sac']);
-				$(rate).val(response.data[0]['item_sale_price']);
-				$(item_value).val(response.data[0]['item_sale_price']);
-				$(total).val(response.data[0]['item_sale_price']);
+				$(hsn_sac_no).val(response.data[0].item_hsn_sac);
+				$(rate).val(response.data[0].item_sale_price);
+				$(item_value).val(response.data[0].item_sale_price);
+				$(total).val(response.data[0].item_sale_price);
 			}
 			calCgstAmount(obj);
 			calculateTotal(obj);
@@ -610,7 +608,7 @@ function saveSalesInvoice(){
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/saveSalesInvoice",
+		"url": SERVER_NAME+"/api/saveAdvanceReceipt",
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -753,15 +751,15 @@ function deleteInvoiceDetail(id_no,obj){
 
 
 
-function updateSalesInvoice(){
+function updateAdvanceReceipt(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-	var si_id = $("#si_id").val();
+	var ar_id = $("#ar_id").val();
 	
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/updateSalesInvoice/"+si_id,
+		"url": SERVER_NAME+"/api/updateAdvanceReceipt/"+ar_id,
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",

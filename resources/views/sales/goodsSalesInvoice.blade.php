@@ -42,7 +42,27 @@
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01')
 		});
+		$('.due_datepicker').datepicker({
+			format: 'yyyy-mm-dd',
+			startDate: new Date(year, month, '01')
+		})
+		.on('hide', due_dateChanged);
 	});
+
+	function due_dateChanged(ev) {
+		var invoice_date = $(".datepicker").val();
+		if(invoice_date == ''){
+			$(".due_datepicker").val(" ");
+			alert('Please select Invoice date first');
+		}else{
+			var due_date = $(".due_datepicker").val();
+
+			if(invoice_date >= due_date){
+				alert('Due date should greater than invoice date');
+				$(".due_datepicker").val(" ");
+			}
+		}
+	}
 </script>
 
 <div class="content">
@@ -77,7 +97,7 @@
 								<td><input type="text" class="form-control" name="invoice_no" value="{{$data['invoice_no']}}" style="text-align:center;" /></td>
 								<td><input type="text" class="form-control datepicker" name="invoice_date" /></td>
 								<td><input type="text" class="form-control" name="reference" /></td>
-								<td><input type="text" class="form-control datepicker" name="due_date" /></td>
+								<td><input type="text" class="form-control due_datepicker" name="due_date" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -117,7 +137,7 @@
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
 							</table>
-							<p><input type="checkbox" id="same_address"> Shipping Address is Same as billing address</p>
+							<p><input type="checkbox" id="same_address" name="sh_address_same"> Shipping Address is Same as billing address</p>
 						</div>
 						<div class="col-md-3">
 							<table class="table table-bordered">
@@ -220,7 +240,7 @@
 							</tr>
 							<tr>
 								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Advanced Settings Reverse Charge</p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge</p>
 								</td>
 							</tr>
 							<tr>
@@ -237,13 +257,13 @@
 					<table class="table table-bordered">
 						<tr>
 							<td width="40%">Total In Words</td>
-							<td>Taxable Amount</td>
+							<!-- <td>Taxable Amount</td> -->
 							<td>Total Tax</td>
 							<td>GRAND TOTAL</td>
 						</tr>
 						<tr>
 							<td><input type="text" class="form-control total_in_words" id="total_in_words" name="total_in_words" /></td>
-							<td><input type="text" class="form-control taxable_amount" id="taxable_amount" /></td>
+							<!-- <td><input type="text" class="form-control taxable_amount" id="taxable_amount" /></td> -->
 							<td><input type="text" class="form-control total_tax" id="total_tax" name="total_tax" /></td>
 							<td><input type="text" class="form-control" name="grand_total" id="grand_total" /></td>
 						</tr>

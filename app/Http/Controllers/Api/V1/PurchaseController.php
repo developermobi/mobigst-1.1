@@ -224,6 +224,11 @@ class PurchaseController extends Controller{
 			$purchaseInvoiceData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 			$purchaseInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
 			$purchaseInvoiceData['total_amount'] = $input['total_amount'];
+			if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+				$salesInvoiceData['tax_type_applied'] = '1';
+			}else{
+				$salesInvoiceData['tax_type_applied'] = '0';
+			}
 			$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
 			$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
 			$purchaseInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
@@ -241,13 +246,13 @@ class PurchaseController extends Controller{
 				if(sizeof($getSIC) > 0){
 					$count_data = array();
 					$count_data['gstin_id'] = $input['gstin_id'];
-					$count_data['invoice_type'] = 1;
+					$count_data['invoice_type'] = 4;
 					$count_data['count'] = $getSIC[0]->count + 1;
 					$updateIC = Purchase::updateIC($count_data);
 				}else{
 					$add_count_data = array();
 					$add_count_data['gstin_id'] = $input['gstin_id'];
-					$count_data['invoice_type'] = 1;
+					$count_data['invoice_type'] = 4;
 					$add_count_data['count'] = '1';
 					$addIC = Purchase::addIC($add_count_data);
 				}
@@ -283,7 +288,7 @@ class PurchaseController extends Controller{
 					return $returnResponse;
 				}else{
 					$invoiceDetailData['invoice_no'] = $input['invoice_no'];
-					$invoiceDetailData['invoice_type'] = '1';
+					$invoiceDetailData['invoice_type'] = '4';
 					$invoiceDetailData['item_name'] = $input['item_name'];
 					$invoiceDetailData['item_type'] = "Goods";
 					$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
@@ -412,6 +417,11 @@ class PurchaseController extends Controller{
 		$purchaseInvoiceData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$purchaseInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
 		$purchaseInvoiceData['total_amount'] = $input['total_amount'];
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$salesInvoiceData['tax_type_applied'] = '1';
+		}else{
+			$salesInvoiceData['tax_type_applied'] = '0';
+		}
 		$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
 		$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
 		$purchaseInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";

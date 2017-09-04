@@ -51,7 +51,7 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Credit / Debit Notes </a>
+						<a href="../../advanceReceipt/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Advance Receipt </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
@@ -109,7 +109,7 @@
 								</tr>
 							</table>
 							<p>
-								@if($data['data']['invoice_data'][0]->place_of_supply == '1')
+								@if($data['data']['invoice_data'][0]->sh_address_same == '1')
 								<input type="checkbox" id="same_address" checked>
 								@else
 								<input type="checkbox" id="same_address">
@@ -263,25 +263,54 @@
 									<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="{{$data['data']['invoice_data'][0]->total_igst_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="{{$data['data']['invoice_data'][0]->total_cess_amount}}" /></td>
-									<td colspan="2"><input type="text" class="form-control" name="total_amount" id="total_amount" value="{{$data['data']['invoice_data'][0]->total_amount}}" /></td>
+									<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="{{$data['data']['invoice_data'][0]->total_amount}}" /></td>
 								</tr>
 								<tr>
 									<td colspan="17">
 										<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 									</td>
 								</tr>
+								@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
+								<tr>
+									<td colspan="16">
+										<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > <!-- Advanced Settings --> Reverse Charge </p>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="5">Tax under Reverse Charge</td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="{{$data['data']['invoice_data'][0]->tt_cgst_amount}}" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="{{$data['data']['invoice_data'][0]->tt_sgst_amount}}" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="{{$data['data']['invoice_data'][0]->tt_igst_amount}}" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="{{$data['data']['invoice_data'][0]->tt_cess_amount}}" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" value="{{$data['data']['invoice_data'][0]->tt_total}}"/></td>
+								</tr>
+								@else
+								<tr>
+									<td colspan="16">
+										<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="5">Tax under Reverse Charge</td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0"/></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0"/></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0"/></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0"/></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
+								</tr>
+								@endif
 							</tbody>
 						</table>
 						<table class="table table-bordered">
 							<tr>
 								<td width="40%">Total In Words</td>
-								<td>Taxable Amount</td>
+								<!-- <td>Taxable Amount</td> -->
 								<td>Total Tax</td>
 								<td>GRAND TOTAL</td>
 							</tr>
 							<tr>
 								<td><input type="text" class="form-control total_in_words" name="total_in_words" id="total_in_words" value="{{$data['data']['invoice_data'][0]->total_in_words}}"/></td>
-								<td><input type="text" class="form-control taxable_amount" id="taxable_amount"/></td>
+								<!-- <td><input type="text" class="form-control taxable_amount" id="taxable_amount"/></td> -->
 								<td><input type="text" class="form-control total_tax" name="total_tax" id="total_tax" value="{{$data['data']['invoice_data'][0]->total_tax}}" /></td>
 								<td><input type="text" class="form-control" name="grand_total" id="grand_total" value="{{$data['data']['invoice_data'][0]->grand_total}}"/></td>
 							</tr>
@@ -386,13 +415,13 @@
 						</div>
 						<div class="col-md-6">
 							<center><h3>Purchase</h3></center>
-							<a href="purches_invoice.html">
+							<a href="../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
 							</a>
-							<a href="purch_credit_debit_list.html">
+							<a href="../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
 							</a>
-							<a href="advance_paymnt.html">
+							<a href="../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
 							</a>
 						</div>
@@ -551,7 +580,7 @@
 	$('.invoice_no').css('pointer-events','none');
 </script>
 
-<script src="{{URL::asset('app/js/advanceReceipt.js')}}"></script>
+<script src="{{URL::asset('app/js/editadvanceReceipt.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

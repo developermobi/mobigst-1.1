@@ -126,13 +126,13 @@
 					</div>
 					<div class="col-md-6">
 						<center><h3>Purchase</h3></center>
-						<a href="purches_invoice.html">
+						<a href="../purchase/{{$data['gstin_id']}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
 						</a>
-						<a href="purch_credit_debit_list.html">
+						<a href="../vcdnote/{{$data['gstin_id']}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
 						</a>
-						<a href="advance_paymnt.html">
+						<a href="../advancePayment/{{$data['gstin_id']}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
 						</a>
 					</div>

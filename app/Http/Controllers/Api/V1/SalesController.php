@@ -197,7 +197,7 @@ class SalesController extends Controller{
 
 
 	public function saveSalesInvoice(Request $request){
-		return $input = $request->all();
+		$input = $request->all();
 
 		$checkInvoiceNumber = Sales::checkInvoiceNumber($input['gstin_id'],$input['invoice_no']);
 
@@ -227,12 +227,22 @@ class SalesController extends Controller{
 			$salesInvoiceData['sh_city'] = $input['sh_city'];
 			$salesInvoiceData['sh_state'] = $input['sh_state'];
 			$salesInvoiceData['sh_country'] = $input['sh_country'];
+			if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+				$advanceReceiptData['sh_address_same'] = '1';
+			}else{
+				$advanceReceiptData['sh_address_same'] = '0';
+			}
 			$salesInvoiceData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
 			$salesInvoiceData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
 			$salesInvoiceData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 			$salesInvoiceData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 			$salesInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
 			$salesInvoiceData['total_amount'] = $input['total_amount'];
+			if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+				$salesInvoiceData['tax_type_applied'] = '1';
+			}else{
+				$salesInvoiceData['tax_type_applied'] = '0';
+			}
 			$salesInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
 			$salesInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
 			$salesInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
@@ -335,7 +345,7 @@ class SalesController extends Controller{
 		if (sizeof($getData) > 0) {
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "200";
-			$returnResponse['message'] = "Invoice cncelled successfully.";
+			$returnResponse['message'] = "Invoice cancelled successfully.";
 			$returnResponse['data'] = $getData;
 		}else{
 			$returnResponse['status'] = "success";
@@ -425,12 +435,22 @@ class SalesController extends Controller{
 		$salesInvoiceData['sh_city'] = $input['sh_city'];
 		$salesInvoiceData['sh_state'] = $input['sh_state'];
 		$salesInvoiceData['sh_country'] = $input['sh_country'];
+		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+			$advanceReceiptData['sh_address_same'] = '1';
+		}else{
+			$advanceReceiptData['sh_address_same'] = '0';
+		}
 		$salesInvoiceData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
 		$salesInvoiceData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
 		$salesInvoiceData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 		$salesInvoiceData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$salesInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
 		$salesInvoiceData['total_amount'] = $input['total_amount'];
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$salesInvoiceData['tax_type_applied'] = '1';
+		}else{
+			$salesInvoiceData['tax_type_applied'] = '0';
+		}
 		$salesInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
 		$salesInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
 		$salesInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
@@ -520,6 +540,7 @@ class SalesController extends Controller{
 					$creditValue += $value->total_amount;
 				}
 				if($value->note_type == 2){
+					$key = 1;
 					$debitTransaction += $key;
 					$debitValue += $value->total_amount;
 				}
@@ -646,6 +667,11 @@ class SalesController extends Controller{
 			$cdnoteData['bill_city'] = $input['bill_city'];
 			$cdnoteData['bill_state'] = $input['bill_state'];
 			$cdnoteData['bill_country'] = $input['bill_country'];
+			if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+				$advanceReceiptData['sh_address_same'] = '1';
+			}else{
+				$advanceReceiptData['sh_address_same'] = '0';
+			}
 			$cdnoteData['sh_address'] = $input['sh_address'];
 			$cdnoteData['sh_pincode'] = $input['sh_pincode'];
 			$cdnoteData['sh_city'] = $input['sh_city'];
@@ -656,6 +682,17 @@ class SalesController extends Controller{
 			$cdnoteData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 			$cdnoteData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 			$cdnoteData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+			if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+				$cdnoteData['tax_type_applied'] = '1';
+			}else{
+				$cdnoteData['tax_type_applied'] = '0';
+			}
+			$cdnoteData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+			$cdnoteData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+			$cdnoteData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+			$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+			$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+			$cdnoteData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 			$cdnoteData['total_amount'] = $input['total_amount'];
 			$cdnoteData['grand_total'] = $input['grand_total'];
 			$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -820,6 +857,11 @@ class SalesController extends Controller{
 		$cdnoteData['bill_city'] = $input['bill_city'];
 		$cdnoteData['bill_state'] = $input['bill_state'];
 		$cdnoteData['bill_country'] = $input['bill_country'];
+		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+			$advanceReceiptData['sh_address_same'] = '1';
+		}else{
+			$advanceReceiptData['sh_address_same'] = '0';
+		}
 		$cdnoteData['sh_address'] = $input['sh_address'];
 		$cdnoteData['sh_pincode'] = $input['sh_pincode'];
 		$cdnoteData['sh_city'] = $input['sh_city'];
@@ -830,6 +872,16 @@ class SalesController extends Controller{
 		$cdnoteData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 		$cdnoteData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$cdnoteData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$cdnoteData['tax_type_applied'] = '1';
+		}else{
+			$cdnoteData['tax_type_applied'] = '0';
+		}
+		$cdnoteData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$cdnoteData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$cdnoteData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$cdnoteData['total_amount'] = $input['total_amount'];
 		$cdnoteData['grand_total'] = $input['grand_total'];
 		$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -946,11 +998,26 @@ class SalesController extends Controller{
 		$advanceReceiptData['sh_city'] = $input['sh_city'];
 		$advanceReceiptData['sh_state'] = $input['sh_state'];
 		$advanceReceiptData['sh_country'] = $input['sh_country'];
+		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+			$advanceReceiptData['sh_address_same'] = '1';
+		}else{
+			$advanceReceiptData['sh_address_same'] = '0';
+		}
 		$advanceReceiptData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
 		$advanceReceiptData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
 		$advanceReceiptData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 		$advanceReceiptData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$advanceReceiptData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$advanceReceiptData['tax_type_applied'] = '1';
+		}else{
+			$advanceReceiptData['tax_type_applied'] = '0';
+		}
+		$advanceReceiptData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$advanceReceiptData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$advanceReceiptData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$advanceReceiptData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$advanceReceiptData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
@@ -1160,6 +1227,11 @@ class SalesController extends Controller{
 		$advanceReceiptData['bill_city'] = $input['bill_city'];
 		$advanceReceiptData['bill_state'] = $input['bill_state'];
 		$advanceReceiptData['bill_country'] = $input['bill_country'];
+		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+			$advanceReceiptData['sh_address_same'] = '1';
+		}else{
+			$advanceReceiptData['sh_address_same'] = '0';
+		}
 		$advanceReceiptData['sh_address'] = $input['sh_address'];
 		$advanceReceiptData['sh_pincode'] = $input['sh_pincode'];
 		$advanceReceiptData['sh_city'] = $input['sh_city'];
@@ -1170,6 +1242,16 @@ class SalesController extends Controller{
 		$advanceReceiptData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 		$advanceReceiptData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$advanceReceiptData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$advanceReceiptData['tax_type_applied'] = '1';
+		}else{
+			$advanceReceiptData['tax_type_applied'] = '0';
+		}
+		$advanceReceiptData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$advanceReceiptData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$advanceReceiptData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$advanceReceiptData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$advanceReceiptData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];

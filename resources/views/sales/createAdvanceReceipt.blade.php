@@ -166,7 +166,7 @@
 								</tbody>
 							</table>
 						</div>
-						<p><input type="checkbox" id="same_address"> Shipping Address is Same as billing address</p>
+						<p><input type="checkbox" id="same_address" name="sh_address_same"> Shipping Address is Same as billing address</p>
 					</div>
 					<table class="table table-bordered order-list" style="margin-top: 10px;">
 						<thead>
@@ -207,25 +207,39 @@
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" name="total_amount" id="total_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="0" /></td>
 							</tr>
 							<tr>
 								<td colspan="17">
 									<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 								</td>
 							</tr>
+							<tr>
+								<td colspan="16">
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge</p>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="5">Tax under Reverse Charge</td>
+								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
+								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
+							</tr>
 						</tbody>
 					</table>
 					<table class="table table-bordered">
 						<tr>
 							<td width="40%">Total In Words</td>
-							<td>Taxable Amount</td>
+							<!-- <td>Taxable Amount</td> -->
 							<td>Total Tax</td>
 							<td>GRAND TOTAL</td>
 						</tr>
 						<tr>
 							<td><input type="text" class="form-control total_in_words" id="total_in_words" name="total_in_words" /></td>
-							<td><input type="text" class="form-control taxable_amount" id="taxable_amount" /></td>
+							<!-- <td><input type="text" class="form-control taxable_amount" id="taxable_amount" /></td> -->
 							<td><input type="text" class="form-control total_tax" id="total_tax" name="total_tax" /></td>
 							<td><input type="text" class="form-control" name="grand_total" id="grand_total" /></td>
 						</tr>
@@ -397,13 +411,13 @@
 					</div>
 					<div class="col-md-6">
 						<center><h3>Purchase</h3></center>
-						<a href="purches_invoice.html">
+						<a href="../purchase/{{encrypt($data['gstin_id'])}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
 						</a>
-						<a href="purch_credit_debit_list.html">
+						<a href="../vcdnote/{{encrypt($data['gstin_id'])}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
 						</a>
-						<a href="advance_paymnt.html">
+						<a href="../advancePayment/{{encrypt($data['gstin_id'])}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
 						</a>
 					</div>

@@ -51,7 +51,7 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Credit / Debit Notes </a>
+						<a href="../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Advance Payment </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
@@ -326,13 +326,13 @@
 						</div>
 						<div class="col-md-6">
 							<center><h3>Purchase</h3></center>
-							<a href="purches_invoice.html">
+							<a href="../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
 							</a>
-							<a href="purch_credit_debit_list.html">
+							<a href="../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
 							</a>
-							<a href="advance_paymnt.html">
+							<a href="../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 								<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
 							</a>
 						</div>

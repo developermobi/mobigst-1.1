@@ -42,7 +42,27 @@
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01')
 		});
+		$('.due_datepicker').datepicker({
+			format: 'yyyy-mm-dd',
+			startDate: new Date(year, month, '01')
+		})
+		.on('hide', due_dateChanged);
 	});
+
+	function due_dateChanged(ev) {
+		var invoice_date = $(".datepicker").val();
+		if(invoice_date == ''){
+			$(".due_datepicker").val(" ");
+			alert('Please select Invoice date first');
+		}else{
+			var due_date = $(".due_datepicker").val();
+
+			if(invoice_date >= due_date){
+				alert('Due date should greater than invoice date');
+				$(".due_datepicker").val(" ");
+			}
+		}
+	}
 </script>
 
 <div class="content">
@@ -78,7 +98,7 @@
 								<td><input type="text" class="form-control" name="invoice_no" id="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" style="text-align:center;"readonly /></td>
 								<td><input type="text" class="form-control datepicker" name="invoice_date" value="{{$data['data']['invoice_data'][0]->invoice_date}}" /></td>
 								<td><input type="text" class="form-control" name="reference" value="{{$data['data']['invoice_data'][0]->reference}}" /></td>
-								<td><input type="text" class="form-control datepicker" name="due_date" value="{{$data['data']['invoice_data'][0]->due_date}}" /></td>
+								<td><input type="text" class="form-control due_datepicker" name="due_date" value="{{$data['data']['invoice_data'][0]->due_date}}" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -212,27 +232,42 @@
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="{{$data['data']['invoice_data'][0]->total_igst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="{{$data['data']['invoice_data'][0]->total_cess_amount}}" /></td>
-								<td colspan="2"><input type="text" class="form-control" name="total_amount" id="total_amount" value="{{$data['data']['invoice_data'][0]->total_amount}}" /></td>
+								<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="{{$data['data']['invoice_data'][0]->total_amount}}" /></td>
 							</tr>
 							<tr>
 								<td colspan="17">
 									<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 								</td>
 							</tr>
+							@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
 							<tr>
 								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting"> Advanced Settings Reverse Charge</p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked> <!-- Advanced Settings --> Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
 								<td colspan="5">Tax under Reverse Charge</td>
-								<td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="{{$data['data']['invoice_data'][0]->tt_cgst_amount}}" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="{{$data['data']['invoice_data'][0]->tt_sgst_amount}}" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="{{$data['data']['invoice_data'][0]->tt_igst_amount}}" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="{{$data['data']['invoice_data'][0]->tt_cess_amount}}" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" value="{{$data['data']['invoice_data'][0]->tt_total}}"/></td>
+							</tr>
+							@else
+							<tr>
+								<td colspan="16">
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="5">Tax under Reverse Charge</td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0"/></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0"/></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0"/></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0"/></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
 							</tr>
+							@endif
 						</tbody>
 					</table>
 					<table class="table table-bordered">
@@ -508,7 +543,7 @@
 	$('#contact_gstin').css('pointer-events','none');
 </script>
 
-<script src="{{URL::asset('app/js/purchaseinvoice.js')}}"></script>
+<script src="{{URL::asset('app/js/editpurchaseinvoice.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection
