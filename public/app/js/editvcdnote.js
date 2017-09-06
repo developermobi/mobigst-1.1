@@ -1,6 +1,6 @@
 $(function(){
 
-	$("#tt_taxable_value").val('0');
+	/*$("#tt_taxable_value").val('0');
 	$("#tt_taxable_value").prop('disabled', true);
 	$("#tt_cgst_amount").val('0');
 	$("#tt_cgst_amount").prop('disabled', true);
@@ -11,7 +11,7 @@ $(function(){
 	$("#tt_cess_amount").val('0');
 	$("#tt_cess_amount").prop('disabled', true);
 	$("#tt_total").val('0');
-	$("#tt_total").prop('disabled', true);
+	$("#tt_total").prop('disabled', true);*/
 
 	var gstin_id = $("#gstin_id").val();
 

@@ -203,7 +203,7 @@
 								</th>
 								<th rowspan="2">HSN/SAC</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2">Cost</th>
+								<th rowspan="2">Rate</th>
 								<th rowspan="2">Discount</th>
 								<th colspan="2">CGST</th>
 								<th colspan="2">SGST</th>

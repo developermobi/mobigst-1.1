@@ -57,7 +57,7 @@
 		}else{
 			var due_date = $(".due_datepicker").val();
 
-			if(invoice_date >= due_date){
+			if(invoice_date > due_date){
 				alert('Due date should greater than invoice date');
 				$(".due_datepicker").val(" ");
 			}

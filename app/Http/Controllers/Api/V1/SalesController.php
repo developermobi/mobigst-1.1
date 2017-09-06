@@ -882,6 +882,7 @@ class SalesController extends Controller{
 		$cdnoteData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
 		$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$cdnoteData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 		$cdnoteData['total_amount'] = $input['total_amount'];
 		$cdnoteData['grand_total'] = $input['grand_total'];
 		$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -1018,6 +1019,7 @@ class SalesController extends Controller{
 		$advanceReceiptData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
 		$advanceReceiptData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$advanceReceiptData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$advanceReceiptData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
@@ -1252,6 +1254,7 @@ class SalesController extends Controller{
 		$advanceReceiptData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
 		$advanceReceiptData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$advanceReceiptData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$advanceReceiptData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];

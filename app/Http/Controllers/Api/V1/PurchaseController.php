@@ -418,9 +418,9 @@ class PurchaseController extends Controller{
 		$purchaseInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
 		$purchaseInvoiceData['total_amount'] = $input['total_amount'];
 		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
-			$salesInvoiceData['tax_type_applied'] = '1';
+			$purchaseInvoiceData['tax_type_applied'] = '1';
 		}else{
-			$salesInvoiceData['tax_type_applied'] = '0';
+			$purchaseInvoiceData['tax_type_applied'] = '0';
 		}
 		$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
 		$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
@@ -511,6 +511,7 @@ class PurchaseController extends Controller{
 					$creditValue += $value->total_amount;
 				}
 				if($value->note_type == 2){
+					$key = 1;
 					$debitTransaction += $key;
 					$debitValue += $value->total_amount;
 				}
@@ -637,6 +638,17 @@ class PurchaseController extends Controller{
 			$cdnoteData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 			$cdnoteData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 			$cdnoteData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+			if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+				$cdnoteData['tax_type_applied'] = '1';
+			}else{
+				$cdnoteData['tax_type_applied'] = '0';
+			}
+			$cdnoteData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+			$cdnoteData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+			$cdnoteData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+			$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+			$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+			$cdnoteData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 			$cdnoteData['total_amount'] = $input['total_amount'];
 			$cdnoteData['grand_total'] = $input['grand_total'];
 			$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -800,6 +812,17 @@ class PurchaseController extends Controller{
 		$cdnoteData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 		$cdnoteData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$cdnoteData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$salesInvoiceData['tax_type_applied'] = '1';
+		}else{
+			$salesInvoiceData['tax_type_applied'] = '0';
+		}
+		$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$purchaseInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$purchaseInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$purchaseInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$purchaseInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 		$cdnoteData['total_amount'] = $input['total_amount'];
 		$cdnoteData['grand_total'] = $input['grand_total'];
 		$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -911,6 +934,17 @@ class PurchaseController extends Controller{
 		$advanceReceiptData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 		$advanceReceiptData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$advanceReceiptData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$salesInvoiceData['tax_type_applied'] = '1';
+		}else{
+			$salesInvoiceData['tax_type_applied'] = '0';
+		}
+		$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$purchaseInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$purchaseInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$purchaseInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$purchaseInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
@@ -1120,6 +1154,17 @@ class PurchaseController extends Controller{
 		$advanceReceiptData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
 		$advanceReceiptData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$advanceReceiptData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$salesInvoiceData['tax_type_applied'] = '1';
+		}else{
+			$salesInvoiceData['tax_type_applied'] = '0';
+		}
+		$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$purchaseInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$purchaseInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$purchaseInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$purchaseInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];

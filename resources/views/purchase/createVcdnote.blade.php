@@ -128,7 +128,7 @@
 								</th>
 								<th rowspan="2">HSN/SAC</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2">Cost</th>
+								<th rowspan="2">Rate</th>
 								<th rowspan="2">Discount</th>
 								<th colspan="2">CGST</th>
 								<th colspan="2">SGST</th>
@@ -156,12 +156,26 @@
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" name="total_amount" id="total_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="0" /></td>
 							</tr>
 							<tr>
 								<td colspan="17">
 									<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
 								</td>
+							</tr>
+							<tr>
+								<td colspan="16">
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge</p>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="5">Tax under Reverse Charge</td>
+								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
+								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
+								<td colspan="2"><input type="text" class="form-control tt_total" id="tt_total" name="tt_total" /></td>
 							</tr>
 						</tbody>
 					</table>
