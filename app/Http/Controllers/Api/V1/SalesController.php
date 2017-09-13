@@ -102,6 +102,34 @@ class SalesController extends Controller{
 
 
 
+	public function servicesSalesInvoice($id){
+		$gstin_id = decrypt($id);
+
+		$data = array();
+		$getBusinessByGstin = Sales::getBusinessByGstin($gstin_id);
+		$getSalesInvoiceCount = Sales::getSalesInvoiceCount($gstin_id);
+		$getGstinInfo = Sales::getGstinInfo($gstin_id);
+
+		if(sizeof($getSalesInvoiceCount) > 0){
+			$data['invoice_no'] = "INV".($getSalesInvoiceCount[0]->count + 1);
+		}else{
+			$data['invoice_no'] = "INV1";
+		}
+
+		if(sizeof($getBusinessByGstin) > 0){
+			$data['gstin_id'] = $gstin_id;
+			$data['business_id'] = $getBusinessByGstin[0]->business_id;
+		}
+
+		if(sizeof($getGstinInfo) > 0){
+			$data['state_code'] = $getGstinInfo[0]->state_code;
+			$data['state_name'] = $getGstinInfo[0]->state_name;
+		}
+		return view('sales.servicesSalesInvoice')->with('data', $data);
+	}
+
+
+
 	public function getContact($business_id){
 
 		$getContact = Sales::getContact($business_id);
@@ -230,6 +258,7 @@ class SalesController extends Controller{
 		}else{
 			$salesInvoiceData = array();
 			$salesInvoiceData['gstin_id'] = $input['gstin_id'];
+			$salesInvoiceData['invoice_type'] = '1';
 			$salesInvoiceData['invoice_no'] = $input['invoice_no'];
 			$salesInvoiceData['invoice_date'] = $input['invoice_date'];
 			$salesInvoiceData['reference'] = $input['reference'];
@@ -293,12 +322,7 @@ class SalesController extends Controller{
 				$salesInvoiceData['is_other_charge'] = '0';
 			}
 			$salesInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
-			if(isset($input['is_invoice_charge']) && $input['is_invoice_charge'] == "on"){
-				$salesInvoiceData['is_invoice_charge'] = '1';
-			}else{
-				$salesInvoiceData['is_invoice_charge'] = '0';
-			}
-			$salesInvoiceData['invoice_charge'] = isset($input['invoice_charge']) ? $input['invoice_charge'] : "0";
+			$salesInvoiceData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 			$salesInvoiceData['total_in_words'] = $input['total_in_words'];
 			$salesInvoiceData['total_tax'] = $input['total_tax'];
 			$salesInvoiceData['grand_total'] = $input['grand_total'];
@@ -357,7 +381,156 @@ class SalesController extends Controller{
 					$invoiceDetailData['invoice_type'] = '1';
 					$invoiceDetailData['unit'] = $input['unit'];
 					$invoiceDetailData['item_name'] = $input['item_name'];
+					$invoiceDetailData['item_value'] = $input['item_value'];
 					$invoiceDetailData['item_type'] = "Goods";
+					$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
+					$invoiceDetailData['quantity'] = $input['quantity'];
+					$invoiceDetailData['rate'] = $input['rate'];
+					$invoiceDetailData['discount'] = $input['discount'];
+					$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
+					$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
+					$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
+					$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
+					$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
+					$invoiceDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
+					$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
+					$invoiceDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
+					$invoiceDetailData['total'] = $input['total'];
+					$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
+
+					$returnResponse['status'] = "success";
+					$returnResponse['code'] = "201";
+					$returnResponse['message'] = "Invoice created successfully.";
+					$returnResponse['data'] = $insertSalesInvoice;
+					return $returnResponse;
+				}
+			}else{
+				$returnResponse['status'] = "failed";
+				$returnResponse['code'] = "400";
+				$returnResponse['message'] = "Error while creating invoice. Please try again.";
+				$returnResponse['data'] = $insertSalesInvoice;
+				return $returnResponse;
+			}
+		}
+		return $returnResponse;
+	}
+
+
+
+	public function saveServicesSalesInvoice(Request $request){
+		$input = $request->all();
+
+		$checkInvoiceNumber = Sales::checkInvoiceNumber($input['gstin_id'],$input['invoice_no']);
+
+		if(sizeof($checkInvoiceNumber) > 0){
+			$returnResponse['status'] = "failed";
+			$returnResponse['code'] = "400";
+			$returnResponse['message'] = "Duplicate invoice number. Please change invoice number.";
+			$returnResponse['data'] = $checkInvoiceNumber;
+			return $returnResponse;
+		}else{
+			$salesInvoiceData = array();
+			$salesInvoiceData['gstin_id'] = $input['gstin_id'];
+			$salesInvoiceData['invoice_type'] = '2';
+			$salesInvoiceData['invoice_no'] = $input['invoice_no'];
+			$salesInvoiceData['invoice_date'] = $input['invoice_date'];
+			$salesInvoiceData['reference'] = $input['reference'];
+			$salesInvoiceData['contact_gstin'] = $input['contact_gstin'];
+			$salesInvoiceData['place_of_supply'] = $input['place_of_supply'];
+			$salesInvoiceData['due_date'] = $input['due_date'];
+			$salesInvoiceData['contact_name'] = $input['contact_name'];
+			$salesInvoiceData['bill_address'] = $input['bill_address'];
+			$salesInvoiceData['bill_pincode'] = $input['bill_pincode'];
+			$salesInvoiceData['bill_city'] = $input['bill_city'];
+			$salesInvoiceData['bill_state'] = $input['bill_state'];
+			$salesInvoiceData['bill_country'] = $input['bill_country'];
+			$salesInvoiceData['sh_address'] = $input['sh_address'];
+			$salesInvoiceData['sh_pincode'] = $input['sh_pincode'];
+			$salesInvoiceData['sh_city'] = $input['sh_city'];
+			$salesInvoiceData['sh_state'] = $input['sh_state'];
+			$salesInvoiceData['sh_country'] = $input['sh_country'];
+			if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+				$salesInvoiceData['sh_address_same'] = '1';
+			}else{
+				$salesInvoiceData['sh_address_same'] = '0';
+			}
+			$salesInvoiceData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
+			$salesInvoiceData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
+			$salesInvoiceData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
+			$salesInvoiceData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
+			$salesInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+			$salesInvoiceData['total_amount'] = $input['total_amount'];
+			if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+				$salesInvoiceData['tax_type_applied'] = '1';
+			}else{
+				$salesInvoiceData['tax_type_applied'] = '0';
+			}
+			$salesInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+			$salesInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+			$salesInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+			$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+			$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+			$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+			$salesInvoiceData['total_in_words'] = $input['total_in_words'];
+			$salesInvoiceData['total_tax'] = $input['total_tax'];
+			$salesInvoiceData['grand_total'] = $input['grand_total'];
+			$insertSalesInvoice = Sales::insertSalesInvoice($salesInvoiceData);
+			if($insertSalesInvoice > 0){
+
+				$getSIC = Sales::getSIC($input['gstin_id']);
+				if(sizeof($getSIC) > 0){
+					$count_data = array();
+					$count_data['gstin_id'] = $input['gstin_id'];
+					$count_data['invoice_type'] = 1;
+					$count_data['count'] = $getSIC[0]->count + 1;
+					$updateIC = Sales::updateIC($count_data);
+				}else{
+					$add_count_data = array();
+					$add_count_data['gstin_id'] = $input['gstin_id'];
+					$add_count_data['invoice_type'] = 1;
+					$add_count_data['count'] = '1';
+					$addIC = Sales::addIC($add_count_data);
+				}
+
+				$invoiceDetailData = array();
+
+				if(is_array($input['total'])){
+					foreach ($input['total'] as $key => $value) {
+						$invoiceDetailData['gstin_id'] = $input['gstin_id'];
+						$invoiceDetailData['invoice_no'] = $input['invoice_no'];
+						$invoiceDetailData['invoice_type'] = '1';
+						$invoiceDetailData['unit'] = $input['unit'][$key];
+						$invoiceDetailData['item_name'] = $input['item_name'][$key];
+						$invoiceDetailData['item_value'] = $input['item_value'][$key];
+						$invoiceDetailData['item_type'] = "Services";
+						$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
+						$invoiceDetailData['quantity'] = $input['quantity'][$key];
+						$invoiceDetailData['rate'] = $input['rate'][$key];
+						$invoiceDetailData['discount'] = $input['discount'][$key];
+						$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
+						$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
+						$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
+						$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
+						$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
+						$invoiceDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
+						$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
+						$invoiceDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
+						$invoiceDetailData['total'] = $input['total'][$key];
+						$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
+					}
+					$returnResponse['status'] = "success";
+					$returnResponse['code'] = "201";
+					$returnResponse['message'] = "Invoice created successfully.";
+					$returnResponse['data'] = $insertSalesInvoice;
+					return $returnResponse;
+				}else{
+					$invoiceDetailData['gstin_id'] = $input['gstin_id'];
+					$invoiceDetailData['invoice_no'] = $input['invoice_no'];
+					$invoiceDetailData['invoice_type'] = '1';
+					$invoiceDetailData['unit'] = $input['unit'];
+					$invoiceDetailData['item_name'] = $input['item_name'];
+					$invoiceDetailData['item_value'] = $input['item_value'];
+					$invoiceDetailData['item_type'] = "Services";
 					$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 					$invoiceDetailData['quantity'] = $input['quantity'];
 					$invoiceDetailData['rate'] = $input['rate'];
@@ -416,7 +589,7 @@ class SalesController extends Controller{
 		$getData = Sales::getSalesInvoiceData($invoice_id);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -452,7 +625,7 @@ class SalesController extends Controller{
 		$getData = Sales::getSalesInvoiceData($invoice_id);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -488,6 +661,87 @@ class SalesController extends Controller{
 		}
 		return $pdf->stream('SalesInvoice.pdf');
 		return view('sales.printSalesInvoice');
+	}
+
+
+
+	public function viewServicesSalesInvoice($id){
+		$invoice_id = decrypt($id);
+		$getData = Sales::getSalesInvoiceData($invoice_id);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('sales.viewServicesSalesInvoice')->with('data', $returnResponse);
+	}
+
+
+
+	public function printServicesSalesInvoice(Request $request,$id){
+		$invoice_id = decrypt($id);
+		$getData = Sales::getSalesInvoiceData($invoice_id);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+
+		view()->share('data',$returnResponse);
+		$pdf = PDF::loadView('sales.printServicesSalesInvoice');
+
+		if($request->has('download')){
+			$pdf = PDF::loadView('sales.printServicesSalesInvoice');
+			return $pdf->download('SalesInvoice.pdf');
+		}
+		return $pdf->stream('SalesInvoice.pdf');
+		return view('sales.printServicesSalesInvoice');
 	}
 
 
@@ -530,6 +784,44 @@ class SalesController extends Controller{
 
 
 
+	public function editServicesSalesInvoice($id){
+		$invoice_id = decrypt($id);
+		$getData = Sales::getSalesInvoiceData($invoice_id);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			$getUnit = Sales::getUnit();
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+			$data['units'] = $getUnit;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('sales.editServicesSalesInvoice')->with('data', $returnResponse);
+	}
+
+
+
 	public function deleteInvoiceDetail($id){
 		$getData = Sales::deleteInvoiceDetail($id);
 
@@ -554,6 +846,7 @@ class SalesController extends Controller{
 
 		$salesInvoiceData = array();
 		$salesInvoiceData['gstin_id'] = $input['gstin_id'];
+		$salesInvoiceData['invoice_type'] = '1';
 		$salesInvoiceData['invoice_no'] = $input['invoice_no'];
 		$salesInvoiceData['invoice_date'] = $input['invoice_date'];
 		$salesInvoiceData['reference'] = $input['reference'];
@@ -617,12 +910,7 @@ class SalesController extends Controller{
 			$salesInvoiceData['is_other_charge'] = '0';
 		}
 		$salesInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
-		if(isset($input['is_invoice_charge']) && $input['is_invoice_charge'] == "on"){
-			$salesInvoiceData['is_invoice_charge'] = '1';
-		}else{
-			$salesInvoiceData['is_invoice_charge'] = '0';
-		}
-		$salesInvoiceData['invoice_charge'] = isset($input['invoice_charge']) ? $input['invoice_charge'] : "0";
+		$salesInvoiceData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "0";
 		$salesInvoiceData['total_in_words'] = $input['total_in_words'];
 		$salesInvoiceData['total_tax'] = $input['total_tax'];
 		$salesInvoiceData['grand_total'] = $input['grand_total'];
@@ -667,6 +955,124 @@ class SalesController extends Controller{
 			$invoiceDetailData['invoice_type'] = '1';
 			$invoiceDetailData['unit'] = $input['unit'];
 			$invoiceDetailData['item_name'] = $input['item_name'];
+			$invoiceDetailData['item_value'] = $input['item_value'];
+			$invoiceDetailData['item_type'] = "Goods";
+			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
+			$invoiceDetailData['quantity'] = $input['quantity'];
+			$invoiceDetailData['rate'] = $input['rate'];
+			$invoiceDetailData['discount'] = $input['discount'];
+			$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage']) ? $input['cgst_percentage'] : "0";
+			$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount']) ? $input['cgst_amount'] : "0";
+			$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage']) ? $input['sgst_percentage'] : "0";
+			$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount']) ? $input['sgst_amount'] : "0";
+			$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage']) ? $input['igst_percentage'] : "0";
+			$invoiceDetailData['igst_amount'] = isset($input['igst_amount']) ? $input['igst_amount'] : "0";
+			$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
+			$invoiceDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
+			$invoiceDetailData['total'] = $input['total'];
+			$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Invoice updated successfully.";
+			$returnResponse['data'] = $insertSalesInvoice;
+			return $returnResponse;
+		}
+		return $returnResponse;
+	}
+
+
+
+	public function updateServicesSalesInvoice(Request $request,$si_id){
+		$input = $request->all();
+
+		$salesInvoiceData = array();
+		$salesInvoiceData['gstin_id'] = $input['gstin_id'];
+		$salesInvoiceData['invoice_type'] = '2';
+		$salesInvoiceData['invoice_no'] = $input['invoice_no'];
+		$salesInvoiceData['invoice_date'] = $input['invoice_date'];
+		$salesInvoiceData['reference'] = $input['reference'];
+		$salesInvoiceData['contact_gstin'] = $input['contact_gstin'];
+		$salesInvoiceData['place_of_supply'] = $input['place_of_supply'];
+		$salesInvoiceData['due_date'] = $input['due_date'];
+		$salesInvoiceData['contact_name'] = $input['contact_name'];
+		$salesInvoiceData['bill_address'] = $input['bill_address'];
+		$salesInvoiceData['bill_pincode'] = $input['bill_pincode'];
+		$salesInvoiceData['bill_city'] = $input['bill_city'];
+		$salesInvoiceData['bill_state'] = $input['bill_state'];
+		$salesInvoiceData['bill_country'] = $input['bill_country'];
+		$salesInvoiceData['sh_address'] = $input['sh_address'];
+		$salesInvoiceData['sh_pincode'] = $input['sh_pincode'];
+		$salesInvoiceData['sh_city'] = $input['sh_city'];
+		$salesInvoiceData['sh_state'] = $input['sh_state'];
+		$salesInvoiceData['sh_country'] = $input['sh_country'];
+		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
+			$advanceReceiptData['sh_address_same'] = '1';
+		}else{
+			$advanceReceiptData['sh_address_same'] = '0';
+		}
+		$salesInvoiceData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
+		$salesInvoiceData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
+		$salesInvoiceData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
+		$salesInvoiceData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
+		$salesInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
+		$salesInvoiceData['total_amount'] = $input['total_amount'];
+		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
+			$salesInvoiceData['tax_type_applied'] = '1';
+		}else{
+			$salesInvoiceData['tax_type_applied'] = '0';
+		}
+		$salesInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$salesInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$salesInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		$salesInvoiceData['total_in_words'] = $input['total_in_words'];
+		$salesInvoiceData['total_tax'] = $input['total_tax'];
+		$salesInvoiceData['grand_total'] = $input['grand_total'];
+		
+		$insertSalesInvoice = Sales::updateSalesInvoice($salesInvoiceData,$si_id);
+
+		$invoiceDetailData = array();
+		$deleteInvoiceDetailBySiId = Sales::deleteInvoiceDetailBySiId($input['invoice_no']);
+
+		if(is_array($input['total'])){
+			foreach ($input['total'] as $key => $value) {
+				$invoiceDetailData['gstin_id'] = $input['gstin_id'];
+				$invoiceDetailData['invoice_no'] = $input['invoice_no'];
+				$invoiceDetailData['invoice_type'] = '1';
+				$invoiceDetailData['unit'] = $input['unit'][$key];
+				$invoiceDetailData['item_name'] = $input['item_name'][$key];
+				$invoiceDetailData['item_value'] = $input['item_value'][$key];
+				$invoiceDetailData['item_type'] = "Goods";
+				$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
+				$invoiceDetailData['quantity'] = $input['quantity'][$key];
+				$invoiceDetailData['rate'] = $input['rate'][$key];
+				$invoiceDetailData['discount'] = $input['discount'][$key];
+				$invoiceDetailData['cgst_percentage'] = isset($input['cgst_percentage'][$key]) ? $input['cgst_percentage'][$key] : "0";
+				$invoiceDetailData['cgst_amount'] = isset($input['cgst_amount'][$key]) ? $input['cgst_amount'][$key] : "0";
+				$invoiceDetailData['sgst_percentage'] = isset($input['sgst_percentage'][$key]) ? $input['sgst_percentage'][$key] : "0";
+				$invoiceDetailData['sgst_amount'] = isset($input['sgst_amount'][$key]) ? $input['sgst_amount'][$key] : "0";
+				$invoiceDetailData['igst_percentage'] = isset($input['igst_percentage'][$key]) ? $input['igst_percentage'][$key] : "0";
+				$invoiceDetailData['igst_amount'] = isset($input['igst_amount'][$key]) ? $input['igst_amount'][$key] : "0";
+				$invoiceDetailData['cess_percentage'] = isset($input['cess_percentage'][$key]) ? $input['cess_percentage'][$key] : "0";
+				$invoiceDetailData['cess_amount'] = isset($input['cess_amount'][$key]) ? $input['cess_amount'][$key] : "0";
+				$invoiceDetailData['total'] = $input['total'][$key];
+				$insertInvoiceDetails = Sales::insertInvoiceDetails($invoiceDetailData);
+			}
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Invoice updated successfully.";
+			$returnResponse['data'] = $insertSalesInvoice;
+			return $returnResponse;
+		}else{
+			$invoiceDetailData['gstin_id'] = $input['gstin_id'];
+			$invoiceDetailData['invoice_no'] = $input['invoice_no'];
+			$invoiceDetailData['invoice_type'] = '1';
+			$invoiceDetailData['unit'] = $input['unit'];
+			$invoiceDetailData['item_name'] = $input['item_name'];
+			$invoiceDetailData['item_value'] = $input['item_value'];
 			$invoiceDetailData['item_type'] = "Goods";
 			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 			$invoiceDetailData['quantity'] = $input['quantity'];
@@ -978,7 +1384,7 @@ class SalesController extends Controller{
 		$getData = Sales::getCdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1014,7 +1420,7 @@ class SalesController extends Controller{
 		$getData = Sales::getCdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1059,7 +1465,7 @@ class SalesController extends Controller{
 		$getData = Sales::getCdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1434,7 +1840,7 @@ class SalesController extends Controller{
 		$getData = Sales::getAdvanceReceiptData($receipt_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1470,7 +1876,7 @@ class SalesController extends Controller{
 		$getData = Sales::getAdvanceReceiptData($receipt_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1506,7 +1912,7 @@ class SalesController extends Controller{
 		$getData = Sales::getAdvanceReceiptData($receipt_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no);
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1630,6 +2036,7 @@ class SalesController extends Controller{
 			$invoiceDetailData['item_name'] = $input['item_name'];
 			$invoiceDetailData['item_type'] = "Goods";
 			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
+			$invoiceDetailData['item_value'] = $input['item_value'];
 			$invoiceDetailData['quantity'] = $input['quantity'];
 			$invoiceDetailData['rate'] = $input['rate'];
 			$invoiceDetailData['discount'] = $input['discount'];

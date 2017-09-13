@@ -2,7 +2,7 @@ $(function(){
 
 	$('.rate').css('pointer-events','none');
 
-	$("#tt_taxable_value").val('0');
+	/*$("#tt_taxable_value").val('0');
 	$("#tt_taxable_value").prop('disabled', true);
 	$("#tt_cgst_amount").val('0');
 	$("#tt_cgst_amount").prop('disabled', true);
@@ -19,7 +19,7 @@ $(function(){
 	$("#lp_charge").prop('disabled', true);
 	$("#insurance_charge").prop('disabled', true);
 	$("#other_charge").prop('disabled', true);
-	$('#other_charge_name').prop('disabled', true);
+	$("#invoice_charge").prop('disabled', true);*/
 
 	var business_id = $("#business_id").val();
 
@@ -151,15 +151,13 @@ $(function(){
 			$("#tt_total").val('0');
 			$("#tt_total").prop('disabled', true);
 
-			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
-			$("#total_tax").val(total_tax.toFixed(2));
+			$("#total_tax").val(parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount));
 		}
 	});
 
 	$('#is_freight_charge').change(function(){
 		if ($('#is_freight_charge').is(':checked') == true){
 			$('#freight_charge').prop('disabled', false);
-			$('#freight_charge').focus();
 		} else {
 			$('#freight_charge').val('');
 			calculateTotal(this);
@@ -170,7 +168,6 @@ $(function(){
 	$('#is_lp_charge').change(function(){
 		if ($('#is_lp_charge').is(':checked') == true){
 			$('#lp_charge').prop('disabled', false);
-			$('#lp_charge').focus();
 		} else {
 			$('#lp_charge').val('');
 			calculateTotal(this);
@@ -181,7 +178,6 @@ $(function(){
 	$('#is_insurance_charge').change(function(){
 		if ($('#is_insurance_charge').is(':checked') == true){
 			$('#insurance_charge').prop('disabled', false);
-			$('#insurance_charge').focus();
 		} else {
 			$('#insurance_charge').val('');
 			calculateTotal(this);
@@ -193,7 +189,6 @@ $(function(){
 		if ($('#is_other_charge').is(':checked') == true){
 			$('#other_charge').prop('disabled', false);
 			$('#other_charge_name').prop('disabled', false);
-			$('#other_charge_name').focus();
 		} else {
 			$('#other_charge').val('');
 			calculateTotal(this);
@@ -203,11 +198,11 @@ $(function(){
 	});
 
 	$('#save_invoice').click(function(){
-		saveSalesInvoice();
+		saveServicesSalesInvoice();
 	});
 
 	$('#update_invoice').click(function(){
-		updateSalesInvoice();
+		updateServicesSalesInvoice();
 	});
 
 });
@@ -580,6 +575,7 @@ function calculateNew(obj){
 	if(discount == ''){
 		discount = 0;
 	}
+	console.log(discount);
 
 	var priceNquantity = parseFloat(quantity)*parseFloat(item_value);
 	var rate_element = $(obj).closest("tr").find(".rate");
@@ -587,6 +583,7 @@ function calculateNew(obj){
 
 	var amount = (parseFloat(priceNquantity) / 100) * discount;
 	var new_rate = parseFloat(priceNquantity) - parseFloat(amount);
+	console.log(new_rate);
 	rate_element.val(new_rate.toFixed(2));
 
 	calCgstAmount(obj);
@@ -861,7 +858,7 @@ function deleteInvoiceDetail(id_no,obj){
 
 
 
-function updateSalesInvoice(){
+function updateServicesSalesInvoice(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
 	var si_id = $("#si_id").val();
@@ -869,7 +866,7 @@ function updateSalesInvoice(){
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/updateSalesInvoice/"+si_id,
+		"url": SERVER_NAME+"/api/updateServicesSalesInvoice/"+si_id,
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",

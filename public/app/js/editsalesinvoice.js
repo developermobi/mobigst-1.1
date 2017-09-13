@@ -2,6 +2,25 @@ $(function(){
 
 	$('.rate').css('pointer-events','none');
 
+	/*$("#tt_taxable_value").val('0');
+	$("#tt_taxable_value").prop('disabled', true);
+	$("#tt_cgst_amount").val('0');
+	$("#tt_cgst_amount").prop('disabled', true);
+	$("#tt_sgst_amount").val('0');
+	$("#tt_sgst_amount").prop('disabled', true);
+	$("#tt_igst_amount").val('0');
+	$("#tt_igst_amount").prop('disabled', true);
+	$("#tt_cess_amount").val('0');
+	$("#tt_cess_amount").prop('disabled', true);
+	$("#tt_total").val('0');
+	$("#tt_total").prop('disabled', true);
+
+	$("#freight_charge").prop('disabled', true);
+	$("#lp_charge").prop('disabled', true);
+	$("#insurance_charge").prop('disabled', true);
+	$("#other_charge").prop('disabled', true);
+	$("#invoice_charge").prop('disabled', true);*/
+
 	var business_id = $("#business_id").val();
 
 	getStates();
@@ -75,44 +94,64 @@ $(function(){
 	});
 
 
-	$(".place_of_supply").change(function(event){
-		var place_of_supply = $("#place_of_supply").val();
-		var customer_state = $("#customer_state").val();
+	$('#advance_setting').change(function() {
+		var total_cgst_amount = $(".total_cgst_amount").val();
+		var total_sgst_amount = $(".total_sgst_amount").val();
+		var total_igst_amount = $(".total_igst_amount").val();
+		var total_cess_amount = $(".total_cess_amount").val();
 
-		if(place_of_supply == customer_state){
-			$(".cgst_percentage").val('0');
-			$(".cgst_percentage").prop('disabled', false);
-			$(".cgst_amount").val('0');
-			$(".cgst_amount").prop('disabled', false);
-			$(".sgst_percentage").val('0');
-			$(".sgst_percentage").prop('disabled', false);
-			$(".sgst_amount").val('0');
-			$(".sgst_amount").prop('disabled', false);
-			$(".igst_percentage").val('0');
-			$(".igst_percentage").prop('disabled', true);
-			$(".igst_amount").val('0');
-			$(".igst_amount").prop('disabled', true);
-			$(".total_cgst_amount").val('0');
-			$(".total_sgst_amount").val('0');
-			$(".total_igst_amount").val('0');
-			Recalculate();
+		if ($(this).is(':checked')) {
+
+			$("#tt_cgst_amount").val('0');
+			$("#tt_cgst_amount").prop('disabled', false);
+			$("#tt_sgst_amount").val('0');
+			$("#tt_sgst_amount").prop('disabled', false);
+			$("#tt_igst_amount").val('0');
+			$("#tt_igst_amount").prop('disabled', false);
+			$("#tt_cess_amount").val('0');
+			$("#tt_cess_amount").prop('disabled', false);
+			$("#tt_total").val('0');
+			$("#tt_total").prop('disabled', false);
+			
+			$("#tt_cgst_amount").val(total_cgst_amount);
+			$("#tt_sgst_amount").val(total_sgst_amount);
+			$("#tt_igst_amount").val(total_igst_amount);
+			$("#tt_cess_amount").val(total_cess_amount);
+			var tt_total = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			$("#tt_total").val(tt_total.toFixed(2));
+
+			$("#total_tax").val('0');
+
+			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			var total = $(".total_amount").val();
+
+			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax.toFixed(2)));
+			var total_amount = $(".total_amount").val();
+			$("#grand_total").val(total_amount);
+			var grand_total = $("#grand_total").val();
+			var total_in_words = number2text(grand_total);
+			$("#total_in_words").val(total_in_words);
 		}else{
-			$(".cgst_percentage").val('0');
-			$(".cgst_percentage").prop('disabled', true);
-			$(".cgst_amount").val('0');
-			$(".cgst_amount").prop('disabled', true);
-			$(".sgst_percentage").val('0');
-			$(".sgst_percentage").prop('disabled', true);
-			$(".sgst_amount").val('0');
-			$(".sgst_amount").prop('disabled', true);
-			$(".igst_percentage").val('0');
-			$(".igst_percentage").prop('disabled', false);
-			$(".igst_amount").val('0');
-			$(".igst_amount").prop('disabled', false);
-			$(".total_cgst_amount").val('0');
-			$(".total_sgst_amount").val('0');
-			$(".total_igst_amount").val('0');
-			Recalculate();
+			var total_tax = $("#tt_total").val();
+			var grand_total = $("#grand_total").val();
+			$(".total_amount").val(parseFloat(grand_total) + parseFloat(total_tax));
+			$("#grand_total").val(parseFloat(grand_total) + parseFloat(total_tax));
+			var new_grand_total = $("#grand_total").val();
+			var total_in_words = number2text(new_grand_total);
+			$("#total_in_words").val(total_in_words);
+
+			$("#tt_cgst_amount").val('0');
+			$("#tt_cgst_amount").prop('disabled', true);
+			$("#tt_sgst_amount").val('0');
+			$("#tt_sgst_amount").prop('disabled', true);
+			$("#tt_igst_amount").val('0');
+			$("#tt_igst_amount").prop('disabled', true);
+			$("#tt_cess_amount").val('0');
+			$("#tt_cess_amount").prop('disabled', true);
+			$("#tt_total").val('0');
+			$("#tt_total").prop('disabled', true);
+
+			$("#total_tax").val(parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount));
 		}
 	});
 
@@ -149,22 +188,14 @@ $(function(){
 	$('#is_other_charge').change(function(){
 		if ($('#is_other_charge').is(':checked') == true){
 			$('#other_charge').prop('disabled', false);
+			$('#other_charge_name').prop('disabled', false);
 		} else {
 			$('#other_charge').val('');
 			calculateTotal(this);
 			$('#other_charge').prop('disabled', true);
+			$('#other_charge_name').prop('disabled', true);
 		}
 	});
-
-	$('#is_invoice_charge').change(function(){
-		if ($('#is_invoice_charge').is(':checked') == true){
-			$('#invoice_charge').prop('disabled', false);
-		} else {
-			$('#invoice_charge').val('');
-			calculateTotal(this);
-			$('#invoice_charge').prop('disabled', true);
-		}
-	});	
 
 	$('#save_invoice').click(function(){
 		saveSalesInvoice();
@@ -175,6 +206,7 @@ $(function(){
 	});
 
 });
+
 
 
 function getContact(business_id){
@@ -234,6 +266,7 @@ function getStates(){
 				});
 			}
 			$(".place_of_supply").append(option);
+			$(".state").append(option);
 		},
 		complete:function(){
 		}
@@ -346,6 +379,10 @@ function getContactInfo(obj){
 					$(".igst_percentage").prop('disabled', true);
 					$(".igst_amount").val('0');
 					$(".igst_amount").prop('disabled', true);
+					$(".total_cgst_amount").val('0');
+					$(".total_sgst_amount").val('0');
+					$(".total_igst_amount").val('0');
+					Recalculate();
 				}else{
 					$(".cgst_percentage").val('0');
 					$(".cgst_percentage").prop('disabled', true);
@@ -359,6 +396,10 @@ function getContactInfo(obj){
 					$(".igst_percentage").prop('disabled', false);
 					$(".igst_amount").val('0');
 					$(".igst_amount").prop('disabled', false);
+					$(".total_cgst_amount").val('0');
+					$(".total_sgst_amount").val('0');
+					$(".total_igst_amount").val('0');
+					Recalculate();
 				}
 			}
 		},
@@ -432,6 +473,17 @@ function getItemInfo(obj){
 		complete:function(){
 		}
 	});
+}
+
+
+
+function removeDiscount(obj){
+	$('.discount').val('0');
+	calculateNew(obj);
+	alert('msg');
+	calculateTotal(obj);
+	alert('msg1');
+	$('.removeDiv').hide();
 }
 
 
@@ -523,6 +575,7 @@ function calculateNew(obj){
 	if(discount == ''){
 		discount = 0;
 	}
+	console.log(discount);
 
 	var priceNquantity = parseFloat(quantity)*parseFloat(item_value);
 	var rate_element = $(obj).closest("tr").find(".rate");
@@ -530,6 +583,7 @@ function calculateNew(obj){
 
 	var amount = (parseFloat(priceNquantity) / 100) * discount;
 	var new_rate = parseFloat(priceNquantity) - parseFloat(amount);
+	console.log(new_rate);
 	rate_element.val(new_rate.toFixed(2));
 
 	calCgstAmount(obj);
@@ -608,12 +662,7 @@ function calculateTotal(obj){
 		other_charge = 0;
 	}
 
-	var invoice_charge = $(".invoice_charge").val();
-	if(invoice_charge == ''){
-		invoice_charge = 0;
-	}
-
-	var total_charge = parseFloat(freight_charge) + parseFloat(lp_charge) + parseFloat(insurance_charge) + parseFloat(other_charge) + parseFloat(invoice_charge);
+	var total_charge = parseFloat(freight_charge) + parseFloat(lp_charge) + parseFloat(insurance_charge) + parseFloat(other_charge);
 
 	var total_tax = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum);
 	$("#total_tax").val(parseFloat(total_tax.toFixed(2)));

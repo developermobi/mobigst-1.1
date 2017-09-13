@@ -15,12 +15,6 @@ $(function(){
 	$("#tt_total").val('0');
 	$("#tt_total").prop('disabled', true);
 
-	$("#freight_charge").prop('disabled', true);
-	$("#lp_charge").prop('disabled', true);
-	$("#insurance_charge").prop('disabled', true);
-	$("#other_charge").prop('disabled', true);
-	$('#other_charge_name').prop('disabled', true);
-
 	var business_id = $("#business_id").val();
 
 	getStates();
@@ -151,59 +145,12 @@ $(function(){
 			$("#tt_total").val('0');
 			$("#tt_total").prop('disabled', true);
 
-			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
-			$("#total_tax").val(total_tax.toFixed(2));
-		}
-	});
-
-	$('#is_freight_charge').change(function(){
-		if ($('#is_freight_charge').is(':checked') == true){
-			$('#freight_charge').prop('disabled', false);
-			$('#freight_charge').focus();
-		} else {
-			$('#freight_charge').val('');
-			calculateTotal(this);
-			$('#freight_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_lp_charge').change(function(){
-		if ($('#is_lp_charge').is(':checked') == true){
-			$('#lp_charge').prop('disabled', false);
-			$('#lp_charge').focus();
-		} else {
-			$('#lp_charge').val('');
-			calculateTotal(this);
-			$('#lp_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_insurance_charge').change(function(){
-		if ($('#is_insurance_charge').is(':checked') == true){
-			$('#insurance_charge').prop('disabled', false);
-			$('#insurance_charge').focus();
-		} else {
-			$('#insurance_charge').val('');
-			calculateTotal(this);
-			$('#insurance_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_other_charge').change(function(){
-		if ($('#is_other_charge').is(':checked') == true){
-			$('#other_charge').prop('disabled', false);
-			$('#other_charge_name').prop('disabled', false);
-			$('#other_charge_name').focus();
-		} else {
-			$('#other_charge').val('');
-			calculateTotal(this);
-			$('#other_charge').prop('disabled', true);
-			$('#other_charge_name').prop('disabled', true);
+			$("#total_tax").val(parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount));
 		}
 	});
 
 	$('#save_invoice').click(function(){
-		saveSalesInvoice();
+		saveServicesSalesInvoice();
 	});
 
 	$('#update_invoice').click(function(){
@@ -645,40 +592,18 @@ function calculateTotal(obj){
 	$(".total_igst_amount").val(igst_amount_sum.toFixed(2));
 	$(".total_cess_amount").val(cess_amount_sum.toFixed(2));
 
-	var freight_charge = $(".freight_charge").val();
-	if(freight_charge == ''){
-		freight_charge = 0;
-	}
-
-	var lp_charge = $(".lp_charge").val();
-	if(lp_charge == ''){
-		lp_charge = 0;
-	}
-
-	var insurance_charge = $(".insurance_charge").val();
-	if(insurance_charge == ''){
-		insurance_charge = 0;
-	}
-
-	var other_charge = $(".other_charge").val();
-	if(other_charge == ''){
-		other_charge = 0;
-	}
-
-	var total_charge = parseFloat(freight_charge) + parseFloat(lp_charge) + parseFloat(insurance_charge) + parseFloat(other_charge);
-
 	var total_tax = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum);
 	$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 	var total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 	$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
-	$("#grand_total").val(parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2)));
+	$("#grand_total").val(parseFloat(total_amount.toFixed(2)));
 	var total_in_words = number2text($("#grand_total").val());
 	$("#total_in_words").val(total_in_words);
 
 	if($('#advance_setting').is(":checked")){
 		$("#total_tax").val('0');
 		$("#total_amount").val(parseFloat(rate_sum));
-		$("#grand_total").val(parseFloat(rate_sum) + parseFloat(total_charge));
+		$("#grand_total").val(parseFloat(rate_sum));
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 
@@ -693,7 +618,7 @@ function calculateTotal(obj){
 		$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 		total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 		$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
-		$("#grand_total").val(parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2)));
+		$("#grand_total").val(parseFloat(total_amount.toFixed(2)));
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 	}
@@ -701,7 +626,7 @@ function calculateTotal(obj){
 
 
 
-function saveSalesInvoice(){
+function saveServicesSalesInvoice(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
 	
@@ -718,7 +643,7 @@ function saveSalesInvoice(){
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/saveSalesInvoice",
+		"url": SERVER_NAME+"/api/saveServicesSalesInvoice",
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",

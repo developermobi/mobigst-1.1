@@ -44,7 +44,7 @@
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right; margin-right: 10px;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">View Sales Invoice</h2>
+			<h2 style="margin-top: 0px;">View Goods Sales Invoice</h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
@@ -166,15 +166,13 @@
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
-								<th rowspan="2" width="20%"> ITEM 
-									<span style="float: right;cursor: pointer;">
-										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
-									</span>
-								</th>
-								<th rowspan="2">HSN/SAC</th>
+								<th rowspan="2" width="20%"> ITEM </th>
+								<th rowspan="2">HSN</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2">Cost</th>
-								<th rowspan="2">Discount</th>
+								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2">Price</th>
+								<th rowspan="2">Discount in %</th>
+								<th rowspan="2">Taxable Value</th>
 								<th colspan="2">CGST</th>
 								<th colspan="2">SGST</th>
 								<th colspan="2">IGST</th>
@@ -197,50 +195,28 @@
 							@foreach($data['data']['invoice_details'] as $key => $value)
 							<tr>
 								<td>
-									<select class="form-control item_name" name="item_name" id="item_name"  onchange="getItemInfo(this);calculateTotal(this)">
-										<option value="{{$value->item_name}}">{{$value->item_name}}</option>
-									</select>
+									<input type="text" class="form-control quantity" name="quantity" id="quantity" value="{{$value->item_name}}" onkeyup="calculateNew(this)"/>
 								</td>
 								<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no" value="{{$value->hsn_sac_no}}" /></td>
-								<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="{{$value->quantity}}" onkeyup="calculateQuantity(this)"/></td>
-								<td><input type="text" class="form-control rate" name="rate" id="rate" value="{{$value->rate}}" onkeyup="calculateCost(this)"/><input type="hidden" class="form-control item_value" name="item_value" id="item_value" value="{{$value->item_value}}"/></td>
-								<td><input type="text" class="form-control discount" name="discount" id="discount" value="{{$value->discount}}" onkeyup="calculateDiscount(this)"/></td>
+								<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="{{$value->quantity}}" onkeyup="calculateNew(this)"/></td>
 								<td>
-									<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">
-										<option value="0" <?php if($value->cgst_percentage == '0'){echo "selected";}?> >0</option>
-										<option value="0.125" <?php if($value->cgst_percentage == '0.125'){echo "selected";}?> >0.125</option>
-										<option value="1.5" <?php if($value->cgst_percentage == '1.5'){echo "selected";}?> >1.5</option>
-										<option value="2.5" <?php if($value->cgst_percentage == '2.5'){echo "selected";}?> >2.5</option>
-										<option value="6" <?php if($value->cgst_percentage == '6'){echo "selected";}?> >6</option>
-										<option value="9" <?php if($value->cgst_percentage == '9'){echo "selected";}?> >9</option>
-										<option value="14" <?php if($value->cgst_percentage == '14'){echo "selected";}?> >14</option>
-									</select>
+									<input type="text" class="form-control quantity" name="quantity" id="quantity" value="{{$value->unit}}" onkeyup="calculateNew(this)"/>
+								</td>
+								<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="{{$value->item_value}}" onkeyup="calculateNew(this)"/></td>
+								<td><input type="text" class="form-control discount" name="discount" id="discount" value="{{$value->discount}}" onkeyup="calculateNew(this)"/></td>
+								<td><input type="text" class="form-control rate" name="rate" id="rate" value="{{$value->rate}}"/></td>
+								<td>
+									<input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="{{$value->cgst_percentage}}"/>
 								</td>
 								<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="{{$value->cgst_amount}}"/></td>
 								<td>
-									<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">
-										<option value="0" <?php if($value->sgst_percentage == '0'){echo "selected";}?> >0</option>
-										<option value="0.125" <?php if($value->sgst_percentage == '0.125'){echo "selected";}?> >0.125</option>
-										<option value="1.5" <?php if($value->sgst_percentage == '1.5'){echo "selected";}?> >1.5</option>
-										<option value="2.5" <?php if($value->sgst_percentage == '2.5'){echo "selected";}?> >2.5</option>
-										<option value="6" <?php if($value->sgst_percentage == '6'){echo "selected";}?> >6</option>
-										<option value="9" <?php if($value->sgst_percentage == '9'){echo "selected";}?> >9</option>
-										<option value="14" <?php if($value->sgst_percentage == '14'){echo "selected";}?> >14</option>
-									</select>
+									<input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="{{$value->sgst_percentage}}"/>
 								</td>
 								<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="{{$value->sgst_amount}}"/></td>
 								<td>
-									<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>
-										<option value="0" <?php if($value->igst_percentage == '0'){echo "selected";}?> >0</option>
-										<option value="0.125" <?php if($value->igst_percentage == '0.125'){echo "selected";}?> >0.125</option>
-										<option value="1.5" <?php if($value->igst_percentage == '1.5'){echo "selected";}?> >1.5</option>
-										<option value="2.5" <?php if($value->igst_percentage == '2.5'){echo "selected";}?> >2.5</option>
-										<option value="6" <?php if($value->igst_percentage == '6'){echo "selected";}?> >6</option>
-										<option value="9" <?php if($value->igst_percentage == '9'){echo "selected";}?> >9</option>
-										<option value="14" <?php if($value->igst_percentage == '14'){echo "selected";}?> >14</option>
-									</select>
+									<input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="{{$value->igst_percentage}}"/>
 								</td>
-								<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="{{$value->igst_amount}}"  disabled/></td>
+								<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="{{$value->igst_amount}}"/></td>
 								<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="{{$data['data']['invoice_details'][0]->cess_percentage}}"/></td>
 								<td><input type="text" class="form-control cess_amount" name="cess_amount" value="{{$value->cess_amount}}"/></td>
 								<td><input type="text" class="form-control total" name="total" id="total" value="{{$value->total}}" /></td>
@@ -248,7 +224,7 @@
 							@endforeach
 							@endif
 							<tr id="t2">
-								<td colspan="5">Total Inv. Val</td>
+								<td colspan="7">Total Inv. Val</td>
 								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="{{$data['data']['invoice_data'][0]->total_cgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="{{$data['data']['invoice_data'][0]->total_igst_amount}}" /></td>
@@ -285,6 +261,21 @@
 							</tr>
 							@endif
 						</tbody>
+					</table>
+					<table class="table table-bordered" id="item_table2">
+						<tr>
+							<td>Freight Charges</td>
+							<td>Loading and Packing Charges</td>
+							<td>Insurance Charges</td>
+							<td colspan="2">Other Charges</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->freight_charge}}" ></td>
+							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->lp_charge}}" ></td>
+							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->insurance_charge}}"  ></td>
+							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name" value="{{$data['data']['invoice_data'][0]->other_charge_name}}"  placeholder="Enter Charge Name" /></td>
+							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->other_charge}}" ></td>
+						</tr>
 					</table>
 					<table class="table table-bordered">
 						<tr>
@@ -410,25 +401,6 @@
 </div>
 
 <script>
-	var place_of_supply = $("#place_of_supply").val();
-	var customer_state = $("#customer_state").val();
-
-	if(place_of_supply != customer_state){
-		$(".cgst_percentage").prop('disabled', true);
-		$(".cgst_amount").prop('disabled', true);
-		$(".sgst_percentage").prop('disabled', true);
-		$(".sgst_amount").prop('disabled', true);
-		$(".igst_percentage").prop('disabled', false);
-		$(".igst_amount").prop('disabled', false);
-	}else{
-		$(".cgst_percentage").prop('disabled', false);
-		$(".cgst_amount").prop('disabled', false);
-		$(".sgst_percentage").prop('disabled', false);
-		$(".sgst_amount").prop('disabled', false);
-		$(".igst_percentage").prop('disabled', true);
-		$(".igst_amount").prop('disabled', true);
-	}
-
 	$('.table-responsive').css('pointer-events','none');
 </script>
 

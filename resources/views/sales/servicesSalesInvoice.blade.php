@@ -84,7 +84,7 @@
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Create Goods Sales Invoice</h2>
+			<h2 style="margin-top: 0px;">Create Services Sales Invoice</h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
@@ -206,7 +206,7 @@
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2">HSN <a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a> </th>
+								<th rowspan="2">SAC <a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a> </th>
 								<th rowspan="2">QTY</th>
 								<th rowspan="2" width="5%">Unit</th>
 								<th rowspan="2">Price</th>
@@ -263,21 +263,6 @@
 					</table>
 					<table class="table table-bordered" id="item_table2">
 						<tr>
-							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="calculateTotal(this);"> Freight Charges</td>
-							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="calculateTotal(this);"> Loading and Packing Charges</td>
-							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="calculateTotal(this);"> Insurance Charges</td>
-							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="calculateTotal(this);"> Other Charges</td>
-						</tr>
-						<tr>
-							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="calculateTotal(this);" /></td>
-							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="calculateTotal(this);" /></td>
-							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="calculateTotal(this);" /></td>
-							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name"  placeholder="Enter Charge Name" /></td>
-							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="calculateTotal(this);" /></td>
-						</tr>
-					</table>
-					<table class="table table-bordered" id="item_table2">
-						<tr>
 							<td width="50%">Total In Words</td>
 							<td>Total Tax</td>
 							<td>GRAND TOTAL</td>
@@ -323,7 +308,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="custname">Customer Or Vendor Name:</label>
-								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name" autofocus>
+								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name">
 							</div>
 							<div class="form-group">
 								<label for="gstin">GSTIN NO:</label>
@@ -391,7 +376,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="item_description">Item Description<span>*</span> :</label>
-								<input type="text" class="form-control" placeholder="Item Description" name="item_description" autofocus>
+								<input type="text" class="form-control" placeholder="Item Description" name="item_description">
 							</div>
 							<div class="form-group">
 								<label for="item_type">Item Type:</label>
@@ -599,7 +584,7 @@
 	});
 </script>
 
-<script src="{{URL::asset('app/js/salesinvoice.js')}}"></script>
+<script src="{{URL::asset('app/js/servicessalesinvoice.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

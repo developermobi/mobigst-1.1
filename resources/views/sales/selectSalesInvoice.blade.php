@@ -21,33 +21,33 @@
 	<div class="container">
 		<center><h2>Select your Invoice Template</h2></center>
 		<div class="about-grids" style="padding-top: 60px;">
-			<div class="col-md-6 about-grid1 wow fadeInLeft animated animated" data-wow-delay="0.4s">
+			<div class="col-md-4 about-grid1 wow fadeInLeft animated animated" data-wow-delay="0.4s">
 				<div class="latest-top">
 					<div class="latest-class">
-						<div class="latest-left grow">
+						<div class="latest-left">
 							<img src="{{URL::asset('images/goods_invoice.png')}}" class="img-responsive" alt=""/>
 						</div>
 						<div class="latest-right">
 							<h4>Goods Invoice</h4>
 						</div>
 						<a href="../goodsSalesInvoice/{{encrypt($data)}}">
-							<button type="button" class="btn btn-info btn-block" value="SEND">Create Invoice</button>
+							<button type="button" class="btn btn-info btn-block" value="SEND">Create Goods Invoice</button>
 						</a>
 						<div class="clearfix"></div>
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6 about-grid wow fadeInRight animated animated" data-wow-delay="0.4s">
+			<div class="col-md-4 about-grid wow fadeInRight animated animated" data-wow-delay="0.4s">
 				<div class="latest-top">
 					<div class="latest-class">
-						<div class="latest-left grow">
+						<div class="latest-left">
 							<img src="{{URL::asset('images/services_invoice.png')}}" class="img-responsive" alt=""/>
 						</div>
 						<div class="latest-right">
 							<h4>Services Invoice</h4>
 						</div>
-						<a href="../goodsSalesInvoice/{{encrypt($data)}}">
-							<button type="button" class="btn btn-info btn-block" value="SEND">Create Invoice</button>
+						<a href="../servicesSalesInvoice/{{encrypt($data)}}">
+							<button type="button" class="btn btn-info btn-block" value="SEND">Create Services Invoice</button>
 						</a>
 						<div class="clearfix"></div>
 					</div>

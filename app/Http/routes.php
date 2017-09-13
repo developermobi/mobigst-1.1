@@ -245,6 +245,20 @@ Route::get('sales/viewSalesInvoice/{id}', [
 
 Route::get('printSalesInvoice/{id}',array('as'=>'printSalesInvoice','uses'=>'Api\V1\SalesController@printSalesInvoice'));
 
+Route::get('servicesSalesInvoice/{id}', [
+	'as' => 'servicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@servicesSalesInvoice'
+	]);
+
+Route::get('sales/editServicesSalesInvoice/{id}', [
+	'as' => 'sales/editServicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@editServicesSalesInvoice'
+	]);
+
+Route::get('sales/viewServicesSalesInvoice/{id}', [
+	'as' => 'sales/viewServicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@viewServicesSalesInvoice'
+	]);
+
+Route::get('printServicesSalesInvoice/{id}',array('as'=>'printServicesSalesInvoice','uses'=>'Api\V1\SalesController@printServicesSalesInvoice'));
+
 Route::get('uploadSalesInvoice/{id}', [
 	'as' => 'uploadSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@uploadSalesInvoice'
 	]);
@@ -314,6 +328,10 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
+	$api->post('saveServicesSalesInvoice', 'App\Http\Controllers\Api\V1\SalesController@saveServicesSalesInvoice');
+});
+
+$api->version('v1', function ($api) {
 	$api->post('cancelInvoice/{id}', 'App\Http\Controllers\Api\V1\SalesController@cancelInvoice');
 });
 
@@ -323,6 +341,10 @@ $api->version('v1', function ($api) {
 
 $api->version('v1', function ($api) {
 	$api->post('updateSalesInvoice/{si_id}', 'App\Http\Controllers\Api\V1\SalesController@updateSalesInvoice');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('updateServicesSalesInvoice/{si_id}', 'App\Http\Controllers\Api\V1\SalesController@updateServicesSalesInvoice');
 });
 
 $api->version('v1', function ($api) {
