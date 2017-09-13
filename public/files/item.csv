@@ -1,8 +1,6 @@
-Item SKU,Item Type,Item HSN SAC,Item Description,Item Unit,Item Sale Price,Item Purchase Price,"Item Discount
-","Item Notes
-"
-10001,G,1019010,Bulk SMS,qt,100000,,5,Notes
-10002,S,1019020,Amazon Prime,qt,50,25000,6,Notes
-10003,G,1019090,Transactional SMS,qt,250000,60000,7,Notes
-10004,S,1011020,Microsoft office,qt,10,120000,9,Notes
-10005,G,1011010,Adobe Photoshop,qt,150,2500000,10,Notes
+Item SKU,Item Type,Item HSN SAC,Item Description,Item Unit,Item Sale Price,Item Purchase Price,Item Discount,Item Notes
+10001,G,1019010,Bulk SMS,qt,25000,25000,5,Notes
+10002,S,1019020,Amazon Prime,qt,1600,1600,6,Notes
+10003,G,1019090,Transactional SMS,qt,6500,6500,7,Notes
+10004,S,1011020,Microsoft office,qt,3250,3250,9,Notes
+10005,G,1011010,Adobe Photoshop,qt,50,50,10,Notes
