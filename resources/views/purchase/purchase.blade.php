@@ -83,8 +83,9 @@
 							<td>{{$value->due_date}}</td>
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editPurchaseInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
-								<a class='btn btn-sm btn-warning' onclick=cancelPurchaseInvoice(this); data-id='{{$value->pi_id}}'>Cancel</a>
+								<a class='btn btn-sm btn-info' href="viewPurchaseInvoice/{{encrypt($value->invoice_no)}}">View</a>
+								<a class='btn btn-sm btn-warning' href="editPurchaseInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
+								<a class='btn btn-sm btn-danger' onclick=cancelPurchaseInvoice(this); data-id='{{$value->pi_id}}'>Delete</a>
 							</td>
 						</tr>
 						@endforeach

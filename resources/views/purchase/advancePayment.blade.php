@@ -89,8 +89,9 @@
 								@endif
 							</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editAdvancePayment/{{encrypt($value->payment_no)}}"> Edit </a>
-								<a class='btn btn-sm btn-warning' onclick=cancelAdvancePayment(this); data-id='{{$value->ap_id}}'> Cancel </a>
+								<a class='btn btn-sm btn-info' href="viewAdvancePayment/{{encrypt($value->payment_no)}}"> View </a>
+								<a class='btn btn-sm btn-warning' href="editAdvancePayment/{{encrypt($value->payment_no)}}"> Edit </a>
+								<a class='btn btn-sm btn-danger' onclick=cancelAdvancePayment(this); data-id='{{$value->ap_id}}'> Delete </a>
 							</td>
 						</tr>
 						@endforeach

@@ -1,5 +1,7 @@
 $(function(){
 
+	$('.rate').css('pointer-events','none');
+
 	$("#tt_taxable_value").val('0');
 	$("#tt_taxable_value").prop('disabled', true);
 	$("#tt_cgst_amount").val('0');
@@ -21,13 +23,15 @@ $(function(){
 		window.location.href = SERVER_NAME;
 	}
 
-	$(".item_name").change(function(event){
-		var invoice_no = $("#invoice_no").val();
-		if(invoice_no == ''){
-			alert('Please select invoice first');
-			$(".item_name").val('');
+	$('.note_type').change(function(){
+		if ($('input[name=note_type]:checked').val() == 2){
+			var note_no = $(".note_no").val().slice(2);
+			var new_note_no = "DN".concat(note_no);
+			$(".note_no").val(new_note_no);
 		}else{
-			$('#noedit').css('pointer-events','none');
+			var note_no = $(".note_no").val().slice(2);
+			var new_note_no = "CN".concat(note_no);
+			$(".note_no").val(new_note_no);
 		}
 	});
 
@@ -201,6 +205,38 @@ function getInvoiceInfo(obj){
 
 
 
+function getUnit(obj){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getUnit",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response['data'];
+			var option = "<option value=''></option>";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+				});
+			}
+			$(obj).closest("tr").find(".unit").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
 function getItem(business_id){
 
 	$.ajax({
@@ -257,6 +293,7 @@ function getItemInfo(obj){
 				$(item_value).val(response.data[0].item_sale_price);
 				$(total).val(response.data[0].item_sale_price);
 			}
+			Recalculate();
 			calCgstAmount(obj);
 			calculateTotal(obj);
 		},
@@ -326,7 +363,17 @@ function calculateCESS(obj){
 
 
 
-function calculateQuantity(obj){
+function Recalculate(){
+	$('#item_table tr').each(function() {
+		var item_rate = $(this).find(".rate").val();
+		var total_element = $(this).find('.total');
+		total_element.val(item_rate);
+	});
+}
+
+
+
+/*function calculateQuantity(obj){
 	var quantity = $(obj).closest("tr").find(".quantity").val();
 
 	if(quantity != ''){
@@ -422,6 +469,55 @@ function calculateCost(obj){
 		calCgstAmount(obj);
 		calculateTotal(obj);
 	}
+}*/
+
+
+
+function calculateNew(obj){
+	var quantity = $(obj).closest("tr").find(".quantity").val();
+	var item_value = $(obj).closest("tr").find(".item_value").val();
+	var discount = $(obj).closest("tr").find(".discount").val();
+
+	if(quantity == '' || quantity == '0'){
+		quantity = 1;
+	}
+
+	if(item_value == ''){
+		item_value = 0;
+	}
+
+	if(discount == ''){
+		discount = 0;
+	}
+
+	var priceNquantity = parseFloat(quantity)*parseFloat(item_value);
+	var rate_element = $(obj).closest("tr").find(".rate");
+	rate_element.val(priceNquantity);
+
+	var amount = (parseFloat(priceNquantity) / 100) * discount;
+	var new_rate = parseFloat(priceNquantity) - parseFloat(amount);
+	rate_element.val(new_rate);
+
+	calCgstAmount(obj);
+
+	var cgst_amount_element = $(obj).closest("tr").find(".cgst_amount");
+	var cgst_amount = cgst_amount_element.val();
+	var new_cgst_amount = cgst_amount_element.val(cgst_amount*discount);
+
+	var sgst_amount_element = $(obj).closest("tr").find(".sgst_amount");
+	var sgst_amount = sgst_amount_element.val();
+	var new_sgst_amount = sgst_amount_element.val(sgst_amount*discount);
+
+	var igst_amount_element = $(obj).closest("tr").find(".igst_amount");
+	var igst_amount = igst_amount_element.val();
+	var new_igst_amount = igst_amount_element.val(igst_amount*discount);
+
+	var cess_amount_element = $(obj).closest("tr").find(".cess_amount");
+	var cess_amount = cess_amount_element.val();
+	var cess_igst_amount = cess_amount_element.val(cess_amount*discount);
+
+	calCgstAmount(obj);
+	calculateTotal(obj);
 }
 
 

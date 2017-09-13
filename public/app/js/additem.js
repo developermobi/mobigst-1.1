@@ -1,6 +1,7 @@
 $(function(){
 
 	getBusiness();
+	getUnit();
 
 	if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === 'undefined'){
 		window.location.href = SERVER_NAME;
@@ -97,6 +98,38 @@ function getBusiness(){
 			}
 			$(".dynamicBusiness").html('');
 			$(".dynamicBusiness").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
+function getUnit(){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getUnit",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response['data'];
+			var option = "<option value=''> Select Unit </option>";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+				});
+			}
+			$(".unit").append(option);
 		},
 		complete:function(){
 		}

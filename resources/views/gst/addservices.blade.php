@@ -50,7 +50,11 @@
 							</div>
 							<div class="form-group">
 								<label for="item_type">Item Type:</label>
-								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+								<select class="form-control unit" name="item_type">
+									<option value=" "> Select Item Type</option>
+									<option value="Goods">Goods</option>
+									<option value="Services">Services</option>
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="code">Item/SKU Code:</label>
@@ -68,7 +72,8 @@
 							</div>
 							<div class="form-group">
 								<label for="unit">Unit:</label>
-								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+								<select class="form-control unit" name="item_unit">
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="selling">Selling Price:</label>

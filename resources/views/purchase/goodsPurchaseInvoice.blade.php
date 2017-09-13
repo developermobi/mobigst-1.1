@@ -57,7 +57,7 @@
 		}else{
 			var due_date = $(".due_datepicker").val();
 
-			if(invoice_date >= due_date){
+			if(invoice_date > due_date){
 				alert('Due date should greater than invoice date');
 				$(".due_datepicker").val(" ");
 			}
@@ -126,11 +126,11 @@
 							<table class="table table-bordered">
 								<tr>
 									<td>GSTIN</td>
-									<td>Place of Supply</td>
+									<!-- <td>Place of Supply</td> -->
 								</tr>
 								<tr>
 									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" /></td>
-									<td>
+									<td style="display: none;">
 										<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
 										</select>
 									</td>

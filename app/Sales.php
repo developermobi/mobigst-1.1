@@ -81,6 +81,15 @@ class Sales extends Model{
 
 
 
+	public static function getUnit(){
+
+		$unit = DB::table('unit')
+		->get();
+		return $unit;
+	}
+
+
+
 	public static function getContactInfo($contact_id){
 
 		$getContactInfo = DB::table('contact')
@@ -209,10 +218,11 @@ class Sales extends Model{
 
 
 
-	public static function getInvoiceDetail($invoice_no){
+	public static function getInvoiceDetail($invoice_no,$gstin_id){
 		
 		$getData = DB::table('invoice_details')
 		->where('invoice_no',$invoice_no)
+		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->get();
 

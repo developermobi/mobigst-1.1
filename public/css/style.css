@@ -8,7 +8,7 @@ body a{
 	-ms-transition:0.5s all;
 }
 h1,h2,h3,h4,h5,h6{
-	padding:0px 0px;
+	padding:0.5em 0px;
 	margin:0px 0px;
 }
 p{
@@ -115,6 +115,79 @@ div#bs-example-navbar-collapse-1 {
 .nav-in:hover span::before {
 	width: 100%;
 }
+/* ------------------------- Start breadcrumb ------------------------- */
+.breadcrumb {
+	padding: 0px;
+	background: #D4D4D4;
+	list-style: none; 
+	overflow: hidden;
+	margin-top: 3em;
+}
+.breadcrumb>li+li:before {
+	padding: 0;
+}
+.breadcrumb li { 
+	float: left; 
+}
+.breadcrumb li.active a {
+	background: brown;                   /* fallback color */
+	background: #ffc107 ; 
+}
+.breadcrumb li.completed a {
+	background: brown;                   /* fallback color */
+	background: hsla(153, 57%, 51%, 1); 
+}
+.breadcrumb li.active a:after {
+	border-left: 30px solid #ffc107 ;
+}
+.breadcrumb li.completed a:after {
+	border-left: 30px solid hsla(153, 57%, 51%, 1);
+} 
+
+.breadcrumb li a {
+	color: white;
+	text-decoration: none; 
+	padding: 3px 0 3px 45;
+	position: relative; 
+	display: block;
+	float: left;
+}
+.breadcrumb li a:after { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 30px solid hsla(0, 0%, 83%, 1);
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	left: 100%;
+	z-index: 2; 
+}	
+.breadcrumb li a:before { 
+	content: " "; 
+	display: block; 
+	width: 0; 
+	height: 0;
+	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
+	border-bottom: 50px solid transparent;
+	border-left: 35px solid white;
+	position: absolute;
+	top: 50%;
+	margin-top: -50px; 
+	margin-left: 1px;
+	left: 100%;
+	z-index: 1; 
+}	
+.breadcrumb li:first-child a {
+	padding-left: 15px;
+}
+.breadcrumb li a:hover { background: #ffc107  ; }
+.breadcrumb li a:hover:after { border-left-color: #ffc107   !important; }
+
+
 /* Rectangle Out */
 .hvr-rectangle-out {
 	display: inline-block;
@@ -286,7 +359,7 @@ a.button {
 	margin-top: 2em;
 	font-size:2em;
 	text-transform: capitalize;
-	/*font-family: 'Ubuntu Condensed', sans-serif;*/
+	font-family: 'Ubuntu Condensed', sans-serif;
 	/*line-height: 1.4em;*/
 }
 .train-top button {
@@ -304,8 +377,8 @@ a.button {
 }
 .train-top {
 	background: #fff;
-	padding: 2em;
-	height: 26em;
+	padding: 1em;
+	height: 25em;
 	box-shadow: 0 0 5px #c3c3c3;
 	border: 1px solid #DACFCF;
 	text-align: center;
@@ -390,12 +463,16 @@ a.button {
 .table-responsive h3{
 	padding: 1em 0px;
 }
+.table .order-list{
+	width:1500px !important;
+	overflow-x:scroll;
+}
 .table-responsive td .form-control{
 	display: block;
 	width: 100%;
 	height: 34px;
-	/*padding: 6px 12px;*/
-	font-size: 14px;
+	padding: 00px !important;
+	font-size: 12px;
 	line-height: 1.42857143;
 	/*background-color:#fff;
     color: #555;
@@ -784,7 +861,7 @@ a.button1 {
 	padding: 7em 0;
 }
 .about-section h2{
-	margin-top:1em;
+	/*margin-top:1em;*/
 	text-transform:capitalize;
 	text-align:center;
 }
@@ -798,7 +875,7 @@ a.button1 {
 	font-size: 1em;
 	color: #777;
 	line-height: 2em;
-	margin: 1em 0;
+	/*margin: 1em 0;*/
 }
 .about-left {
 	float: left;
@@ -814,8 +891,11 @@ a.button1 {
 	box-shadow: 0 0 5px #c3c3c3;
 	overflow: hidden;
 }
+.fillcolor{
+	background-color:#f0f1fb;
+}
 .few-grid h5 {
-	/*font-size: 1.3em;*/
+	font-size: 1.3em;
 	color: #1E1E1E;
 	font-family: 'Ubuntu Condensed', sans-serif;
 	text-transform: capitalize;
@@ -834,14 +914,15 @@ a.button1 {
 	font-size: 1.8em;
 	text-transform: capitalize;
 	font-family: 'Ubuntu Condensed', sans-serif;
-	margin-bottom: 1em;
+	/* margin-bottom: 1em;*/
 }
 .few-grid {
 	border: 1px solid#DACFCF;
 	padding: .5em;
 	box-shadow: 0 0 5px #c3c3c3;
-	text-align: center;
-	/*height: 14em;*/
+	margin-top: 0.6em;
+    /*text-align: center;
+    height: 14em;*/
 }
 
 .latest-class .grow img {
@@ -863,12 +944,12 @@ a.button1 {
 
 .latest-left {
 	float: left;
-	width: 40%;
+	/*width: 40%;*/
 }
 
 .latest-right {
 	float: left;
-	width: 60%;
+	/*width: 60%;*/
 }
 
 .about-grid1 h4 {
@@ -903,11 +984,11 @@ a.button1 {
 	border: 1px solid#DACFCF;
 	padding: 1.5em;
 	box-shadow: 0 0 5px #c3c3c3;
-	margin-top: 3em;
+	/*margin-top: 3em;*/
 }
 .time-left {
 	float: left;
-	width: 50%;
+	/* width: 50%;*/
 }
 .time-right {
 	float: left;
@@ -980,7 +1061,7 @@ ul.details li i {
 
 /**class**/
 .class {
-	padding: 4em 0;
+	/*padding: 4em 0;*/
 }
 .class h2{
 	color: #000;
@@ -1378,8 +1459,14 @@ h3.ghj {
 }
 
 /*-- //contact-page --*/
-
-/**responsive**/
+/* -------- MODAL ------- */
+.modal-body h3{
+	text-align:center;
+}
+.modal-body h5{
+	
+}
+/** ============================================= RESPONSIVE ==========================================================**/
 @media(max-width:1440px){
 	.banner-section {
 		min-height: 772px;
@@ -1696,6 +1783,7 @@ h3.ghj {
 	}
 	.nav-in::after {
 		background: #00bbd3;
+		width:50%;
 		-webkit-transform: translate3d(101%,0,0);
 		transform: translate3d(-49%,0,0);
 		-webkit-transition: -webkit-transform 0.5s;

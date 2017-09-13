@@ -312,49 +312,64 @@ class GstController extends Controller{
 		$input = $request->all();
 
 		$stateCode = substr($input['gstin_no'], 0, 2);
-		$getStateInfo = Gst::getStateInfo($stateCode);
 
-		if(sizeof($getStateInfo) > 0){
-			$business_data = array();
-			$business_data['user_id'] = $request->cookie('tokenId');
-			$business_data['name'] = $input['name'];
-			$business_data['pan'] = $input['pan_no'];
+		$checkGstin = Gst::checkAvailableGstin($input['gstin_no']);
 
-			$addBusiness = Gst::addBusiness($business_data);
+		if(sizeof($checkGstin) > 0){
+			$returnResponse['status'] = "failed";
+			$returnResponse['code'] = "302";
+			$returnResponse['message'] = "This GSTIN is alrady registered. Plaese use different GSTIN.";
+			$returnResponse['data'] = '';
+		}else{
+			$getStateInfo = Gst::getStateInfo($stateCode);
+			if(sizeof($getStateInfo) > 0){
+				$business_data = array();
+				$business_data['user_id'] = $request->cookie('tokenId');
+				$business_data['name'] = $input['name'];
+				$business_data['pan'] = $input['pan_no'];
+				$business_data['city'] = $input['city'];
+				$business_data['state'] = $input['state'];
+				$business_data['pincode'] = $input['pincode'];
+				$business_data['address'] = $input['address'];
+				$business_data['phone'] = $input['phone'];
+				$business_data['email'] = $input['email'];
 
-			if($addBusiness > 0){
-
-				$gstin_data = array();
-				$gstin_data['business_id'] = $addBusiness;
-				$gstin_data['gstin_no'] = $input['gstin_no'];
-				$gstin_data['display_name'] = $input['display_name'];
-				$gstin_data['state_code'] = $getStateInfo[0]->state_code;
-				$gstin_data['state_name'] = $getStateInfo[0]->state_name;
-
-				$addBusiness = Gst::addGstin($gstin_data);
+				$addBusiness = Gst::addBusiness($business_data);
 
 				if($addBusiness > 0){
-					$returnResponse['status'] = "success";
-					$returnResponse['code'] = "201";
-					$returnResponse['message'] = "Business added Sucessfully.";
-					$returnResponse['data'] = $addBusiness;
+
+					$gstin_data = array();
+					$gstin_data['business_id'] = $addBusiness;
+					$gstin_data['gstin_no'] = $input['gstin_no'];
+					$gstin_data['display_name'] = $input['display_name'];
+					$gstin_data['state_code'] = $getStateInfo[0]->state_code;
+					$gstin_data['state_name'] = $getStateInfo[0]->state_name;
+
+					$addBusiness = Gst::addGstin($gstin_data);
+
+					if($addBusiness > 0){
+						$returnResponse['status'] = "success";
+						$returnResponse['code'] = "201";
+						$returnResponse['message'] = "Business added Sucessfully.";
+						$returnResponse['data'] = $addBusiness;
+					}else{
+						$returnResponse['status'] = "failed";
+						$returnResponse['code'] = "302";
+						$returnResponse['message'] = "Error while adding business. Please try again.";
+						$returnResponse['data'] = $addBusiness;
+					}
 				}else{
 					$returnResponse['status'] = "failed";
 					$returnResponse['code'] = "302";
 					$returnResponse['message'] = "Error while adding business. Please try again.";
-					$returnResponse['data'] = $addBusiness;
+					$returnResponse['data'] = $addUser;
 				}
 			}else{
 				$returnResponse['status'] = "failed";
 				$returnResponse['code'] = "302";
-				$returnResponse['message'] = "Error while adding business. Please try again.";
-				$returnResponse['data'] = $addUser;
+				$returnResponse['message'] = "GSTIN number is not valid. Plaese check your GSTIN.";
+				$returnResponse['data'] = '';
 			}
-		}else{
-			$returnResponse['status'] = "failed";
-			$returnResponse['code'] = "302";
-			$returnResponse['message'] = "GSTIN number is not valid. Plaese check your gstin number.";
-			$returnResponse['data'] = '';
 		}
 		return response()->json($returnResponse);
 	}
@@ -365,29 +380,38 @@ class GstController extends Controller{
 		$input = $request->all();
 
 		$stateCode = substr($input['gstin_no'], 0, 2);
-		$getStateInfo = Gst::getStateInfo($stateCode);
-		
-		if(sizeof($getStateInfo) > 0){
-			$input['state_name'] = $getStateInfo[0]->state_name;
-			$input['state_code'] = $getStateInfo[0]->state_code;
-			$addGstin = Gst::addGstin($input);
 
-			if($addGstin > 0){
-				$returnResponse['status'] = "success";
-				$returnResponse['code'] = "201";
-				$returnResponse['message'] = "GSTIN number added Sucessfully.";
-				$returnResponse['data'] = $addGstin;
+		$checkGstin = Gst::checkAvailableGstin($input['gstin_no']);
+
+		if(sizeof($checkGstin) > 0){
+			$returnResponse['status'] = "failed";
+			$returnResponse['code'] = "302";
+			$returnResponse['message'] = "This GSTIN is alrady registered. Plaese use different GSTIN.";
+			$returnResponse['data'] = '';
+		}else{
+			$getStateInfo = Gst::getStateInfo($stateCode);
+			if(sizeof($getStateInfo) > 0){
+				$input['state_name'] = $getStateInfo[0]->state_name;
+				$input['state_code'] = $getStateInfo[0]->state_code;
+				$addGstin = Gst::addGstin($input);
+
+				if($addGstin > 0){
+					$returnResponse['status'] = "success";
+					$returnResponse['code'] = "201";
+					$returnResponse['message'] = "GSTIN number added Sucessfully.";
+					$returnResponse['data'] = $addGstin;
+				}else{
+					$returnResponse['status'] = "failed";
+					$returnResponse['code'] = "302";
+					$returnResponse['message'] = "Error while adding gstin no. Please try again.";
+					$returnResponse['data'] = $addGstin;
+				}
 			}else{
 				$returnResponse['status'] = "failed";
 				$returnResponse['code'] = "302";
-				$returnResponse['message'] = "Error while adding gstin no. Please try again.";
-				$returnResponse['data'] = $addGstin;
+				$returnResponse['message'] = "GSTIN number is not valid. Plaese check your GSTIN.";
+				$returnResponse['data'] = '';
 			}
-		}else{
-			$returnResponse['status'] = "failed";
-			$returnResponse['code'] = "302";
-			$returnResponse['message'] = "GSTIN number is not valid. Plaese check your gstin number.";
-			$returnResponse['data'] = '';
 		}
 		return response()->json($returnResponse);
 	}
@@ -768,19 +792,23 @@ class GstController extends Controller{
 
 
 	public function editContact($id){
-		$item = decrypt($id);
-		$getData = Gst::getContactData($item);
+		$contact_id = decrypt($id);
+		$getData = Gst::getContactData($contact_id);
+		$states = Gst::getStates();
+		$data = array();
+		$data['contactData'] = $getData;
+		$data['states'] = $states;
 
 		if (sizeof($getData) > 0) {
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "200";
 			$returnResponse['message'] = "Data found.";
-			$returnResponse['data'] = $getData;
+			$returnResponse['data'] = $data;
 		}else{
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "204";
 			$returnResponse['message'] = "No data found.";
-			$returnResponse['data'] = $getData;
+			$returnResponse['data'] = $data;
 		}
 		return view('gst.editCustomer')->with('data', $returnResponse);
 	}

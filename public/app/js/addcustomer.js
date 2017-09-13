@@ -1,6 +1,7 @@
 $(function(){
 
 	getBusiness();
+	getStates();
 
 	if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === 'undefined'){
 		window.location.href = SERVER_NAME;
@@ -96,6 +97,38 @@ function getBusiness(){
 			}
 			$(".dynamicBusiness").html('');
 			$(".dynamicBusiness").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
+function getStates(){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getStates",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response['data'];
+			var option = "<option value=''> Select State </option>";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i]['state_name']+"'>"+data[i]['state_name']+"</option>";
+				});
+			}
+			$(".state").append(option);
 		},
 		complete:function(){
 		}

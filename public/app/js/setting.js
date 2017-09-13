@@ -4,6 +4,8 @@ $(function(){
 		window.location.href = SERVER_NAME;
 	}
 
+	getStates();
+
 	jQuery.validator.addMethod("pan", function(value, element) {
 		return this.optional( element ) || /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/.test( value );
 	}, 'Please enter a valid pan number.');
@@ -176,8 +178,14 @@ function editBusiness(id,this_obj){
 		},
 		success:function(response){
 			if(response.code == 200){
-				$("#name").val(response.data[0]['name']);
-				$("#pan").val(response.data[0]['pan']);
+				$("#name").val(response.data[0].name);
+				$("#pan").val(response.data[0].pan);
+				$("#city").val(response.data[0].city);
+				$("#state").val(response.data[0].state);
+				$("#pincode").val(response.data[0].pincode);
+				$("#address").val(response.data[0].address);
+				$("#phone").val(response.data[0].phone);
+				$("#email").val(response.data[0].email);
 			}else{
 				swal({
 					title: "Failed!",
@@ -244,7 +252,7 @@ function deleteBusiness(obj){
 				$(".bodyLoaderWithOverlay").hide();
 			}
 		});
-	})
+	});
 }
 
 
@@ -269,8 +277,8 @@ function editGstin(id,this_obj){
 		},
 		success:function(response){
 			if(response.code == 200){
-				$("#gstin_no").val(response.data[0]['gstin_no']);
-				$("#display_name").val(response.data[0]['display_name']);
+				$("#gstin_no").val(response.data[0].gstin_no);
+				$("#display_name").val(response.data[0].display_name);
 			}else{
 				alert(response.message);
 			}
@@ -332,5 +340,37 @@ function deleteGstin(obj){
 				$(".bodyLoaderWithOverlay").hide();
 			}
 		});
-	})
+	});
+}
+
+
+
+function getStates(){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getStates",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response.data;
+			var option = "<option value=''> Select State </option>";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i].state_name+"'>"+data[i].state_name+"</option>";
+				});
+			}
+			$(".state").append(option);
+		},
+		complete:function(){
+		}
+	}); 
 }

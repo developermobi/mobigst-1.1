@@ -24,12 +24,9 @@
 			<div class="row">
 				<div class="col-md-4" style="padding: 20px 14px;">
 					<a href="../selectSalesInvoice/{{$data['gstin_id']}}">
-						<button class="btn btn-success" type="button" style="float: left;"> + New Sales Invoice</button>
+						<button class="btn btn-success" type="button" style="float: left;"> + New Sales Invoice </button>
 					</a>
 				</div>
-				<!-- <div class="col-md-4" style="padding: 20px 14px;">
-					<button class="btn btn-success" onclick="sendMail();" type="button" style="float: left;"> Send Mail Form </button>
-				</div> -->
 				<div class="col-md-4">
 				</div>
 				<div class="col-md-4" style="padding: 20px 14px;">
@@ -84,10 +81,11 @@
 							<td>{{$value->contact_name}}</td>
 							<td>{{$value->created_date}}</td>
 							<td>{{$value->due_date}}</td>
-							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
+							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}} </td>
 							<td>
-								<a class='btn btn-sm btn-info' href="editSalesInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
-								<a class='btn btn-sm btn-warning' onclick=cancelInvoice(this); data-id='{{$value->si_id}}'>Cancel</a>
+								<a class='btn btn-sm btn-info' href="viewSalesInvoice/{{encrypt($value->invoice_no)}}">View</a>
+								<a class='btn btn-sm btn-warning' href="editSalesInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
+								<a class='btn btn-sm btn-danger' onclick=cancelInvoice(this); data-id='{{$value->si_id}}'>Delete</a>
 							</td>
 						</tr>
 						@endforeach

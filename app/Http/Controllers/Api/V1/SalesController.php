@@ -12,6 +12,7 @@ use App\Sales;
 use Session;
 use View;
 use DB;
+use PDF;
 
 
 class SalesController extends Controller{
@@ -139,6 +140,25 @@ class SalesController extends Controller{
 
 
 
+	public function getUnit(){
+
+		$getUnit = Sales::getUnit();
+		if(sizeof($getUnit) > 0){
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "302";
+			$returnResponse['message'] = "Data Found.";
+			$returnResponse['data'] = $getUnit;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No Content.";
+			$returnResponse['data'] = $getUnit;
+		}
+		return $returnResponse;
+	}
+
+
+
 	public function getContactInfo($contact_id){
 
 		$getContactInfo = Sales::getContactInfo($contact_id);
@@ -228,9 +248,9 @@ class SalesController extends Controller{
 			$salesInvoiceData['sh_state'] = $input['sh_state'];
 			$salesInvoiceData['sh_country'] = $input['sh_country'];
 			if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
-				$advanceReceiptData['sh_address_same'] = '1';
+				$salesInvoiceData['sh_address_same'] = '1';
 			}else{
-				$advanceReceiptData['sh_address_same'] = '0';
+				$salesInvoiceData['sh_address_same'] = '0';
 			}
 			$salesInvoiceData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
 			$salesInvoiceData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
@@ -249,10 +269,39 @@ class SalesController extends Controller{
 			$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 			$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 			$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+			if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+				$salesInvoiceData['is_freight_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_freight_charge'] = '0';
+			}
+			$salesInvoiceData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+			if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+				$salesInvoiceData['is_lp_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_lp_charge'] = '0';
+			}
+			$salesInvoiceData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+			if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+				$salesInvoiceData['is_insurance_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_insurance_charge'] = '0';
+			}
+			$salesInvoiceData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+			if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+				$salesInvoiceData['is_other_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_other_charge'] = '0';
+			}
+			$salesInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+			if(isset($input['is_invoice_charge']) && $input['is_invoice_charge'] == "on"){
+				$salesInvoiceData['is_invoice_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_invoice_charge'] = '0';
+			}
+			$salesInvoiceData['invoice_charge'] = isset($input['invoice_charge']) ? $input['invoice_charge'] : "0";
 			$salesInvoiceData['total_in_words'] = $input['total_in_words'];
 			$salesInvoiceData['total_tax'] = $input['total_tax'];
 			$salesInvoiceData['grand_total'] = $input['grand_total'];
-
 			$insertSalesInvoice = Sales::insertSalesInvoice($salesInvoiceData);
 			if($insertSalesInvoice > 0){
 
@@ -266,7 +315,7 @@ class SalesController extends Controller{
 				}else{
 					$add_count_data = array();
 					$add_count_data['gstin_id'] = $input['gstin_id'];
-					$count_data['invoice_type'] = 1;
+					$add_count_data['invoice_type'] = 1;
 					$add_count_data['count'] = '1';
 					$addIC = Sales::addIC($add_count_data);
 				}
@@ -275,8 +324,10 @@ class SalesController extends Controller{
 
 				if(is_array($input['total'])){
 					foreach ($input['total'] as $key => $value) {
+						$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 						$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 						$invoiceDetailData['invoice_type'] = '1';
+						$invoiceDetailData['unit'] = $input['unit'][$key];
 						$invoiceDetailData['item_name'] = $input['item_name'][$key];
 						$invoiceDetailData['item_value'] = $input['item_value'][$key];
 						$invoiceDetailData['item_type'] = "Goods";
@@ -301,8 +352,10 @@ class SalesController extends Controller{
 					$returnResponse['data'] = $insertSalesInvoice;
 					return $returnResponse;
 				}else{
+					$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 					$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 					$invoiceDetailData['invoice_type'] = '1';
+					$invoiceDetailData['unit'] = $input['unit'];
 					$invoiceDetailData['item_name'] = $input['item_name'];
 					$invoiceDetailData['item_type'] = "Goods";
 					$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
@@ -358,7 +411,7 @@ class SalesController extends Controller{
 
 
 
-	public function editSalesInvoice($id){
+	public function viewSalesInvoice($id){
 		$invoice_id = decrypt($id);
 		$getData = Sales::getSalesInvoiceData($invoice_id);
 
@@ -374,6 +427,89 @@ class SalesController extends Controller{
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('sales.viewSalesInvoice')->with('data', $returnResponse);
+	}
+
+
+
+	public function printSalesInvoice(Request $request,$id){
+		$invoice_id = decrypt($id);
+		$getData = Sales::getSalesInvoiceData($invoice_id);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+
+		view()->share('data',$returnResponse);
+		$pdf = PDF::loadView('sales.printSalesInvoice');
+
+		if($request->has('download')){
+			$pdf = PDF::loadView('sales.printSalesInvoice');
+			return $pdf->download('SalesInvoice.pdf');
+		}
+		return $pdf->stream('SalesInvoice.pdf');
+		return view('sales.printSalesInvoice');
+	}
+
+
+
+	public function editSalesInvoice($id){
+		$invoice_id = decrypt($id);
+		$getData = Sales::getSalesInvoiceData($invoice_id);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			$getUnit = Sales::getUnit();
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+			$data['units'] = $getUnit;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -457,6 +593,36 @@ class SalesController extends Controller{
 		$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+			$salesInvoiceData['is_freight_charge'] = '1';
+		}else{
+			$salesInvoiceData['is_freight_charge'] = '0';
+		}
+		$salesInvoiceData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+		if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+			$salesInvoiceData['is_lp_charge'] = '1';
+		}else{
+			$salesInvoiceData['is_lp_charge'] = '0';
+		}
+		$salesInvoiceData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+		if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+			$salesInvoiceData['is_insurance_charge'] = '1';
+		}else{
+			$salesInvoiceData['is_insurance_charge'] = '0';
+		}
+		$salesInvoiceData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+		if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+			$salesInvoiceData['is_other_charge'] = '1';
+		}else{
+			$salesInvoiceData['is_other_charge'] = '0';
+		}
+		$salesInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+		if(isset($input['is_invoice_charge']) && $input['is_invoice_charge'] == "on"){
+			$salesInvoiceData['is_invoice_charge'] = '1';
+		}else{
+			$salesInvoiceData['is_invoice_charge'] = '0';
+		}
+		$salesInvoiceData['invoice_charge'] = isset($input['invoice_charge']) ? $input['invoice_charge'] : "0";
 		$salesInvoiceData['total_in_words'] = $input['total_in_words'];
 		$salesInvoiceData['total_tax'] = $input['total_tax'];
 		$salesInvoiceData['grand_total'] = $input['grand_total'];
@@ -468,8 +634,10 @@ class SalesController extends Controller{
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
+				$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 				$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 				$invoiceDetailData['invoice_type'] = '1';
+				$invoiceDetailData['unit'] = $input['unit'][$key];
 				$invoiceDetailData['item_name'] = $input['item_name'][$key];
 				$invoiceDetailData['item_value'] = $input['item_value'][$key];
 				$invoiceDetailData['item_type'] = "Goods";
@@ -494,8 +662,10 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $insertSalesInvoice;
 			return $returnResponse;
 		}else{
+			$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 			$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 			$invoiceDetailData['invoice_type'] = '1';
+			$invoiceDetailData['unit'] = $input['unit'];
 			$invoiceDetailData['item_name'] = $input['item_name'];
 			$invoiceDetailData['item_type'] = "Goods";
 			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
@@ -584,9 +754,9 @@ class SalesController extends Controller{
 		$getGstinInfo = Sales::getGstinInfo($gstin_id);
 
 		if(sizeof($getCdnoteInvoiceCount) > 0){
-			$data['note_no'] = "CDN".($getCdnoteInvoiceCount[0]->count + 1);
+			$data['note_no'] = "CN".($getCdnoteInvoiceCount[0]->count + 1);
 		}else{
-			$data['note_no'] = "CDN1";
+			$data['note_no'] = "CN1";
 		}
 
 		if(sizeof($getBusinessByGstin) > 0){
@@ -799,6 +969,87 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 		return response()->json($returnResponse);
+	}
+
+
+
+	public function viewCdnote($id){
+		$note_no = decrypt($id);
+		$getData = Sales::getCdnoteData($note_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('sales.viewCdnote')->with('data', $returnResponse);
+	}
+
+
+
+	public function printCdnote(Request $request,$id){
+		$note_no = decrypt($id);
+		$getData = Sales::getCdnoteData($note_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+
+		view()->share('data',$returnResponse);
+		$pdf = PDF::loadView('sales.printCdnote');
+
+		if($request->has('download')){
+			$pdf = PDF::loadView('sales.printCdnote');
+			return $pdf->download('CreditDebitNote.pdf');
+		}
+		return $pdf->stream('CreditDebitNote.pdf');
+		return view('sales.printCdnote');
 	}
 
 
@@ -1214,6 +1465,87 @@ class SalesController extends Controller{
 
 
 
+	public function viewAdvanceReceipt($id){
+		$receipt_no = decrypt($id);
+		$getData = Sales::getAdvanceReceiptData($receipt_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('sales.viewAdvanceReceipt')->with('data', $returnResponse);
+	}
+
+
+
+	public function printAdvanceReceipt(Request $request,$id){
+		$receipt_no = decrypt($id);
+		$getData = Sales::getAdvanceReceiptData($receipt_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no);
+			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+
+		view()->share('data',$returnResponse);
+		$pdf = PDF::loadView('sales.printAdvanceReceipt');
+
+		if($request->has('download')){
+			$pdf = PDF::loadView('sales.printAdvanceReceipt');
+			return $pdf->download('AdvanceReceipt.pdf');
+		}
+		return $pdf->stream('AdvanceReceipt.pdf');
+		return view('sales.printAdvanceReceipt');
+	}
+
+
+
 	public function updateAdvanceReceipt(Request $request,$ar_id){
 		$input = $request->all();
 
@@ -1320,6 +1652,34 @@ class SalesController extends Controller{
 		}
 		return $returnResponse;
 	}
+
+
+
+	/*public function uploadSalesInvoice($id){
+		$gstin_id = decrypt($id);
+
+		$data = array();
+		$getBusinessByGstin = Sales::getBusinessByGstin($gstin_id);
+		$getSalesInvoiceCount = Sales::getSalesInvoiceCount($gstin_id);
+		$getGstinInfo = Sales::getGstinInfo($gstin_id);
+
+		if(sizeof($getSalesInvoiceCount) > 0){
+			$data['invoice_no'] = "INV".($getSalesInvoiceCount[0]->count + 1);
+		}else{
+			$data['invoice_no'] = "INV1";
+		}
+
+		if(sizeof($getBusinessByGstin) > 0){
+			$data['gstin_id'] = $gstin_id;
+			$data['business_id'] = $getBusinessByGstin[0]->business_id;
+		}
+
+		if(sizeof($getGstinInfo) > 0){
+			$data['state_code'] = $getGstinInfo[0]->state_code;
+			$data['state_name'] = $getGstinInfo[0]->state_name;
+		}
+		return view('sales.uploadSalesInvoice')->with('data', $data);
+	}*/
 
 
 }

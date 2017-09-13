@@ -83,13 +83,19 @@
 				</div>
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-12">
+						<div class="col-md-6">
 							<div class="form-group">
 								<label for="name">Business Name</label>
 								<input type="text" class="form-control" name="name" placeholder="Business Name" required>
 							</div>
 						</div>
-						<div class="col-md-12">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="display_name">Display Name</label>
+								<input type="text" class="form-control" name="display_name" placeholder="Display Name" required>
+							</div>
+						</div>
+						<div class="col-md-6">
 							<div class="form-group">
 								<label for="pan_no">Pan Number</label>
 								<input type="text" class="form-control" name="pan_no" placeholder="Pan Number" required>
@@ -103,8 +109,39 @@
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="display_name">Display Name</label>
-								<input type="text" class="form-control" name="display_name" placeholder="Display Name" required>
+								<label for="city">City</label>
+								<input type="text" class="form-control" name="city" placeholder="City" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="state">State</label>
+								<select class="form-control state" name="state">
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="pincode">Pincode</label>
+								<input type="text" class="form-control" name="pincode" placeholder="Pincode" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="address">Address</label>
+								<input type="text" class="form-control" name="address" placeholder="Address" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="phone">Phone</label>
+								<input type="text" class="form-control" name="phone" placeholder="Phone" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="text" class="form-control" name="email" placeholder="Email" required>
 							</div>
 						</div>
 					</div>
@@ -141,6 +178,43 @@
 							<div class="form-group">
 								<label for="pan_no">PAN Number</label>
 								<input type="text" class="form-control" name="pan" id="pan" placeholder="PAN Number">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="city">City</label>
+								<input type="text" class="form-control" name="city" id="city" placeholder="City" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="state">State</label>
+								<select class="form-control state" name="state" id="state">
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="pincode">Pincode</label>
+								<input type="text" class="form-control" name="pincode" id="pincode" placeholder="Pincode" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="address">Address</label>
+								<input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="phone">Phone</label>
+								<input type="text" class="form-control" name="phone" id="phone" placeholder="Phone" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="text" class="form-control" name="email" id="email" placeholder="Email" required>
 							</div>
 						</div>
 					</div>

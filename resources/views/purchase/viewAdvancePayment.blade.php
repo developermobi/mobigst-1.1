@@ -51,41 +51,37 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Vendor Credit / Debit Notes </a>
+						<a href="../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Advance Payment </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
-					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
+					<a href="../../printAdvancePayment/{{encrypt($data['data']['invoice_data'][0]->invoice_no)}}" target="_BLANK">
+						<input type="button" class="btn btn-default" value="Print" style="float: right;">
+					</a>
+					<input type="button" class="btn btn-default" value="Quick Action" style="float: right; margin-right: 10px;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Edit Vendor Credit / Debit Note</h2>
+			<h2 style="margin-top: 0px;"> Edit Advance Payment </h2>
 			<div class="table-responsive" style="padding-top: 20px;">
 				<form id="invoiceForm" role="form">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
-					<input type="hidden" name="vcdn_id" id="vcdn_id" value="{{$data['data']['invoice_data'][0]->vcdn_id}}">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Credit / Debit Note Number</th>
-								<th>Issue date</th>
-								<th>Note Type</th>
-								<th>Invoice ID</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="text" class="form-control note_no" name="note_no" value="{{$data['data']['invoice_data'][0]->note_no}}" /></td>
-								<td><input type="text" class="form-control datepicker" name="note_issue_date" value="{{$data['data']['invoice_data'][0]->note_issue_date}}" /></td>
-								<td>
-									<label class="radio-inline"><input type="radio" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '1'){echo "checked";}?> value="1">CREDIT</label>
-									<label class="radio-inline"><input type="radio" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '2'){echo "checked";}?> value="2">DEBIT</label>
-								</td>
-								<td><input type="text" class="form-control invoice_no" name="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" /></td>
-							</tr>
-						</tbody>
-					</table>
+					<input type="hidden" name="ap_id" id="ap_id" value="{{$data['data']['invoice_data'][0]->ap_id}}">
 					<div class="row">
 						<div class="col-md-6">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Advance Payment No:</th>
+										<th>Advance Payment Date:</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="text" class="form-control" name="payment_no" value="{{$data['data']['invoice_data'][0]->payment_no}}" style="text-align:center;" /></td>
+										<td><input type="text" class="form-control datepicker" placeholder="Date" value="{{$data['data']['invoice_data'][0]->payment_date}}" name="payment_date"></td>
+									</tr>
+								</tbody>
+							</table>
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -205,16 +201,12 @@
 								@endif
 								<tr id="t2">
 									<td colspan="5">Total Inv. Val</td>
+									<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
 									<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="{{$data['data']['invoice_data'][0]->total_cgst_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="{{$data['data']['invoice_data'][0]->total_igst_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="{{$data['data']['invoice_data'][0]->total_cess_amount}}" /></td>
 									<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="{{$data['data']['invoice_data'][0]->total_amount}}" /></td>
-								</tr>
-								<tr>
-									<td colspan="17">
-										<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
-									</td>
 								</tr>
 								@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
 								<tr>
@@ -258,7 +250,7 @@
 								<td><input type="text" class="form-control total_in_words" name="total_in_words" id="total_in_words" value="{{$data['data']['invoice_data'][0]->total_in_words}}"/></td>
 								<td><input type="text" class="form-control taxable_amount" id="taxable_amount"/></td>
 								<td><input type="text" class="form-control total_tax" name="total_tax" id="total_tax" value="{{$data['data']['invoice_data'][0]->total_tax}}" /></td>
-								<td><input type="text" class="form-control" name="grand_total" id="grand_total" value="{{$data['data']['invoice_data'][0]->grand_total}}"/></td>
+								<td><input type="text" class="form-control grand_total" name="grand_total" id="grand_total" value="{{$data['data']['invoice_data'][0]->grand_total}}"/></td>
 							</tr>
 						</table>
 						<table class="pull-right">
@@ -270,7 +262,7 @@
 								</td>
 								<td>
 									<a href="#">
-										<button class="btn btn-success" type="button" id="update_invoice">Update Note</button>
+										<button class="btn btn-success" type="button" id="update_invoice">Update Receipt</button>
 									</a>
 								</td>
 							</tr>
@@ -281,65 +273,6 @@
 		</div>
 	</div>
 
-	<!-- Add Item Modal -->
-	<div class="modal fade" id="addItemModal" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header modal-header-success">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add Item</h4>
-				</div>
-				<div class="modal-body">
-					<form role="form" id="itemForm">
-						<input type="hidden" class="form-control" name="business_id" value="{{$data['business_id']}}">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="item_description">Item Description<span>*</span> :</label>
-									<input type="text" class="form-control" placeholder="Item Description" name="item_description">
-								</div>
-								<div class="form-group">
-									<label for="item_type">Item Type:</label>
-									<input type="text" class="form-control" placeholder="Item Type" name="item_type">
-								</div>
-								<div class="form-group">
-									<label for="code">Item/SKU Code:</label>
-									<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
-								</div>
-								<div class="form-group">
-									<label for="purpr">Purchase Price:</label>
-									<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="hsn">HSN/SAC Code:</label>
-									<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
-								</div>
-								<div class="form-group">
-									<label for="unit">Unit:</label>
-									<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
-								</div>
-								<div class="form-group">
-									<label for="selling">Selling Price:</label>
-									<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
-								</div>
-
-								<div class="form-group">
-									<label for="dis">Discount(%):</label>
-									<input type="text" class="form-control" placeholder="Discount" name="item_discount">
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-					<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<!-- Quick Action -->
 	<div class="modal fade" id="quick" role="dialog">
@@ -388,117 +321,6 @@
 
 
 	<script>
-	/*$(document).ready(function() {
-		createView();
-	});*/
-
-	function createView(){
-
-		var business_id = $("#business_id").val();
-		getItem(business_id);
-
-		var new_row= '<tr>'+
-		'<td>'+
-		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getItemInfo(this);calculateTotal(this)">'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateQuantity(this)"/></td>'+
-		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0" onkeyup="calculateCost(this)"/><input type="hidden" class="form-control item_value" name="item_value" id="item_value" value="0"/></td>'+
-		'<td><input type="text" class="form-control discount" name="discount" id="discount" value="0" onkeyup="calculateDiscount(this)"/></td>'+
-		'<td>'+
-		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
-		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
-		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
-		'<td>'+
-		'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
-		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
-		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
-		'<td>'+
-		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
-		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
-		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
-		'<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="0"/></td>'+
-		'<td><input type="text" class="form-control cess_amount" name="cess_amount" value="0"/></td>'+
-		'<td><input type="text" class="form-control total" name="total" id="total"/></td>'+
-		'<td><i class="fa fa-trash-o ibtnDel"></i></td>'+
-		'</tr>';
-
-		$("#t2").before(new_row); 
-
-		var place_of_supply = $("#place_of_supply").val();
-		var customer_state = $("#customer_state").val();
-
-		if(place_of_supply != customer_state){
-			$(".cgst_percentage").prop('disabled', true);
-			$(".cgst_amount").prop('disabled', true);
-			$(".sgst_percentage").prop('disabled', true);
-			$(".sgst_amount").prop('disabled', true);
-			$(".igst_percentage").prop('disabled', false);
-			$(".igst_amount").prop('disabled', false);
-		}else{
-			$(".cgst_percentage").prop('disabled', false);
-			$(".cgst_amount").prop('disabled', false);
-			$(".sgst_percentage").prop('disabled', false);
-			$(".sgst_amount").prop('disabled', false);
-			$(".igst_percentage").prop('disabled', true);
-			$(".igst_amount").prop('disabled', true);
-		}
-
-		$(document).ready(function() {
-			$(".item_name").select2();
-		});
-	}
-
-	$("table.order-list").on("click", ".ibtnDel", function (event) {
-		
-		var count = 0;
-		$('input[name=hsn_sac_no]').each(function(){
-			count++;
-		});
-		if(count == 1 || count < 1){
-			return false;
-		}
-		var result = confirm("Do you want to delete this item ?");
-		if (result) {
-			var id_no = $(this).closest('tr').find('.id_no').val();
-			deleteInvoiceDetail(id_no,this);
-
-			$(this).closest("tr").remove();
-			calCgstAmount(this);
-			calculateTotal(this);
-		}
-	});
-
-	
-
-	$(document).ready(function() {
-		$(".item_name").select2();
-	});
 
 	var place_of_supply = $("#place_of_supply").val();
 	var customer_state = $("#customer_state").val();
@@ -519,14 +341,10 @@
 		$(".igst_amount").prop('disabled', true);
 	}
 
-	$('#place_of_supply').css('pointer-events','none');
-	$('#tddd').css('pointer-events','none');
-	$('#contact_gstin').css('pointer-events','none');
-	$('.note_no').css('pointer-events','none');
-	$('.invoice_no').css('pointer-events','none');
+	$('.table-responsive').css('pointer-events','none');
 </script>
 
-<script src="{{URL::asset('app/js/editvcdnote.js')}}"></script>
+<script src="{{URL::asset('app/js/editadvancePayment.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

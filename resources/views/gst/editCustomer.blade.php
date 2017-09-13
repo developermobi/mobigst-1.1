@@ -34,56 +34,57 @@
 			<div class="about-grid1 wow fadeInLeft animated animated" data-wow-delay="0.4s">
 				<h2 style="margin-top:0px;">Edit Customer Or Vendor</h2>
 				<form id="updateCustomerForm" role="form">
-					<input type="hidden" class="form-control" id="contact_id"  value="{{$data['data'][0]->contact_id}}">
+					<input type="hidden" class="form-control" id="contact_id"  value="{{$data['data']['contactData'][0]->contact_id}}">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="custname">Customer Or Vendor Name:</label>
-								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name" value="{{$data['data'][0]->contact_name}}">
+								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name" value="{{$data['data']['contactData'][0]->contact_name}}">
 							</div>
 							<div class="form-group">
 								<label for="gstin">GSTIN NO:</label>
-								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no" value="{{$data['data'][0]->gstin_no}}">
+								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no" value="{{$data['data']['contactData'][0]->gstin_no}}">
 							</div>
 							<div class="form-group">
 								<label for="country">Country:</label>
-								<input type="text" class="form-control" placeholder="Enter Country" name="country" value="{{$data['data'][0]->country}}">
+								<input type="text" class="form-control" placeholder="Enter Country" name="country" value="{{$data['data']['contactData'][0]->country}}">
 							</div>
 							<div class="form-group">
 								<label for="conper">Contact Person:</label>
-								<input type="text" class="form-control" placeholder="Contact Person" name="contact_person" value="{{$data['data'][0]->contact_person}}">
+								<input type="text" class="form-control" placeholder="Contact Person" name="contact_person" value="{{$data['data']['contactData'][0]->contact_person}}">
 							</div>
 							<div class="form-group">
 								<label for="pin">Pincode:</label>
-								<input type="text" class="form-control" placeholder="Enter Pincode" name="pincode" value="{{$data['data'][0]->pincode}}">
+								<input type="text" class="form-control" placeholder="Enter Pincode" name="pincode" value="{{$data['data']['contactData'][0]->pincode}}">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="email">Email Id:</label>
-								<input type="email" class="form-control" placeholder="Email Id" name="email" value="{{$data['data'][0]->email}}">
+								<input type="email" class="form-control" placeholder="Email Id" name="email" value="{{$data['data']['contactData'][0]->email}}">
 							</div>
 							<div class="form-group">
 								<label for="pan">PAN:</label>
-								<input type="text" class="form-control" placeholder="Enter PAN" name="pan_no" value="{{$data['data'][0]->pan_no}}">
+								<input type="text" class="form-control" placeholder="Enter PAN" name="pan_no" value="{{$data['data']['contactData'][0]->pan_no}}">
 							</div>
 							<div class="form-group">
 								<label for="state">State:</label>
-								<input type="text" class="form-control" placeholder="Enter State" name="state" value="{{$data['data'][0]->state}}">
+								<select class="form-control state" name="">
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="mob">Mobile No:</label>
-								<input type="text" class="form-control" placeholder="Enter Mobile No" name="mobile_no" value="{{$data['data'][0]->mobile_no}}">
+								<input type="text" class="form-control" placeholder="Enter Mobile No" name="mobile_no" value="{{$data['data']['contactData'][0]->mobile_no}}">
 							</div>
 							<div class="form-group">
 								<label for="city">City:</label>
-								<input type="text" class="form-control" placeholder="Enter City" name="city" value="{{$data['data'][0]->city}}">
+								<input type="text" class="form-control" placeholder="Enter City" name="city" value="{{$data['data']['contactData'][0]->city}}">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="add">Address:</label>
-						<textarea class="form-control" rows="5"  placeholder="Enter Address" name="address">{{$data['data'][0]->address}}</textarea>
+						<textarea class="form-control" rows="5"  placeholder="Enter Address" name="address">{{$data['data']['contactData'][0]->address}}</textarea>
 					</div>
 					<button type="button" class="btn btn-danger">Back</button>
 					<button type="button" class="btn btn-default">Cancel</button>

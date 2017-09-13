@@ -47,10 +47,10 @@
 							<a href="http://mobigst.mobisofttech.co.in:8989/files/item.csv" target="_BLANK">
 								<button class="btn btn-success" type="button">Download Sample File</button>
 							</a>
-							<a href="addservices">
+							<!-- <a href="addservices">
 								<button class="btn btn-info" type="button"> + New Item</button>
 							</a>
-							<button class="btn btn-warning" type="button" data-toggle="modal" data-target="#viewItem"> View Items </button>
+							<button class="btn btn-warning" type="button" data-toggle="modal" data-target="#viewItem"> View Items </button> -->
 						</div>	
 						<div class="image-upload">
 							<label for="file-input">

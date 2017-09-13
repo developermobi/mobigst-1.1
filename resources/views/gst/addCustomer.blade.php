@@ -77,7 +77,8 @@
 							</div>
 							<div class="form-group">
 								<label for="state">State:</label>
-								<input type="text" class="form-control" placeholder="Enter State" name="state">
+								<select class="form-control state" name="state">
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="mob">Mobile No:</label>

@@ -4,6 +4,8 @@ if(location.hostname == 'localhost'){
 	var SERVER_NAME = "http://mobigst.mobisofttech.co.in:8989";
 }
 
+
+
 //Create Object of form data
 (function ($) {
 	$.fn.serializeFormJSON = function () {
@@ -22,6 +24,7 @@ if(location.hostname == 'localhost'){
 		return o;
 	};
 })(jQuery);
+
 
 
 function onlyAlphaNumeric(event){
@@ -49,6 +52,7 @@ function onlyNumeric(event){
 }
 
 
+
 var token = $.cookie("token");
 var userTokenId = $.cookie("tokenId");
 var userTokenEmail = $.cookie("tokenEmail");
@@ -70,6 +74,7 @@ if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === '
 	$("#signup_li").hide();
 	$("#welcome_user_li").show();
 }
+
 
 
 function logout(){
@@ -114,6 +119,8 @@ function logout(){
 	});
 }
 
+
+
 $(function(){
 	if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === 'undefined'){
 		$("#login_li").show();
@@ -127,6 +134,7 @@ $(function(){
 });
 
 
+
 $(function () {
-	$('[data-toggle="tooltip"]').tooltip()
-})
+	$('[data-toggle="tooltip"]').tooltip();
+});

@@ -188,6 +188,17 @@ class Gst extends Model{
 
 
 
+	public static function checkAvailableGstin($gstin){
+		$getData = DB::table('gstin')
+		->where('gstin_no',$gstin)
+		->where('status',1)
+		->get();
+
+		return $getData;
+	}
+
+
+
 	public static function addBusiness($input){
 		$input['created_at'] = date('Y-m-d H:i:s');
 
@@ -213,7 +224,6 @@ class Gst extends Model{
 	public static function getBusinessData($business_id){
 
 		$getData = DB::table('business')
-		->select('business_id','name','pan')
 		->where('business_id',$business_id)
 		->where('status',1)
 		->get();

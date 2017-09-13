@@ -239,6 +239,16 @@ Route::get('sales/editSalesInvoice/{id}', [
 	'as' => 'sales/editSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@editSalesInvoice'
 	]);
 
+Route::get('sales/viewSalesInvoice/{id}', [
+	'as' => 'sales/viewSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@viewSalesInvoice'
+	]);
+
+Route::get('printSalesInvoice/{id}',array('as'=>'printSalesInvoice','uses'=>'Api\V1\SalesController@printSalesInvoice'));
+
+Route::get('uploadSalesInvoice/{id}', [
+	'as' => 'uploadSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@uploadSalesInvoice'
+	]);
+
 Route::get('createCdnote/{id}', [
 	'as' => 'createCdnote/{id}', 'uses' => 'Api\V1\SalesController@createCdnote'
 	]);
@@ -250,6 +260,12 @@ Route::get('cdnote/{id}', [
 Route::get('cdnote/editCdnote/{id}', [
 	'as' => 'cdnote/editCdnote/{id}', 'uses' => 'Api\V1\SalesController@editCdnote'
 	]);
+
+Route::get('cdnote/viewCdnote/{id}', [
+	'as' => 'cdnote/viewCdnote/{id}', 'uses' => 'Api\V1\SalesController@viewCdnote'
+	]);
+
+Route::get('printCdnote/{id}',array('as'=>'printCdnote','uses'=>'Api\V1\SalesController@printCdnote'));
 
 Route::get('createAdvanceReceipt/{id}', [
 	'as' => 'createAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@createAdvanceReceipt'
@@ -263,12 +279,22 @@ Route::get('advanceReceipt/editAdvanceReceipt/{id}', [
 	'as' => 'advanceReceipt/editAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@editAdvanceReceipt'
 	]);
 
+Route::get('advanceReceipt/viewAdvanceReceipt/{id}', [
+	'as' => 'advanceReceipt/viewAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@viewAdvanceReceipt'
+	]);
+
+Route::get('printAdvanceReceipt/{id}',array('as'=>'printAdvanceReceipt','uses'=>'Api\V1\SalesController@printAdvanceReceipt'));
+
 $api->version('v1', function ($api) {
 	$api->get('getContact/{business_id}', 'App\Http\Controllers\Api\V1\SalesController@getContact');
 });
 
 $api->version('v1', function ($api) {
 	$api->get('getStates', 'App\Http\Controllers\Api\V1\SalesController@getStates');
+});
+
+$api->version('v1', function ($api) {
+	$api->get('getUnit', 'App\Http\Controllers\Api\V1\SalesController@getUnit');
 });
 
 $api->version('v1', function ($api) {
@@ -360,6 +386,12 @@ Route::get('purchase/editPurchaseInvoice/{id}', [
 	'as' => 'purchase/editPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@editPurchaseInvoice'
 	]);
 
+Route::get('purchase/viewPurchaseInvoice/{id}', [
+	'as' => 'purchase/viewPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@viewPurchaseInvoice'
+	]);
+
+Route::get('printPurchaseInvoice/{id}',array('as'=>'printPurchaseInvoice','uses'=>'Api\V1\PurchaseController@printPurchaseInvoice'));
+
 Route::get('createVcdnote/{id}', [
 	'as' => 'createVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@createVcdnote'
 	]);
@@ -372,6 +404,12 @@ Route::get('vcdnote/editVcdnote/{id}', [
 	'as' => 'vcdnote/editVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@editVcdnote'
 	]);
 
+Route::get('vcdnote/viewVcdnote/{id}', [
+	'as' => 'vcdnote/viewVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@viewVcdnote'
+	]);
+
+Route::get('printVcdnote/{id}',array('as'=>'printVcdnote','uses'=>'Api\V1\PurchaseController@printVcdnote'));
+
 Route::get('createAdvancePayment/{id}', [
 	'as' => 'createAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@createAdvancePayment'
 	]);
@@ -383,6 +421,12 @@ Route::get('advancePayment/{id}', [
 Route::get('advancePayment/editAdvancePayment/{id}', [
 	'as' => 'advancePayment/editAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@editAdvancePayment'
 	]);
+
+Route::get('advancePayment/viewAdvancePayment/{id}', [
+	'as' => 'advancePayment/viewAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@viewAdvancePayment'
+	]);
+
+Route::get('printAdvancePayment/{id}',array('as'=>'printAdvancePayment','uses'=>'Api\V1\PurchaseController@printAdvancePayment'));
 
 
 $api->version('v1', function ($api) {

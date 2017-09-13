@@ -23,6 +23,9 @@
 			width: 1300px;
 		}
 	}
+	#item_table td{
+		padding: 4px;
+	}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -74,11 +77,11 @@
 						</thead>
 						<tbody>
 							<tr>
-								<td><input type="text" class="form-control" name="note_no" value="{{$data['note_no']}}" style="text-align:center;" /></td>
+								<td><input type="text" class="form-control note_no" name="note_no" value="{{$data['note_no']}}" style="text-align:center;" /></td>
 								<td><input type="text" class="form-control datepicker" name="note_issue_date" /></td>
 								<td>
-									<label class="radio-inline"><input type="radio" name="note_type" value="1" checked>CREDIT</label>
-									<label class="radio-inline"><input type="radio" name="note_type" value="2">DEBIT</label>
+									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" value="1" checked>CREDIT</label>
+									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" value="2">DEBIT</label>
 								</td>
 								<td id="noedit">
 									<select class="form-control invoice_no" id="invoice_no" name="invoice_no" onchange="getInvoiceInfo(this);">
@@ -169,7 +172,7 @@
 							</table>
 						</div>
 					</div>
-					<table class="table table-bordered order-list">
+					<table class="table table-bordered order-list" id="item_table">
 						<thead>
 							<tr>
 								<!-- <th rowspan="2">SR. NO.</th> -->
@@ -178,10 +181,12 @@
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2">HSN/SAC</th>
+								<th rowspan="2">HSN/SAC <a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a> </th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2">Cost</th>
-								<th rowspan="2">Discount</th>
+								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2">Price</th>
+								<th rowspan="2">Discount in %</th>
+								<th rowspan="2">Taxable Value</th>
 								<th colspan="2">CGST</th>
 								<th colspan="2">SGST</th>
 								<th colspan="2">IGST</th>
@@ -190,11 +195,11 @@
 								<th rowspan="2">#</th>
 							</tr>
 							<tr>
-								<th width="7%">%</th>
+								<th width="5%">%</th>
 								<th>Amt (Rs.)</th>
-								<th width="7%">%</th>
+								<th width="5%">%</th>
 								<th>Amt (Rs.)</th>
-								<th width="7%">%</th>
+								<th width="5%">%</th>
 								<th>Amt (Rs.)</th>
 								<th>%</th>
 								<th>Amt (Rs.)</th>
@@ -382,17 +387,22 @@
 
 		var new_row= '<tr>'+
 		'<td>'+
-		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getItemInfo(this);calculateTotal(this)">'+
+		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateQuantity(this)"/></td>'+
-		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0" onkeyup="calculateCost(this)"/><input type="hidden" class="form-control item_value" name="item_value" id="item_value" value="0"/></td>'+
-		'<td><input type="text" class="form-control discount" name="discount" id="discount" value="0" onkeyup="calculateDiscount(this)"/></td>'+
+		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
+		'<td>'+
+		'<select class="form-control unit" name="unit" id="unit">'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control discount" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
+		'<option vae">0.125</option>'+
 		'<option value="1.5">1.5</option>'+
 		'<option value="2.5">2.5</option>'+
 		'<option value="6">6</option>'+
@@ -416,12 +426,12 @@
 		'<td>'+
 		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
-		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="1">0.25</option>'+
+		'<option value="2">2</option>'+
+		'<option value="5">5</option>'+
+		'<option value="10">10</option>'+
+		'<option value="20">20</option>'+
+		'<option value="50">50</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+

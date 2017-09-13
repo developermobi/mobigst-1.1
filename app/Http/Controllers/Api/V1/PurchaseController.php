@@ -12,6 +12,7 @@ use App\Purchase;
 use Session;
 use View;
 use DB;
+use PDF;
 
 
 class PurchaseController extends Controller{
@@ -340,6 +341,87 @@ class PurchaseController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 		return response()->json($returnResponse);
+	}
+
+
+
+	public function viewPurchaseInvoice($id){
+		$invoice_id = decrypt($id);
+		$getData = Purchase::getPurchaseInvoiceData($invoice_id);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no);
+			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('purchase.viewPurchaseInvoice')->with('data', $returnResponse);
+	}
+
+
+
+	public function printPurchaseInvoice(Request $request,$id){
+		$invoice_id = decrypt($id);
+		$getData = Purchase::getPurchaseInvoiceData($invoice_id);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no);
+			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+
+		view()->share('data',$returnResponse);
+		$pdf = PDF::loadView('purchase.printPurchaseInvoice');
+
+		if($request->has('download')){
+			$pdf = PDF::loadView('purchase.printPurchaseInvoice');
+			return $pdf->download('PurchaseInvoice.pdf');
+		}
+		return $pdf->stream('PurchaseInvoice.pdf');
+		return view('purchase.printPurchaseInvoice');
 	}
 
 
@@ -759,6 +841,87 @@ class PurchaseController extends Controller{
 
 
 
+	public function viewVcdnote($id){
+		$note_no = decrypt($id);
+		$getData = Purchase::getVcdnoteData($note_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('purchase.viewVcdnote')->with('data', $returnResponse);
+	}
+
+
+
+	public function printVcdnote(Request $request,$id){
+		$note_no = decrypt($id);
+		$getData = Purchase::getVcdnoteData($note_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+
+		view()->share('data',$returnResponse);
+		$pdf = PDF::loadView('purchase.printVcdnote');
+
+		if($request->has('download')){
+			$pdf = PDF::loadView('purchase.printVcdnote');
+			return $pdf->download('Vendor-Credit-Debit-Note.pdf');
+		}
+		return $pdf->stream('Vendor-Credit-Debit-Note.pdf');
+		return view('purchase.printVcdnote');
+	}
+
+
+
 	public function editVcdnote($id){
 		$note_no = decrypt($id);
 		$getData = Purchase::getVcdnoteData($note_no);
@@ -1099,6 +1262,87 @@ class PurchaseController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 		return response()->json($returnResponse);
+	}
+
+
+
+	public function viewAdvancePayment($id){
+		$note_no = decrypt($id);
+		$getData = Purchase::getVcdnoteData($note_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('purchase.viewAdvancePayment')->with('data', $returnResponse);
+	}
+
+
+
+	public function printAdvancePayment(Request $request,$id){
+		$note_no = decrypt($id);
+		$getData = Purchase::getVcdnoteData($note_no);
+
+		if (sizeof($getData) > 0) {
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
+			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			if(sizeof($getGstinInfo) > 0){
+				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
+				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+			}
+
+			$data = array();
+			$data['invoice_data'] = $getData;
+			$data['invoice_details'] = $getInvoiceDetail;
+
+			if(sizeof($getBusinessByGstin) > 0){
+				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
+			}
+
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $data;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+
+		view()->share('data',$returnResponse);
+		$pdf = PDF::loadView('purchase.printAdvancePayment');
+
+		if($request->has('download')){
+			$pdf = PDF::loadView('purchase.printAdvancePayment');
+			return $pdf->download('Advance-Payment.pdf');
+		}
+		return $pdf->stream('Advance-Payment.pdf');
+		return view('purchase.printAdvancePayment');
 	}
 
 
