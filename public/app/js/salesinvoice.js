@@ -471,7 +471,7 @@ function getItemInfo(obj){
 				$(item_value).val(response.data[0]['item_sale_price']);
 				$(total).val(response.data[0]['item_sale_price']);
 			}
-			Recalculate();
+			//Recalculate();
 			calCgstAmount(obj);
 			calculateTotal(obj);
 		},
@@ -540,15 +540,16 @@ function calculateCESS(obj){
 	var rate = rate_element.val();
 
 	var cess_percentage = $(obj).closest("tr").find(".cess_percentage").val();
-	if(cess_percentage != ''){
-
-		var amount_element = $(obj).closest("tr").find(".cess_amount");
-		var amount = (rate / 100) * cess_percentage;
-		amount_element.val(amount);
-
-		calCgstAmount(obj);
-		calculateTotal(obj);
+	if(cess_percentage == ''){
+		cess_percentage = 0;
 	}
+
+	var amount_element = $(obj).closest("tr").find(".cess_amount");
+	var amount = (rate / 100) * cess_percentage;
+	amount_element.val(amount);
+
+	calCgstAmount(obj);
+	calculateTotal(obj);
 }
 
 

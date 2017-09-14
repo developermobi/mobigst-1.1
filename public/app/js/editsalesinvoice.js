@@ -158,6 +158,7 @@ $(function(){
 	$('#is_freight_charge').change(function(){
 		if ($('#is_freight_charge').is(':checked') == true){
 			$('#freight_charge').prop('disabled', false);
+			$('#freight_charge').focus();
 		} else {
 			$('#freight_charge').val('');
 			calculateTotal(this);
@@ -168,6 +169,7 @@ $(function(){
 	$('#is_lp_charge').change(function(){
 		if ($('#is_lp_charge').is(':checked') == true){
 			$('#lp_charge').prop('disabled', false);
+			$('#lp_charge').focus();
 		} else {
 			$('#lp_charge').val('');
 			calculateTotal(this);
@@ -178,6 +180,7 @@ $(function(){
 	$('#is_insurance_charge').change(function(){
 		if ($('#is_insurance_charge').is(':checked') == true){
 			$('#insurance_charge').prop('disabled', false);
+			$('#insurance_charge').focus();
 		} else {
 			$('#insurance_charge').val('');
 			calculateTotal(this);
@@ -189,6 +192,7 @@ $(function(){
 		if ($('#is_other_charge').is(':checked') == true){
 			$('#other_charge').prop('disabled', false);
 			$('#other_charge_name').prop('disabled', false);
+			$('#other_charge_name').focus();
 		} else {
 			$('#other_charge').val('');
 			calculateTotal(this);
@@ -466,7 +470,7 @@ function getItemInfo(obj){
 				$(item_value).val(response.data[0]['item_sale_price']);
 				$(total).val(response.data[0]['item_sale_price']);
 			}
-			Recalculate();
+			//Recalculate();
 			calCgstAmount(obj);
 			calculateTotal(obj);
 		},

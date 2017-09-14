@@ -1269,6 +1269,31 @@ class SalesController extends Controller{
 			$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 			$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 			$cdnoteData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+			if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+				$cdnoteData['is_freight_charge'] = '1';
+			}else{
+				$cdnoteData['is_freight_charge'] = '0';
+			}
+			$cdnoteData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+			if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+				$cdnoteData['is_lp_charge'] = '1';
+			}else{
+				$cdnoteData['is_lp_charge'] = '0';
+			}
+			$cdnoteData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+			if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+				$cdnoteData['is_insurance_charge'] = '1';
+			}else{
+				$cdnoteData['is_insurance_charge'] = '0';
+			}
+			$cdnoteData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+			if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+				$cdnoteData['is_other_charge'] = '1';
+			}else{
+				$cdnoteData['is_other_charge'] = '0';
+			}
+			$cdnoteData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+			$cdnoteData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 			$cdnoteData['total_amount'] = $input['total_amount'];
 			$cdnoteData['grand_total'] = $input['grand_total'];
 			$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -1296,11 +1321,13 @@ class SalesController extends Controller{
 
 				if(is_array($input['total'])){
 					foreach ($input['total'] as $key => $value) {
+						$cdnoteDetailData['gstin_id'] = $input['gstin_id'];
 						$cdnoteDetailData['invoice_no'] = $input['note_no'];
 						$cdnoteDetailData['invoice_type'] = '2';
+						$cdnoteDetailData['unit'] = $input['unit'][$key];
 						$cdnoteDetailData['item_name'] = $input['item_name'][$key];
 						$cdnoteDetailData['item_value'] = $input['item_value'][$key];
-						$cdnoteDetailData['item_type'] = "Goods";
+						$cdnoteDetailData['item_type'] = "";
 						$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
 						$cdnoteDetailData['quantity'] = $input['quantity'][$key];
 						$cdnoteDetailData['rate'] = $input['rate'][$key];
@@ -1322,10 +1349,13 @@ class SalesController extends Controller{
 					$returnResponse['data'] = $insertCdnote;
 					return $returnResponse;
 				}else{
+					$cdnoteDetailData['gstin_id'] = $input['gstin_id'];
 					$cdnoteDetailData['invoice_no'] = $input['note_no'];
-					$cdnoteDetailData['invoice_type'] = '1';
+					$cdnoteDetailData['invoice_type'] = '2';
+					$cdnoteDetailData['unit'] = $input['unit'];
 					$cdnoteDetailData['item_name'] = $input['item_name'];
-					$cdnoteDetailData['item_type'] = "Goods";
+					$cdnoteDetailData['item_value'] = $input['item_value'];
+					$cdnoteDetailData['item_type'] = "";
 					$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 					$cdnoteDetailData['quantity'] = $input['quantity'];
 					$cdnoteDetailData['rate'] = $input['rate'];
@@ -1339,6 +1369,7 @@ class SalesController extends Controller{
 					$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
 					$cdnoteDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
 					$cdnoteDetailData['total'] = $input['total'];
+					return $cdnoteDetailData;
 					$insertInvoiceDetails = Sales::insertInvoiceDetails($cdnoteDetailData);
 
 					$returnResponse['status'] = "success";
@@ -1468,6 +1499,7 @@ class SalesController extends Controller{
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			$getUnit = Sales::getUnit();
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
@@ -1476,6 +1508,7 @@ class SalesController extends Controller{
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['units'] = $getUnit;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -1540,6 +1573,31 @@ class SalesController extends Controller{
 		$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$cdnoteData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+			$cdnoteData['is_freight_charge'] = '1';
+		}else{
+			$cdnoteData['is_freight_charge'] = '0';
+		}
+		$cdnoteData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+		if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+			$cdnoteData['is_lp_charge'] = '1';
+		}else{
+			$cdnoteData['is_lp_charge'] = '0';
+		}
+		$cdnoteData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+		if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+			$cdnoteData['is_insurance_charge'] = '1';
+		}else{
+			$cdnoteData['is_insurance_charge'] = '0';
+		}
+		$cdnoteData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+		if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+			$cdnoteData['is_other_charge'] = '1';
+		}else{
+			$cdnoteData['is_other_charge'] = '0';
+		}
+		$cdnoteData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+		$cdnoteData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "0";
 		$cdnoteData['total_amount'] = $input['total_amount'];
 		$cdnoteData['grand_total'] = $input['grand_total'];
 		$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -1552,9 +1610,11 @@ class SalesController extends Controller{
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
+				$cdnoteDetailData['gstin_id'] = $input['gstin_id'];
 				$cdnoteDetailData['invoice_no'] = $input['note_no'];
 				$cdnoteDetailData['invoice_type'] = '2';
 				$cdnoteDetailData['item_name'] = $input['item_name'][$key];
+				$cdnoteDetailData['unit'] = $input['unit'][$key];
 				$cdnoteDetailData['item_value'] = $input['item_value'][$key];
 				$cdnoteDetailData['item_type'] = "Goods";
 				$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
@@ -1578,9 +1638,11 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $insertCdnote;
 			return $returnResponse;
 		}else{
+			$cdnoteDetailData['gstin_id'] = $input['gstin_id'];
 			$cdnoteDetailData['invoice_no'] = $input['note_no'];
 			$cdnoteDetailData['invoice_type'] = '1';
 			$cdnoteDetailData['item_name'] = $input['item_name'];
+			$cdnoteDetailData['unit'] = $input['unit'];
 			$cdnoteDetailData['item_type'] = "Goods";
 			$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 			$cdnoteDetailData['quantity'] = $input['quantity'];
@@ -1677,6 +1739,31 @@ class SalesController extends Controller{
 		$advanceReceiptData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$advanceReceiptData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$advanceReceiptData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+				$advanceReceiptData['is_freight_charge'] = '1';
+			}else{
+				$advanceReceiptData['is_freight_charge'] = '0';
+			}
+			$advanceReceiptData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+			if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+				$advanceReceiptData['is_lp_charge'] = '1';
+			}else{
+				$advanceReceiptData['is_lp_charge'] = '0';
+			}
+			$advanceReceiptData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+			if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+				$advanceReceiptData['is_insurance_charge'] = '1';
+			}else{
+				$advanceReceiptData['is_insurance_charge'] = '0';
+			}
+			$advanceReceiptData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+			if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+				$advanceReceiptData['is_other_charge'] = '1';
+			}else{
+				$advanceReceiptData['is_other_charge'] = '0';
+			}
+			$advanceReceiptData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+			$advanceReceiptData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
@@ -1704,8 +1791,10 @@ class SalesController extends Controller{
 
 			if(is_array($input['total'])){
 				foreach ($input['total'] as $key => $value) {
+					$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 					$invoiceDetailData['invoice_no'] = $input['receipt_no'];
 					$invoiceDetailData['invoice_type'] = '3';
+					$invoiceDetailData['unit'] = $input['unit'][$key];
 					$invoiceDetailData['item_name'] = $input['item_name'][$key];
 					$invoiceDetailData['item_value'] = $input['item_value'][$key];
 					$invoiceDetailData['item_type'] = "Goods";
@@ -1730,9 +1819,12 @@ class SalesController extends Controller{
 				$returnResponse['data'] = $insertAdvanceReceipt;
 				return $returnResponse;
 			}else{
+				$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 				$invoiceDetailData['invoice_no'] = $input['receipt_no'];
 				$invoiceDetailData['invoice_type'] = '3';
+				$invoiceDetailData['unit'] = $input['unit'];
 				$invoiceDetailData['item_name'] = $input['item_name'];
+				$invoiceDetailData['item_value'] = $input['item_value'];
 				$invoiceDetailData['item_type'] = "Goods";
 				$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 				$invoiceDetailData['quantity'] = $input['quantity'];
@@ -1843,6 +1935,8 @@ class SalesController extends Controller{
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Sales::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Sales::getGstinInfo($getData[0]->gstin_id);
+			$getUnit = Sales::getUnit();
+
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
@@ -1851,6 +1945,7 @@ class SalesController extends Controller{
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['units'] = $getUnit;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -1993,6 +2088,31 @@ class SalesController extends Controller{
 		$advanceReceiptData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$advanceReceiptData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$advanceReceiptData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+			$advanceReceiptData['is_freight_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_freight_charge'] = '0';
+		}
+		$advanceReceiptData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+		if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+			$advanceReceiptData['is_lp_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_lp_charge'] = '0';
+		}
+		$advanceReceiptData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+		if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+			$advanceReceiptData['is_insurance_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_insurance_charge'] = '0';
+		}
+		$advanceReceiptData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+		if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+			$advanceReceiptData['is_other_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_other_charge'] = '0';
+		}
+		$advanceReceiptData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+		$advanceReceiptData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
@@ -2005,9 +2125,11 @@ class SalesController extends Controller{
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
+				$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 				$invoiceDetailData['invoice_no'] = $input['receipt_no'];
 				$invoiceDetailData['invoice_type'] = '3';
 				$invoiceDetailData['item_name'] = $input['item_name'][$key];
+				$invoiceDetailData['unit'] = $input['unit'][$key];
 				$invoiceDetailData['item_value'] = $input['item_value'][$key];
 				$invoiceDetailData['item_type'] = "Goods";
 				$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
@@ -2031,9 +2153,11 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $insertCdnote;
 			return $returnResponse;
 		}else{
+			$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 			$invoiceDetailData['invoice_no'] = $input['receipt_no'];
 			$invoiceDetailData['invoice_type'] = '3';
 			$invoiceDetailData['item_name'] = $input['item_name'];
+			$invoiceDetailData['unit'] = $input['unit'];
 			$invoiceDetailData['item_type'] = "Goods";
 			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 			$invoiceDetailData['item_value'] = $input['item_value'];

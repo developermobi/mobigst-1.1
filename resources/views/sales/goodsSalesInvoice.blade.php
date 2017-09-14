@@ -291,9 +291,7 @@
 					<table class="pull-right">
 						<tr>
 							<td>
-								<a href="javascript:void();">
-									<button class="btn btn-primary" type="button">Back</button>
-								</a>
+								<button class="btn btn-primary" type="button" onclick="refreshPage();">Cancel</button>
 							</td>
 							<td>
 								<a href="#">
@@ -597,6 +595,10 @@
 		$(".item_name").select2();
 		$('input').attr('autocomplete', 'false');
 	});
+
+	function refreshPage(){
+		window.location.reload();
+	} 
 </script>
 
 <script src="{{URL::asset('app/js/salesinvoice.js')}}"></script>

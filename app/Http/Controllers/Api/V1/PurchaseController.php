@@ -141,6 +141,25 @@ class PurchaseController extends Controller{
 
 
 
+	public function getUnit(){
+
+		$getUnit = Sales::getUnit();
+		if(sizeof($getUnit) > 0){
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "302";
+			$returnResponse['message'] = "Data Found.";
+			$returnResponse['data'] = $getUnit;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No Content.";
+			$returnResponse['data'] = $getUnit;
+		}
+		return $returnResponse;
+	}
+
+
+
 	public function getContactInfo($contact_id){
 
 		$getContactInfo = Purchase::getContactInfo($contact_id);
@@ -236,6 +255,31 @@ class PurchaseController extends Controller{
 			$purchaseInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 			$purchaseInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 			$purchaseInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+			if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+				$salesInvoiceData['is_freight_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_freight_charge'] = '0';
+			}
+			$salesInvoiceData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+			if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+				$salesInvoiceData['is_lp_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_lp_charge'] = '0';
+			}
+			$salesInvoiceData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+			if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+				$salesInvoiceData['is_insurance_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_insurance_charge'] = '0';
+			}
+			$salesInvoiceData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+			if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+				$salesInvoiceData['is_other_charge'] = '1';
+			}else{
+				$salesInvoiceData['is_other_charge'] = '0';
+			}
+			$salesInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+			$salesInvoiceData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 			$purchaseInvoiceData['total_in_words'] = $input['total_in_words'];
 			$purchaseInvoiceData['total_tax'] = $input['total_tax'];
 			$purchaseInvoiceData['grand_total'] = $input['grand_total'];
@@ -262,8 +306,10 @@ class PurchaseController extends Controller{
 
 				if(is_array($input['total'])){
 					foreach ($input['total'] as $key => $value) {
+						$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 						$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 						$invoiceDetailData['invoice_type'] = '4';
+						$invoiceDetailData['unit'] = $input['unit'][$key];
 						$invoiceDetailData['item_name'] = $input['item_name'][$key];
 						$invoiceDetailData['item_value'] = $input['item_value'][$key];
 						$invoiceDetailData['item_type'] = "Goods";
@@ -288,9 +334,12 @@ class PurchaseController extends Controller{
 					$returnResponse['data'] = $insertPurchaseInvoice;
 					return $returnResponse;
 				}else{
+					$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 					$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 					$invoiceDetailData['invoice_type'] = '4';
+					$invoiceDetailData['unit'] = $input['unit'];
 					$invoiceDetailData['item_name'] = $input['item_name'];
+					$invoiceDetailData['item_value'] = $input['item_value'];
 					$invoiceDetailData['item_type'] = "Goods";
 					$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 					$invoiceDetailData['quantity'] = $input['quantity'];
@@ -350,7 +399,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getPurchaseInvoiceData($invoice_id);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -386,7 +435,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getPurchaseInvoiceData($invoice_id);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -431,7 +480,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getPurchaseInvoiceData($invoice_id);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -846,7 +895,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getVcdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -882,7 +931,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getVcdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -927,7 +976,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getVcdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1271,7 +1320,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getVcdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1307,7 +1356,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getVcdnoteData($note_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){
@@ -1352,7 +1401,7 @@ class PurchaseController extends Controller{
 		$getData = Purchase::getAdvanceReceiptData($receipt_no);
 
 		if (sizeof($getData) > 0) {
-			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->payment_no);
+			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->payment_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
 			if(sizeof($getGstinInfo) > 0){

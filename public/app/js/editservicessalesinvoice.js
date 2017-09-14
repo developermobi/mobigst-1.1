@@ -466,7 +466,7 @@ function getItemInfo(obj){
 				$(item_value).val(response.data[0]['item_sale_price']);
 				$(total).val(response.data[0]['item_sale_price']);
 			}
-			Recalculate();
+			//Recalculate();
 			calCgstAmount(obj);
 			calculateTotal(obj);
 		},

@@ -43,7 +43,8 @@
 		$(".invoice_no").select2();
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
-			startDate: new Date(year, month, '01')
+			startDate: new Date(year, month, '01'),
+			zIndexOffset: 1035,
 		});
 	});
 </script>
@@ -175,7 +176,6 @@
 					<table class="table table-bordered order-list" id="item_table">
 						<thead>
 							<tr>
-								<!-- <th rowspan="2">SR. NO.</th> -->
 								<th rowspan="2" width="20%">ITEM
 									<span style="float: right;cursor: pointer;">
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
@@ -207,8 +207,7 @@
 						</thead>
 						<tbody>
 							<tr id="t2">
-								<td colspan="5">Total Inv. Val</td>
-								<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
+								<td colspan="7">Total Inv. Val</td>
 								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
@@ -221,13 +220,12 @@
 								</td>
 							</tr>
 							<tr>
-								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge</p>
+								<td colspan="17">
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge</p>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="5">Tax under Reverse Charge</td>
-								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
+								<td colspan="7">Tax under Reverse Charge</td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
@@ -236,16 +234,29 @@
 							</tr>
 						</tbody>
 					</table>
+					<table class="table table-bordered" id="item_table2">
+						<tr>
+							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="calculateTotal(this);"> Freight Charges</td>
+							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="calculateTotal(this);"> Loading and Packing Charges</td>
+							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="calculateTotal(this);"> Insurance Charges</td>
+							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="calculateTotal(this);"> Other Charges</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="calculateTotal(this);" /></td>
+							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="calculateTotal(this);" /></td>
+							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="calculateTotal(this);" /></td>
+							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name"  placeholder="Enter Charge Name" /></td>
+							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="calculateTotal(this);" /></td>
+						</tr>
+					</table>
 					<table class="table table-bordered">
 						<tr>
 							<td width="40%">Total In Words</td>
-							<!-- <td>Taxable Amount</td> -->
 							<td>Total Tax</td>
 							<td>GRAND TOTAL</td>
 						</tr>
 						<tr>
 							<td><input type="text" class="form-control total_in_words" id="total_in_words" name="total_in_words" /></td>
-							<!-- <td><input type="text" class="form-control taxable_amount" id="taxable_amount" /></td> -->
 							<td><input type="text" class="form-control total_tax" id="total_tax" name="total_tax" /></td>
 							<td><input type="text" class="form-control" name="grand_total" id="grand_total" /></td>
 						</tr>
@@ -289,7 +300,11 @@
 							</div>
 							<div class="form-group">
 								<label for="item_type">Item Type:</label>
-								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+								<select class="form-control item_type" name="item_type">
+									<option value="">Select Item Type</option>
+									<option value="Goods">Goods</option>
+									<option value="Services">Services</option>
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="code">Item/SKU Code:</label>
@@ -307,13 +322,14 @@
 							</div>
 							<div class="form-group">
 								<label for="unit">Unit:</label>
-								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+								<select class="form-control item_unit" name="item_unit">
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="selling">Selling Price:</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
-							
+
 							<div class="form-group">
 								<label for="dis">Discount(%):</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
@@ -402,36 +418,39 @@
 		'<td>'+
 		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option vae">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
 		'<option value="0" selected>0</option>'+
-		'<option value="1">0.25</option>'+
-		'<option value="2">2</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
 		'<option value="5">5</option>'+
-		'<option value="10">10</option>'+
-		'<option value="20">20</option>'+
-		'<option value="50">50</option>'+
+		'<option value="9">9</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
@@ -485,6 +504,10 @@
 	});
 
 	$('.noedit').css('pointer-events','none');
+
+	function refreshPage(){
+		window.location.reload();
+	}
 
 </script>
 
