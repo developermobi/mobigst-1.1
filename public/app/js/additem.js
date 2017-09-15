@@ -296,7 +296,7 @@ function deleteItem(obj) {
 				$(".bodyLoaderWithOverlay").hide();
 			}
 		});
-	})
+	});
 }
 
 

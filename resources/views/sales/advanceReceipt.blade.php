@@ -89,8 +89,8 @@
 								@endif
 							</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="viewAdvanceReceipt/{{encrypt($value->receipt_no)}}"> View </a>
-								<a class='btn btn-sm btn-warning' href="editAdvanceReceipt/{{encrypt($value->receipt_no)}}"> Edit </a>
+								<a class='btn btn-sm btn-info' href="viewAdvanceReceipt/{{encrypt($value->receipt_no)}}/{{$data['gstin_id']}}"> View </a>
+								<a class='btn btn-sm btn-warning' href="editAdvanceReceipt/{{encrypt($value->receipt_no)}}/{{$data['gstin_id']}}"> Edit </a>
 								<a class='btn btn-sm btn-danger' onclick=cancelAdvanceReceipt(this); data-id='{{$value->ar_id}}'> Delete </a>
 							</td>
 						</tr>

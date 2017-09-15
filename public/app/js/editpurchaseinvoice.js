@@ -1,48 +1,19 @@
 $(function(){
 
-	/*$("#tt_taxable_value").val('0');
-	$("#tt_taxable_value").prop('disabled', true);
-	$("#tt_cgst_amount").val('0');
-	$("#tt_cgst_amount").prop('disabled', true);
-	$("#tt_sgst_amount").val('0');
-	$("#tt_sgst_amount").prop('disabled', true);
-	$("#tt_igst_amount").val('0');
-	$("#tt_igst_amount").prop('disabled', true);
-	$("#tt_cess_amount").val('0');
-	$("#tt_cess_amount").prop('disabled', true);
-	$("#tt_total").val('0');
-	$("#tt_total").prop('disabled', true);*/
+	$('.rate').css('pointer-events','none');
 
 	var business_id = $("#business_id").val();
 
 	getStates();
+	getItemUnit();
 	getContact(business_id);
 
 	if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === 'undefined'){
 		window.location.href = SERVER_NAME;
 	}
 
-	$(".item_name").change(function(event){
-		var place_of_supply = $("#place_of_supply").val();
-		if(place_of_supply == ''){
-			alert('Please select place of supply first');
-			$(".item_name").val('');
-		}else{
-			$('#place_of_supply').css('pointer-events','none');
-			$('#tddd').css('pointer-events','none');
-			$('#contact_gstin').css('pointer-events','none');
-		}
-	});
-
 	$(".place_of_supply").change(function(event){
 		var place_of_supply = $("#place_of_supply").val();
-		if(place_of_supply != ''){
-			$(".item_name").prop('disabled', false);
-		}else{
-			alert('Please select place of supply first');
-			$(".item_name").prop('disabled', true);
-		}
-
 		var customer_state = $("#customer_state").val();
 
 		if(place_of_supply == customer_state){
@@ -58,6 +29,10 @@ $(function(){
 			$(".igst_percentage").prop('disabled', true);
 			$(".igst_amount").val('0');
 			$(".igst_amount").prop('disabled', true);
+			$(".total_cgst_amount").val('0');
+			$(".total_sgst_amount").val('0');
+			$(".total_igst_amount").val('0');
+			Recalculate();
 		}else{
 			$(".cgst_percentage").val('0');
 			$(".cgst_percentage").prop('disabled', true);
@@ -71,6 +46,10 @@ $(function(){
 			$(".igst_percentage").prop('disabled', false);
 			$(".igst_amount").val('0');
 			$(".igst_amount").prop('disabled', false);
+			$(".total_cgst_amount").val('0');
+			$(".total_sgst_amount").val('0');
+			$(".total_igst_amount").val('0');
+			Recalculate();
 		}
 	});
 
@@ -97,14 +76,15 @@ $(function(){
 			$("#tt_sgst_amount").val(total_sgst_amount);
 			$("#tt_igst_amount").val(total_igst_amount);
 			$("#tt_cess_amount").val(total_cess_amount);
-			$("#tt_total").val(parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount));
+			var tt_total = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			$("#tt_total").val(tt_total.toFixed(2));
 
 			$("#total_tax").val('0');
 
 			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			var total = $(".total_amount").val();
 
-			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax));
+			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax.toFixed(2)));
 			var total_amount = $(".total_amount").val();
 			$("#grand_total").val(total_amount);
 			var grand_total = $("#grand_total").val();
@@ -130,7 +110,54 @@ $(function(){
 			$("#tt_total").val('0');
 			$("#tt_total").prop('disabled', true);
 
-			$("#total_tax").val(parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount));
+			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			$("#total_tax").val(total_tax.toFixed(2));
+		}
+	});
+
+	$('#is_freight_charge').change(function(){
+		if ($('#is_freight_charge').is(':checked') == true){
+			$('#freight_charge').prop('disabled', false);
+			$('#freight_charge').focus();
+		} else {
+			$('#freight_charge').val('');
+			calculateTotal(this);
+			$('#freight_charge').prop('disabled', true);
+		}
+	});
+
+	$('#is_lp_charge').change(function(){
+		if ($('#is_lp_charge').is(':checked') == true){
+			$('#lp_charge').prop('disabled', false);
+			$('#lp_charge').focus();
+		} else {
+			$('#lp_charge').val('');
+			calculateTotal(this);
+			$('#lp_charge').prop('disabled', true);
+		}
+	});
+
+	$('#is_insurance_charge').change(function(){
+		if ($('#is_insurance_charge').is(':checked') == true){
+			$('#insurance_charge').prop('disabled', false);
+			$('#insurance_charge').focus();
+		} else {
+			$('#insurance_charge').val('');
+			calculateTotal(this);
+			$('#insurance_charge').prop('disabled', true);
+		}
+	});
+
+	$('#is_other_charge').change(function(){
+		if ($('#is_other_charge').is(':checked') == true){
+			$('#other_charge').prop('disabled', false);
+			$('#other_charge_name').prop('disabled', false);
+			$('#other_charge_name').focus();
+		} else {
+			$('#other_charge').val('');
+			calculateTotal(this);
+			$('#other_charge').prop('disabled', true);
+			$('#other_charge_name').prop('disabled', true);
 		}
 	});
 
@@ -210,6 +237,70 @@ function getStates(){
 
 
 
+function getUnit(obj){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getUnit",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response['data'];
+			var option = "";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+				});
+			}
+			$(obj).closest("tr").find(".unit").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
+function getItemUnit(){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getUnit",
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response['data'];
+			var option = "<option value=''> Select Item Unit </option>";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+				});
+			}
+			$(".item_unit").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
 function getContactInfo(obj){
 	
 	var contact_id = $(obj).find(':selected').attr('data-attr');
@@ -250,6 +341,7 @@ function getContactInfo(obj){
 					$(".igst_percentage").prop('disabled', true);
 					$(".igst_amount").val('0');
 					$(".igst_amount").prop('disabled', true);
+					Recalculate();
 				}else{
 					$(".cgst_percentage").val('0');
 					$(".cgst_percentage").prop('disabled', true);
@@ -263,6 +355,7 @@ function getContactInfo(obj){
 					$(".igst_percentage").prop('disabled', false);
 					$(".igst_amount").val('0');
 					$(".igst_amount").prop('disabled', false);
+					Recalculate();
 				}
 			}
 		},
@@ -349,31 +442,32 @@ function calCgstAmount(obj){
 
 	var cgst_amount_element = $(obj).closest("tr").find(".cgst_amount");
 	var cgst_amount = (rate / 100) * cgst_percentage;
-	cgst_amount_element.val(cgst_amount);
+	cgst_amount_element.val(cgst_amount.toFixed(2));
 
 	var sgst_percentage_element = $(obj).closest("tr").find(".sgst_percentage");
 	var sgst_percentage = sgst_percentage_element.val();
 
 	var sgst_amount_element = $(obj).closest("tr").find(".sgst_amount");
 	var sgst_amount = (rate / 100) * sgst_percentage;
-	sgst_amount_element.val(sgst_amount);
+	sgst_amount_element.val(sgst_amount.toFixed(2));
 
 	var igst_percentage_element = $(obj).closest("tr").find(".igst_percentage");
 	var igst_percentage = igst_percentage_element.val();
 
 	var igst_amount_element = $(obj).closest("tr").find(".igst_amount");
 	var igst_amount = (rate / 100) * igst_percentage;
-	igst_amount_element.val(igst_amount);
+	igst_amount_element.val(igst_amount.toFixed(2));
 
 	var cess_percentage_element = $(obj).closest("tr").find(".cess_percentage");
 	var cess_percentage = cess_percentage_element.val();
 
 	var cess_amount_element = $(obj).closest("tr").find(".cess_amount");
 	var cess_amount = (rate / 100) * cess_percentage;
-	cess_amount_element.val(cess_amount);
+	cess_amount_element.val(cess_amount.toFixed(2));
 
 	var total_element = $(obj).closest("tr").find(".total");
-	total_element.val(parseFloat(rate) + parseFloat(cgst_amount) + parseFloat(sgst_amount) + parseFloat(igst_amount) + parseFloat(cess_amount));
+	var total = parseFloat(rate) + parseFloat(cgst_amount) + parseFloat(sgst_amount) + parseFloat(igst_amount) + parseFloat(cess_amount);
+	total_element.val(total.toFixed(2));
 
 	calculateTotal(obj);
 }
@@ -385,132 +479,82 @@ function calculateCESS(obj){
 	var rate = rate_element.val();
 
 	var cess_percentage = $(obj).closest("tr").find(".cess_percentage").val();
-	if(cess_percentage != ''){
-
-		var amount_element = $(obj).closest("tr").find(".cess_amount");
-		var amount = (rate / 100) * cess_percentage;
-		amount_element.val(amount);
-
-		calCgstAmount(obj);
-		calculateTotal(obj);
+	if(cess_percentage == ''){
+		cess_percentage = 0;
 	}
+
+	var amount_element = $(obj).closest("tr").find(".cess_amount");
+	var amount = (rate / 100) * cess_percentage;
+	amount_element.val(amount);
+
+	calCgstAmount(obj);
+	calculateTotal(obj);
 }
 
 
 
-function calculateQuantity(obj){
+function Recalculate(){
+	$('#item_table tr').each(function() {
+		var item_rate = $(this).find(".rate").val();
+		var total_element = $(this).find('.total');
+		total_element.val(item_rate);
+	});
+	calculateTotal(this);
+}
+
+
+
+function calculateNew(obj){
 	var quantity = $(obj).closest("tr").find(".quantity").val();
-
-	if(quantity == '0'){
-		swal({
-			title: "Failed!",
-			text: "Item quantity can not be zero",
-			type: "error",
-			confirmButtonText: "Close",
-		});
-		$(obj).closest("tr").find(".quantity").val("1");
-		calculateQuantity(obj);
-		return false;
-	}
-
-	if(quantity != ''){
-		var item_value_element = $(obj).closest("tr").find(".item_value");
-		var rate_element = $(obj).closest("tr").find(".rate");
-		var rate = item_value_element.val();
-		rate_element.val(rate*quantity);
-
-		var cgst_amount_element = $(obj).closest("tr").find(".cgst_amount");
-		var cgst_amount = cgst_amount_element.val();
-		var new_cgst_amount = cgst_amount_element.val(cgst_amount*quantity);
-
-		var sgst_amount_element = $(obj).closest("tr").find(".sgst_amount");
-		var sgst_amount = sgst_amount_element.val();
-		var new_sgst_amount = sgst_amount_element.val(sgst_amount*quantity);
-
-		var igst_amount_element = $(obj).closest("tr").find(".igst_amount");
-		var igst_amount = igst_amount_element.val();
-		var new_igst_amount = igst_amount_element.val(igst_amount*quantity);
-
-		var cess_amount_element = $(obj).closest("tr").find(".cess_amount");
-		var cess_amount = cess_amount_element.val();
-		var cess_igst_amount = cess_amount_element.val(cess_amount*quantity);
-
-		calCgstAmount(obj);
-		calculateTotal(obj);
-	}
-}
-
-
-
-function calculateDiscount(obj){
+	var item_value = $(obj).closest("tr").find(".item_value").val();
 	var discount = $(obj).closest("tr").find(".discount").val();
 
-	if(discount != ''){
-		var rate_element = $(obj).closest("tr").find(".rate");
-		var rate = rate_element.val();
-		var amount = (rate / 100) * discount;
-		var new_rate = parseFloat(rate) - parseFloat(amount);
-		rate_element.val(new_rate);
-
-		var cgst_amount_element = $(obj).closest("tr").find(".cgst_amount");
-		var cgst_amount = cgst_amount_element.val();
-		var new_cgst_amount = cgst_amount_element.val(cgst_amount*discount);
-
-		var sgst_amount_element = $(obj).closest("tr").find(".sgst_amount");
-		var sgst_amount = sgst_amount_element.val();
-		var new_sgst_amount = sgst_amount_element.val(sgst_amount*discount);
-
-		var igst_amount_element = $(obj).closest("tr").find(".igst_amount");
-		var igst_amount = igst_amount_element.val();
-		var new_igst_amount = igst_amount_element.val(igst_amount*discount);
-
-		var cess_amount_element = $(obj).closest("tr").find(".cess_amount");
-		var cess_amount = cess_amount_element.val();
-		var cess_igst_amount = cess_amount_element.val(cess_amount*discount);
-
-		calCgstAmount(obj);
-		calculateTotal(obj);
+	if(quantity == '' || quantity == '0'){
+		quantity = 1;
 	}
-}
 
-
-
-function calculateCost(obj){
-	var rate = $(obj).closest("tr").find(".rate").val();
-
-	if(rate != ''){
-
-		var rate_element = $(obj).closest("tr").find(".rate");
-		var item_value_element = $(obj).closest("tr").find(".item_value");
-		rate_element.val(rate);
-		item_value_element.val(rate);
-
-		calCgstAmount(obj);
-
-		var cgst_amount_element = $(obj).closest("tr").find(".cgst_amount");
-		var cgst_amount = cgst_amount_element.val();
-		var new_cgst_amount = cgst_amount_element.val(cgst_amount*discount);
-
-		var sgst_amount_element = $(obj).closest("tr").find(".sgst_amount");
-		var sgst_amount = sgst_amount_element.val();
-		var new_sgst_amount = sgst_amount_element.val(sgst_amount*discount);
-
-		var igst_amount_element = $(obj).closest("tr").find(".igst_amount");
-		var igst_amount = igst_amount_element.val();
-		var new_igst_amount = igst_amount_element.val(igst_amount*discount);
-
-		var cess_amount_element = $(obj).closest("tr").find(".cess_amount");
-		var cess_amount = cess_amount_element.val();
-		var cess_igst_amount = cess_amount_element.val(cess_amount*discount);
-
-		calCgstAmount(obj);
-		calculateTotal(obj);
+	if(item_value == ''){
+		item_value = 0;
 	}
+
+	if(discount == ''){
+		discount = 0;
+	}
+
+	var priceNquantity = parseFloat(quantity)*parseFloat(item_value);
+	var rate_element = $(obj).closest("tr").find(".rate");
+	rate_element.val(priceNquantity);
+
+	var amount = (parseFloat(priceNquantity) / 100) * discount;
+	var new_rate = parseFloat(priceNquantity) - parseFloat(amount);
+	rate_element.val(new_rate.toFixed(2));
+
+	calCgstAmount(obj);
+
+	var cgst_amount_element = $(obj).closest("tr").find(".cgst_amount");
+	var cgst_amount = cgst_amount_element.val();
+	var new_cgst_amount = cgst_amount_element.val(cgst_amount*discount);
+
+	var sgst_amount_element = $(obj).closest("tr").find(".sgst_amount");
+	var sgst_amount = sgst_amount_element.val();
+	var new_sgst_amount = sgst_amount_element.val(sgst_amount*discount);
+
+	var igst_amount_element = $(obj).closest("tr").find(".igst_amount");
+	var igst_amount = igst_amount_element.val();
+	var new_igst_amount = igst_amount_element.val(igst_amount*discount);
+
+	var cess_amount_element = $(obj).closest("tr").find(".cess_amount");
+	var cess_amount = cess_amount_element.val();
+	var cess_igst_amount = cess_amount_element.val(cess_amount*discount);
+
+	calCgstAmount(obj);
+	calculateTotal(obj);
 }
 
 
 
 function calculateTotal(obj){
+	
 	var rate_sum = 0;
 	$(".rate").each(function(){
 		rate_sum = rate_sum + parseFloat($(this).val());
@@ -536,21 +580,45 @@ function calculateTotal(obj){
 		cess_amount_sum = cess_amount_sum + parseFloat($(this).val());
 	});
 
-	$(".total_cgst_amount").val(cgst_amount_sum);
-	$(".total_sgst_amount").val(sgst_amount_sum);
-	$(".total_igst_amount").val(igst_amount_sum);
-	$(".total_cess_amount").val(cess_amount_sum);
+	$(".total_cgst_amount").val(cgst_amount_sum.toFixed(2));
+	$(".total_sgst_amount").val(sgst_amount_sum.toFixed(2));
+	$(".total_igst_amount").val(igst_amount_sum.toFixed(2));
+	$(".total_cess_amount").val(cess_amount_sum.toFixed(2));
 
-	$("#total_tax").val(parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum));
-	$("#total_amount").val(parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum));
-	var total_in_words = number2text($("#total_amount").val());
+	var freight_charge = $(".freight_charge").val();
+	if(freight_charge == ''){
+		freight_charge = 0;
+	}
+
+	var lp_charge = $(".lp_charge").val();
+	if(lp_charge == ''){
+		lp_charge = 0;
+	}
+
+	var insurance_charge = $(".insurance_charge").val();
+	if(insurance_charge == ''){
+		insurance_charge = 0;
+	}
+
+	var other_charge = $(".other_charge").val();
+	if(other_charge == ''){
+		other_charge = 0;
+	}
+
+	var total_charge = parseFloat(freight_charge) + parseFloat(lp_charge) + parseFloat(insurance_charge) + parseFloat(other_charge);
+
+	var total_tax = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum);
+	$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
+	var total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
+	$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
+	$("#grand_total").val(parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2)));
+	var total_in_words = number2text($("#grand_total").val());
 	$("#total_in_words").val(total_in_words);
-	$("#grand_total").val(parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum));
 
 	if($('#advance_setting').is(":checked")){
 		$("#total_tax").val('0');
 		$("#total_amount").val(parseFloat(rate_sum));
-		$("#grand_total").val(parseFloat(rate_sum));
+		$("#grand_total").val(parseFloat(rate_sum) + parseFloat(total_charge));
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 
@@ -558,11 +626,14 @@ function calculateTotal(obj){
 		$("#tt_sgst_amount").val(sgst_amount_sum);
 		$("#tt_igst_amount").val(igst_amount_sum);
 		$("#tt_cess_amount").val(cess_amount_sum);
-		$("#tt_total").val(parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(igst_amount_sum) + parseFloat(cess_amount_sum));
+		var tt_total = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(igst_amount_sum) + parseFloat(cess_amount_sum);
+		$("#tt_total").val(tt_total.toFixed(2));
 	}else{
-		$("#total_tax").val(parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum));
-		$("#total_amount").val(parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum));
-		$("#grand_total").val(parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum));
+		total_tax = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum);
+		$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
+		total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
+		$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
+		$("#grand_total").val(parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2)));
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 	}

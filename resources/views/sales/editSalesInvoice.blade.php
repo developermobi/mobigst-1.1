@@ -5,27 +5,27 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
+.table .form-control{
+	padding: 0px;
+}
+@media (min-width: 1200px) {
+	.container {
+		width: 1300px;
 	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
-	.table .form-control{
-		padding: 0px;
-	}
-	@media (min-width: 1200px) {
-		.container {
-			width: 1300px;
-		}
-	}
-	#item_table td,#item_table2 td{
-		padding: 4px;
-	}
+}
+#item_table td,#item_table2 td{
+	padding: 4px;
+}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -76,8 +76,8 @@
 			<div class="row">
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
-						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
+						<a href="../../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+						<a href="../../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
@@ -472,34 +472,34 @@
 				<div class="row">
 					<div class="col-md-6">
 						<center><h3>Sales</h3></center>
-						<a href="../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;" >View Sales Invoice</button>
 						</a>
-						<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Credit/Debit Note</button>
 						</a>
-						<a href="../../advanceReceipt/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../advanceReceipt/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Advance Receipt</button>
 						</a>
 					</div>
 					<div class="col-md-6">
 						<center><h3>Purchase</h3></center>
-						<a href="../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
 						</a>
-						<a href="../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
 						</a>
-						<a href="../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
 						</a>
 					</div>
 					<div class="col-md-12">
 						<center><h3>Settings</h3></center>
-						<a href="../../contacts/{{encrypt($data['business_id'])}}">
+						<a href="../../../contacts/{{encrypt($data['business_id'])}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Contacts List</button>
 						</a>
-						<a href="../../importitem">
+						<a href="../../../importitem">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Items List</button>
 						</a>
 					</div>

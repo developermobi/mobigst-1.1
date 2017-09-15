@@ -76,12 +76,12 @@
 			<div class="row">
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
-						<a href="../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
+						<a href="../../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+						<a href="../../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
-					<a href="../../printServicesSalesInvoice/{{encrypt($data['data']['invoice_data'][0]->invoice_no)}}" target="_BLANK">
+					<a href="../../../printServicesSalesInvoice/{{encrypt($data['data']['invoice_data'][0]->invoice_no)}}" target="_BLANK">
 						<input type="button" class="btn btn-default" value="Print" style="float: right;">
 					</a>
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
@@ -345,34 +345,34 @@
 				<div class="row">
 					<div class="col-md-6">
 						<center><h3>Sales</h3></center>
-						<a href="../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;" >View Sales Invoice</button>
 						</a>
-						<a href="../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Credit/Debit Note</button>
 						</a>
-						<a href="../../advanceReceipt/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../advanceReceipt/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Advance Receipt</button>
 						</a>
 					</div>
 					<div class="col-md-6">
 						<center><h3>Purchase</h3></center>
-						<a href="../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Purchase Invoice</button>
 						</a>
-						<a href="../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../vcdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Vendor Credit/Debit Note</button>
 						</a>
-						<a href="../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
+						<a href="../../../advancePayment/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">Add an Advance Payment</button>
 						</a>
 					</div>
 					<div class="col-md-12">
 						<center><h3>Settings</h3></center>
-						<a href="../../contacts/{{encrypt($data['business_id'])}}">
+						<a href="../../../contacts/{{encrypt($data['business_id'])}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Contacts List</button>
 						</a>
-						<a href="../../importitem">
+						<a href="../../../importitem">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Items List</button>
 						</a>
 					</div>

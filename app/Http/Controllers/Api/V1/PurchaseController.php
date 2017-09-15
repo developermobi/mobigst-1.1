@@ -231,6 +231,7 @@ class PurchaseController extends Controller{
 		}else{
 			$purchaseInvoiceData = array();
 			$purchaseInvoiceData['gstin_id'] = $input['gstin_id'];
+			$salesInvoiceData['invoice_type'] = '1';
 			$purchaseInvoiceData['invoice_no'] = $input['invoice_no'];
 			$purchaseInvoiceData['invoice_date'] = $input['invoice_date'];
 			$purchaseInvoiceData['reference'] = $input['reference'];
@@ -245,9 +246,9 @@ class PurchaseController extends Controller{
 			$purchaseInvoiceData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
 			$purchaseInvoiceData['total_amount'] = $input['total_amount'];
 			if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
-				$salesInvoiceData['tax_type_applied'] = '1';
+				$purchaseInvoiceData['tax_type_applied'] = '1';
 			}else{
-				$salesInvoiceData['tax_type_applied'] = '0';
+				$purchaseInvoiceData['tax_type_applied'] = '0';
 			}
 			$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
 			$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
@@ -256,30 +257,30 @@ class PurchaseController extends Controller{
 			$purchaseInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 			$purchaseInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 			if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
-				$salesInvoiceData['is_freight_charge'] = '1';
+				$purchaseInvoiceData['is_freight_charge'] = '1';
 			}else{
-				$salesInvoiceData['is_freight_charge'] = '0';
+				$purchaseInvoiceData['is_freight_charge'] = '0';
 			}
-			$salesInvoiceData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+			$purchaseInvoiceData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
 			if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
-				$salesInvoiceData['is_lp_charge'] = '1';
+				$purchaseInvoiceData['is_lp_charge'] = '1';
 			}else{
-				$salesInvoiceData['is_lp_charge'] = '0';
+				$purchaseInvoiceData['is_lp_charge'] = '0';
 			}
-			$salesInvoiceData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+			$purchaseInvoiceData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
 			if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
-				$salesInvoiceData['is_insurance_charge'] = '1';
+				$purchaseInvoiceData['is_insurance_charge'] = '1';
 			}else{
-				$salesInvoiceData['is_insurance_charge'] = '0';
+				$purchaseInvoiceData['is_insurance_charge'] = '0';
 			}
-			$salesInvoiceData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+			$purchaseInvoiceData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
 			if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
-				$salesInvoiceData['is_other_charge'] = '1';
+				$purchaseInvoiceData['is_other_charge'] = '1';
 			}else{
-				$salesInvoiceData['is_other_charge'] = '0';
+				$purchaseInvoiceData['is_other_charge'] = '0';
 			}
-			$salesInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
-			$salesInvoiceData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
+			$purchaseInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+			$purchaseInvoiceData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 			$purchaseInvoiceData['total_in_words'] = $input['total_in_words'];
 			$purchaseInvoiceData['total_tax'] = $input['total_tax'];
 			$purchaseInvoiceData['grand_total'] = $input['grand_total'];
@@ -483,6 +484,7 @@ class PurchaseController extends Controller{
 			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			$getUnit = Purchase::getUnit();
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
@@ -491,6 +493,7 @@ class PurchaseController extends Controller{
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['units'] = $getUnit;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -535,6 +538,7 @@ class PurchaseController extends Controller{
 
 		$purchaseInvoiceData = array();
 		$purchaseInvoiceData['gstin_id'] = $input['gstin_id'];
+		$purchaseInvoiceData['invoice_type'] = '1';
 		$purchaseInvoiceData['invoice_no'] = $input['invoice_no'];
 		$purchaseInvoiceData['invoice_date'] = $input['invoice_date'];
 		$purchaseInvoiceData['reference'] = $input['reference'];
@@ -559,6 +563,31 @@ class PurchaseController extends Controller{
 		$purchaseInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$purchaseInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$purchaseInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+			$purchaseInvoiceData['is_freight_charge'] = '1';
+		}else{
+			$purchaseInvoiceData['is_freight_charge'] = '0';
+		}
+		$purchaseInvoiceData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+		if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+			$purchaseInvoiceData['is_lp_charge'] = '1';
+		}else{
+			$purchaseInvoiceData['is_lp_charge'] = '0';
+		}
+		$purchaseInvoiceData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+		if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+			$purchaseInvoiceData['is_insurance_charge'] = '1';
+		}else{
+			$purchaseInvoiceData['is_insurance_charge'] = '0';
+		}
+		$purchaseInvoiceData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+		if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+			$purchaseInvoiceData['is_other_charge'] = '1';
+		}else{
+			$purchaseInvoiceData['is_other_charge'] = '0';
+		}
+		$purchaseInvoiceData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+		$purchaseInvoiceData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "0";
 		$purchaseInvoiceData['total_in_words'] = $input['total_in_words'];
 		$purchaseInvoiceData['total_tax'] = $input['total_tax'];
 		$purchaseInvoiceData['grand_total'] = $input['grand_total'];
@@ -570,8 +599,10 @@ class PurchaseController extends Controller{
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
+				$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 				$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 				$invoiceDetailData['invoice_type'] = '4';
+				$invoiceDetailData['unit'] = $input['unit'][$key];
 				$invoiceDetailData['item_name'] = $input['item_name'][$key];
 				$invoiceDetailData['item_value'] = $input['item_value'][$key];
 				$invoiceDetailData['item_type'] = "Goods";
@@ -596,9 +627,12 @@ class PurchaseController extends Controller{
 			$returnResponse['data'] = $insertInvoiceDetails;
 			return $returnResponse;
 		}else{
+			$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 			$invoiceDetailData['invoice_no'] = $input['invoice_no'];
 			$invoiceDetailData['invoice_type'] = '4';
+			$invoiceDetailData['unit'] = $input['unit'];
 			$invoiceDetailData['item_name'] = $input['item_name'];
+			$invoiceDetailData['item_value'] = $input['item_value'];
 			$invoiceDetailData['item_type'] = "Goods";
 			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 			$invoiceDetailData['quantity'] = $input['quantity'];
@@ -686,9 +720,9 @@ class PurchaseController extends Controller{
 		$getGstinInfo = Purchase::getGstinInfo($gstin_id);
 
 		if(sizeof($getCdnoteInvoiceCount) > 0){
-			$data['note_no'] = "VCDN".($getCdnoteInvoiceCount[0]->count + 1);
+			$data['note_no'] = "VCN".($getCdnoteInvoiceCount[0]->count + 1);
 		}else{
-			$data['note_no'] = "VCDN1";
+			$data['note_no'] = "VCN1";
 		}
 
 		if(sizeof($getBusinessByGstin) > 0){
@@ -706,7 +740,7 @@ class PurchaseController extends Controller{
 
 
 	public function getInvoice($gstin){
-
+		
 		$getInvoice = Purchase::getInvoice($gstin);
 		if(sizeof($getInvoice) > 0){
 			$returnResponse['status'] = "success";
@@ -780,6 +814,31 @@ class PurchaseController extends Controller{
 			$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 			$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 			$cdnoteData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+			if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+				$cdnoteData['is_freight_charge'] = '1';
+			}else{
+				$cdnoteData['is_freight_charge'] = '0';
+			}
+			$cdnoteData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+			if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+				$cdnoteData['is_lp_charge'] = '1';
+			}else{
+				$cdnoteData['is_lp_charge'] = '0';
+			}
+			$cdnoteData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+			if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+				$cdnoteData['is_insurance_charge'] = '1';
+			}else{
+				$cdnoteData['is_insurance_charge'] = '0';
+			}
+			$cdnoteData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+			if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+				$cdnoteData['is_other_charge'] = '1';
+			}else{
+				$cdnoteData['is_other_charge'] = '0';
+			}
+			$cdnoteData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+			$cdnoteData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 			$cdnoteData['total_amount'] = $input['total_amount'];
 			$cdnoteData['grand_total'] = $input['grand_total'];
 			$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -807,8 +866,10 @@ class PurchaseController extends Controller{
 
 				if(is_array($input['total'])){
 					foreach ($input['total'] as $key => $value) {
+						$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 						$cdnoteDetailData['invoice_no'] = $input['note_no'];
 						$cdnoteDetailData['invoice_type'] = '5';
+						$invoiceDetailData['unit'] = $input['unit'][$key];
 						$cdnoteDetailData['item_name'] = $input['item_name'][$key];
 						$cdnoteDetailData['item_value'] = $input['item_value'][$key];
 						$cdnoteDetailData['item_type'] = "Goods";
@@ -833,9 +894,12 @@ class PurchaseController extends Controller{
 					$returnResponse['data'] = $insertCdnote;
 					return $returnResponse;
 				}else{
+					$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 					$cdnoteDetailData['invoice_no'] = $input['note_no'];
 					$cdnoteDetailData['invoice_type'] = '5';
+					$invoiceDetailData['unit'] = $input['unit'];
 					$cdnoteDetailData['item_name'] = $input['item_name'];
+					$invoiceDetailData['item_value'] = $input['item_value'];
 					$cdnoteDetailData['item_type'] = "Goods";
 					$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 					$cdnoteDetailData['quantity'] = $input['quantity'];
@@ -979,6 +1043,7 @@ class PurchaseController extends Controller{
 			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
 			$getBusinessByGstin = Purchase::getBusinessByGstin($getData[0]->gstin_id);
 			$getGstinInfo = Purchase::getGstinInfo($getData[0]->gstin_id);
+			$getUnit = Purchase::getUnit();
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
@@ -987,6 +1052,7 @@ class PurchaseController extends Controller{
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['units'] = $getUnit;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -1025,16 +1091,41 @@ class PurchaseController extends Controller{
 		$cdnoteData['total_igst_amount'] = isset($input['total_igst_amount']) ? $input['total_igst_amount'] : "0";
 		$cdnoteData['total_cess_amount'] = isset($input['total_cess_amount']) ? $input['total_cess_amount'] : "0";
 		if(isset($input['tax_type_applied']) && $input['tax_type_applied'] == "on"){
-			$salesInvoiceData['tax_type_applied'] = '1';
+			$cdnoteData['tax_type_applied'] = '1';
 		}else{
-			$salesInvoiceData['tax_type_applied'] = '0';
+			$cdnoteData['tax_type_applied'] = '0';
 		}
-		$purchaseInvoiceData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
-		$purchaseInvoiceData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
-		$purchaseInvoiceData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
-		$purchaseInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
-		$purchaseInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
-		$purchaseInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		$cdnoteData['tt_taxable_value'] = isset($input['tt_taxable_value']) ? $input['tt_taxable_value'] : "0";
+		$cdnoteData['tt_cgst_amount'] = isset($input['tt_cgst_amount']) ? $input['tt_cgst_amount'] : "0";
+		$cdnoteData['tt_sgst_amount'] = isset($input['tt_sgst_amount']) ? $input['tt_sgst_amount'] : "0";
+		$cdnoteData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
+		$cdnoteData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
+		$cdnoteData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
+			$cdnoteData['is_freight_charge'] = '1';
+		}else{
+			$cdnoteData['is_freight_charge'] = '0';
+		}
+		$cdnoteData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+		if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+			$cdnoteData['is_lp_charge'] = '1';
+		}else{
+			$cdnoteData['is_lp_charge'] = '0';
+		}
+		$cdnoteData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+		if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+			$cdnoteData['is_insurance_charge'] = '1';
+		}else{
+			$cdnoteData['is_insurance_charge'] = '0';
+		}
+		$cdnoteData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+		if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+			$cdnoteData['is_other_charge'] = '1';
+		}else{
+			$cdnoteData['is_other_charge'] = '0';
+		}
+		$cdnoteData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+		$cdnoteData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "0";
 		$cdnoteData['total_amount'] = $input['total_amount'];
 		$cdnoteData['grand_total'] = $input['grand_total'];
 		$cdnoteData['total_in_words'] = $input['total_in_words'];
@@ -1047,8 +1138,10 @@ class PurchaseController extends Controller{
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
+				$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 				$cdnoteDetailData['invoice_no'] = $input['note_no'];
 				$cdnoteDetailData['invoice_type'] = '5';
+				$invoiceDetailData['unit'] = $input['unit'][$key];
 				$cdnoteDetailData['item_name'] = $input['item_name'][$key];
 				$cdnoteDetailData['item_value'] = $input['item_value'][$key];
 				$cdnoteDetailData['item_type'] = "Goods";
@@ -1073,8 +1166,10 @@ class PurchaseController extends Controller{
 			$returnResponse['data'] = $insertCdnote;
 			return $returnResponse;
 		}else{
+			$invoiceDetailData['gstin_id'] = $input['gstin_id'];
 			$cdnoteDetailData['invoice_no'] = $input['note_no'];
 			$cdnoteDetailData['invoice_type'] = '5';
+			$invoiceDetailData['unit'] = $input['unit'];
 			$cdnoteDetailData['item_name'] = $input['item_name'];
 			$cdnoteDetailData['item_type'] = "Goods";
 			$cdnoteDetailData['hsn_sac_no'] = $input['hsn_sac_no'];

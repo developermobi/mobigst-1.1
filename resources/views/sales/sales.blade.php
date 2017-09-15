@@ -84,11 +84,11 @@
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}} </td>
 							<td>
 								@if($value->invoice_type == 1)
-								<a class='btn btn-sm btn-info' href="viewSalesInvoice/{{encrypt($value->invoice_no)}}">View</a>
-								<a class='btn btn-sm btn-warning' href="editSalesInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
+								<a class='btn btn-sm btn-info' href="viewSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								<a class='btn btn-sm btn-warning' href="editSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
 								@else
-								<a class='btn btn-sm btn-info' href="viewServicesSalesInvoice/{{encrypt($value->invoice_no)}}">View</a>
-								<a class='btn btn-sm btn-warning' href="editServicesSalesInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
+								<a class='btn btn-sm btn-info' href="viewServicesSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								<a class='btn btn-sm btn-warning' href="editServicesSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
 								@endif
 								<a class='btn btn-sm btn-danger' onclick=cancelInvoice(this); data-id='{{$value->si_id}}'>Delete</a>
 							</td>

@@ -23,6 +23,9 @@
 			width: 1300px;
 		}
 	}
+	#item_table td,#item_table2 td{
+		padding: 4px;
+	}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -147,13 +150,15 @@
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2">HSN/SAC</th>
+								<th rowspan="2">HSN <a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a> </th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2">Cost</th>
-								<th rowspan="2">Discount</th>
-								<th colspan="2">CGST</th>
-								<th colspan="2">SGST</th>
-								<th colspan="2">IGST</th>
+								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2">Price</th>
+								<th rowspan="2" class="removeDiv"> <!-- <span onclick="removeDiscount(this);"><i class="fa fa-times" title="Remove Discount" aria-hidden="true"></i></span> --> Discount in %</th>
+								<th rowspan="2">Taxable Value</th>
+								<th colspan="2">CGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
+								<th colspan="2">SGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
+								<th colspan="2">IGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
 								<th colspan="2">CESS</th>
 								<th rowspan="2">Total</th>
 								<th rowspan="2">#</th>
@@ -179,54 +184,69 @@
 									</select>
 								</td>
 								<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no" value="{{$value->hsn_sac_no}}" /></td>
-								<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="{{$value->quantity}}" onkeyup="calculateQuantity(this)"/></td>
-								<td><input type="text" class="form-control rate" name="rate" id="rate" value="{{$value->rate}}" onkeyup="calculateCost(this)"/><input type="hidden" class="form-control item_value" name="item_value" id="item_value" value="{{$value->item_value}}"/></td>
-								<td><input type="text" class="form-control discount" name="discount" id="discount" value="{{$value->discount}}" onkeyup="calculateDiscount(this)"/></td>
+								<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="{{$value->quantity}}" onkeyup="calculateNew(this)"/></td>
+								<td>
+									<select class="form-control unit" name="unit" id="unit">
+										<?php
+										foreach ($data['data']['units'] as $unit_key => $unit_value) {
+											?>
+											<option value="<?php echo $unit_value->unit_name;?>" <?php if($value->unit == $unit_value->unit_name){ echo "selected";} ?> ><?php echo $unit_value->unit_name;?></option>
+											<?php
+										}
+										?>
+									</select>
+								</td>
+								<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="{{$value->item_value}}" onkeyup="calculateNew(this)"/></td>
+								<td><input type="text" class="form-control discount" name="discount" id="discount" value="{{$value->discount}}" onkeyup="calculateNew(this)"/></td>
+								<td><input type="text" class="form-control rate" name="rate" id="rate" value="{{$value->rate}}"/></td>
 								<td>
 									<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">
 										<option value="0" <?php if($value->cgst_percentage == '0'){echo "selected";}?> >0</option>
-										<option value="0.125" <?php if($value->cgst_percentage == '0.125'){echo "selected";}?> >0.125</option>
-										<option value="1.5" <?php if($value->cgst_percentage == '1.5'){echo "selected";}?> >1.5</option>
-										<option value="2.5" <?php if($value->cgst_percentage == '2.5'){echo "selected";}?> >2.5</option>
-										<option value="6" <?php if($value->cgst_percentage == '6'){echo "selected";}?> >6</option>
+										<option value="0.25" <?php if($value->cgst_percentage == '0.25'){echo "selected";}?> >0.25</option>
+										<option value="3" <?php if($value->cgst_percentage == '3'){echo "selected";}?> >3</option>
+										<option value="5" <?php if($value->cgst_percentage == '5'){echo "selected";}?> >5</option>
 										<option value="9" <?php if($value->cgst_percentage == '9'){echo "selected";}?> >9</option>
-										<option value="14" <?php if($value->cgst_percentage == '14'){echo "selected";}?> >14</option>
+										<option value="12" <?php if($value->cgst_percentage == '12'){echo "selected";}?> >12</option>
+										<option value="18" <?php if($value->cgst_percentage == '18'){echo "selected";}?> >18</option>
+										<option value="28" <?php if($value->cgst_percentage == '28'){echo "selected";}?> >28</option>
 									</select>
 								</td>
 								<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="{{$value->cgst_amount}}"/></td>
 								<td>
 									<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">
-										<option value="0" <?php if($value->sgst_percentage == '0'){echo "selected";}?> >0</option>
-										<option value="0.125" <?php if($value->sgst_percentage == '0.125'){echo "selected";}?> >0.125</option>
-										<option value="1.5" <?php if($value->sgst_percentage == '1.5'){echo "selected";}?> >1.5</option>
-										<option value="2.5" <?php if($value->sgst_percentage == '2.5'){echo "selected";}?> >2.5</option>
-										<option value="6" <?php if($value->sgst_percentage == '6'){echo "selected";}?> >6</option>
-										<option value="9" <?php if($value->sgst_percentage == '9'){echo "selected";}?> >9</option>
-										<option value="14" <?php if($value->sgst_percentage == '14'){echo "selected";}?> >14</option>
+										<option  value="0" <?php if($value->sgst_percentage == '0'){echo "selected";}?> >0</option>
+										<option  value="0.25" <?php if($value->sgst_percentage == '0.25'){echo "selected";}?> >0.25</option>
+										<option  value="3" <?php if($value->sgst_percentage == '3'){echo "selected";}?> >3</option>
+										<option  value="5" <?php if($value->sgst_percentage == '5'){echo "selected";}?> >5</option>
+										<option  value="9" <?php if($value->sgst_percentage == '9'){echo "selected";}?> >9</option>
+										<option  value="12" <?php if($value->sgst_percentage == '12'){echo "selected";}?> >12</option>
+										<option  value="18" <?php if($value->sgst_percentage == '18'){echo "selected";}?> >18</option>
+										<option  value="28" <?php if($value->sgst_percentage == '28'){echo "selected";}?> >28</option>
 									</select>
 								</td>
 								<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="{{$value->sgst_amount}}"/></td>
 								<td>
 									<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>
-										<option value="0" <?php if($value->igst_percentage == '0'){echo "selected";}?> >0</option>
-										<option value="0.125" <?php if($value->igst_percentage == '0.125'){echo "selected";}?> >0.125</option>
-										<option value="1.5" <?php if($value->igst_percentage == '1.5'){echo "selected";}?> >1.5</option>
-										<option value="2.5" <?php if($value->igst_percentage == '2.5'){echo "selected";}?> >2.5</option>
-										<option value="6" <?php if($value->igst_percentage == '6'){echo "selected";}?> >6</option>
-										<option value="9" <?php if($value->igst_percentage == '9'){echo "selected";}?> >9</option>
-										<option value="14" <?php if($value->igst_percentage == '14'){echo "selected";}?> >14</option>
+										<option  value="0" <?php if($value->igst_percentage == '0'){echo "selected";}?> >0</option>
+										<option  value="0.25" <?php if($value->igst_percentage == '0.25'){echo "selected";}?> >0.25</option>
+										<option  value="3" <?php if($value->igst_percentage == '3'){echo "selected";}?> >3</option>
+										<option  value="5" <?php if($value->igst_percentage == '5'){echo "selected";}?> >5</option>
+										<option  value="9" <?php if($value->igst_percentage == '9'){echo "selected";}?> >9</option>
+										<option  value="12" <?php if($value->igst_percentage == '12'){echo "selected";}?> >12</option>
+										<option  value="18" <?php if($value->igst_percentage == '18'){echo "selected";}?> >18</option>
+										<option  value="28" <?php if($value->igst_percentage == '28'){echo "selected";}?> >28</option>
 									</select>
 								</td>
 								<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="{{$value->igst_amount}}"  disabled/></td>
 								<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="{{$data['data']['invoice_details'][0]->cess_percentage}}"/></td>
 								<td><input type="text" class="form-control cess_amount" name="cess_amount" value="{{$value->cess_amount}}"/></td>
 								<td><input type="text" class="form-control total" name="total" id="total" value="{{$value->total}}" /></td>
-								<td><i class="fa fa-trash-o ibtnDel"></i><input type="text" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" /></td>
+								<td><i class="fa fa-trash-o ibtnDel"></i><input type="hidden" class="form-control id_no" name="id_no" id="id_no" value="{{$value->id_no}}" /></td>
 							</tr>
 							@endforeach
 							@endif
 							<tr id="t2">
-								<td colspan="5">Total Inv. Val</td>
+								<td colspan="7">Total Inv. Val</td>
 								<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
 								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="{{$data['data']['invoice_data'][0]->total_cgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
@@ -241,12 +261,12 @@
 							</tr>
 							@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
 							<tr>
-								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked> <!-- Advanced Settings --> Reverse Charge </p>
+								<td colspan="17">
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > <!-- Advanced Settings --> Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="5">Tax under Reverse Charge</td>
+								<td colspan="7">Tax under Reverse Charge</td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="{{$data['data']['invoice_data'][0]->tt_cgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="{{$data['data']['invoice_data'][0]->tt_sgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="{{$data['data']['invoice_data'][0]->tt_igst_amount}}" /></td>
@@ -255,12 +275,12 @@
 							</tr>
 							@else
 							<tr>
-								<td colspan="16">
+								<td colspan="17">
 									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="5">Tax under Reverse Charge</td>
+								<td colspan="7">Tax under Reverse Charge</td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0"/></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0"/></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0"/></td>
@@ -270,16 +290,29 @@
 							@endif
 						</tbody>
 					</table>
+					<table class="table table-bordered" id="item_table2">
+						<tr>
+							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="calculateTotal(this);" <?php if($data['data']['invoice_data'][0]->is_freight_charge == '1'){echo "checked";}?> > Freight Charges</td>
+							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="calculateTotal(this);" <?php if($data['data']['invoice_data'][0]->is_lp_charge == '1'){echo "checked";}?> > Loading and Packing Charges</td>
+							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="calculateTotal(this);" <?php if($data['data']['invoice_data'][0]->is_insurance_charge == '1'){echo "checked";}?> > Insurance Charges</td>
+							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="calculateTotal(this);" <?php if($data['data']['invoice_data'][0]->is_other_charge == '1'){echo "checked";}?> > Other Charges</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->freight_charge}}" ></td>
+							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->lp_charge}}" ></td>
+							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->insurance_charge}}"  ></td>
+							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name" value="{{$data['data']['invoice_data'][0]->other_charge_name}}"  placeholder="Enter Charge Name" /></td>
+							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->other_charge}}" ></td>
+						</tr>
+					</table>
 					<table class="table table-bordered">
 						<tr>
-							<td width="40%">Total In Words</td>
-							<td>Taxable Amount</td>
+							<td width="50%">Total In Words</td>
 							<td>Total Tax</td>
 							<td>GRAND TOTAL</td>
 						</tr>
 						<tr>
 							<td><input type="text" class="form-control total_in_words" name="total_in_words" id="total_in_words" value="{{$data['data']['invoice_data'][0]->total_in_words}}"/></td>
-							<td><input type="text" class="form-control taxable_amount" id="taxable_amount"/></td>
 							<td><input type="text" class="form-control total_tax" name="total_tax" id="total_tax" value="{{$data['data']['invoice_data'][0]->total_tax}}" /></td>
 							<td><input type="text" class="form-control" name="grand_total" id="grand_total" value="{{$data['data']['invoice_data'][0]->grand_total}}"/></td>
 						</tr>

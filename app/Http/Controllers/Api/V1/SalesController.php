@@ -584,9 +584,10 @@ class SalesController extends Controller{
 
 
 
-	public function viewSalesInvoice($id){
+	public function viewSalesInvoice($id,$gstin_id){
 		$invoice_id = decrypt($id);
-		$getData = Sales::getSalesInvoiceData($invoice_id);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getSalesInvoiceData($invoice_id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
@@ -620,9 +621,10 @@ class SalesController extends Controller{
 
 
 
-	public function printSalesInvoice(Request $request,$id){
+	public function printSalesInvoice($id,$gstin_id){
 		$invoice_id = decrypt($id);
-		$getData = Sales::getSalesInvoiceData($invoice_id);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getSalesInvoiceData($invoice_id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
@@ -665,9 +667,10 @@ class SalesController extends Controller{
 
 
 
-	public function viewServicesSalesInvoice($id){
+	public function viewServicesSalesInvoice($id,$gstin_id){
 		$invoice_id = decrypt($id);
-		$getData = Sales::getSalesInvoiceData($invoice_id);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getSalesInvoiceData($invoice_id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
@@ -701,9 +704,10 @@ class SalesController extends Controller{
 
 
 
-	public function printServicesSalesInvoice(Request $request,$id){
+	public function printServicesSalesInvoice($id,$gstin_id){
 		$invoice_id = decrypt($id);
-		$getData = Sales::getSalesInvoiceData($invoice_id);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getSalesInvoiceData($invoice_id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
@@ -746,9 +750,10 @@ class SalesController extends Controller{
 
 
 
-	public function editSalesInvoice($id){
+	public function editSalesInvoice($id,$gstin_id){
 		$invoice_id = decrypt($id);
-		$getData = Sales::getSalesInvoiceData($invoice_id);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getSalesInvoiceData($invoice_id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
@@ -784,9 +789,10 @@ class SalesController extends Controller{
 
 
 
-	public function editServicesSalesInvoice($id){
+	public function editServicesSalesInvoice($id,$gstin_id){
 		$invoice_id = decrypt($id);
-		$getData = Sales::getSalesInvoiceData($invoice_id);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getSalesInvoiceData($invoice_id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->invoice_no,$getData[0]->gstin_id);
@@ -1410,9 +1416,10 @@ class SalesController extends Controller{
 
 
 
-	public function viewCdnote($id){
+	public function viewCdnote($id,$gstin_id){
 		$note_no = decrypt($id);
-		$getData = Sales::getCdnoteData($note_no);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getCdnoteData($note_no,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
@@ -1446,9 +1453,10 @@ class SalesController extends Controller{
 
 
 
-	public function printCdnote(Request $request,$id){
+	public function printCdnote($id,$gstin_id){
 		$note_no = decrypt($id);
-		$getData = Sales::getCdnoteData($note_no);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getCdnoteData($note_no,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
@@ -1491,9 +1499,10 @@ class SalesController extends Controller{
 
 
 
-	public function editCdnote($id){
+	public function editCdnote($id,$gstin_id){
 		$note_no = decrypt($id);
-		$getData = Sales::getCdnoteData($note_no);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getCdnoteData($note_no,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
@@ -1927,9 +1936,10 @@ class SalesController extends Controller{
 
 
 
-	public function editAdvanceReceipt($id){
+	public function editAdvanceReceipt($id,$gstin_id){
 		$receipt_no = decrypt($id);
-		$getData = Sales::getAdvanceReceiptData($receipt_no);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getAdvanceReceiptData($receipt_no,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no,$getData[0]->gstin_id);
@@ -1966,9 +1976,10 @@ class SalesController extends Controller{
 
 
 
-	public function viewAdvanceReceipt($id){
+	public function viewAdvanceReceipt($id,$gstin_id){
 		$receipt_no = decrypt($id);
-		$getData = Sales::getAdvanceReceiptData($receipt_no);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getAdvanceReceiptData($receipt_no,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no,$getData[0]->gstin_id);
@@ -2002,9 +2013,10 @@ class SalesController extends Controller{
 
 
 
-	public function printAdvanceReceipt(Request $request,$id){
+	public function printAdvanceReceipt($id,$gstin_id){
 		$receipt_no = decrypt($id);
-		$getData = Sales::getAdvanceReceiptData($receipt_no);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Sales::getAdvanceReceiptData($receipt_no,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Sales::getInvoiceDetail($getData[0]->receipt_no,$getData[0]->gstin_id);

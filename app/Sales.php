@@ -196,20 +196,20 @@ class Sales extends Model{
 
 	public static function cancelInvoice($business_id){
 
-		$data['status'] = '0';
 		$updateData = DB::table('sales_invoice')
 		->where('si_id', $business_id)
-		->update($data);
+		->delete();
 
 		return  $updateData;
 	}
 
 
 
-	public static function getSalesInvoiceData($invoice_id){
+	public static function getSalesInvoiceData($invoice_id,$gstin_id){
 		
 		$getData = DB::table('sales_invoice')
 		->where('invoice_no',$invoice_id)
+		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->get();
 
@@ -386,10 +386,9 @@ class Sales extends Model{
 
 	public static function cancelCdnote($cdn_id){
 
-		$data['status'] = '0';
 		$updateData = DB::table('cd_note')
 		->where('cdn_id', $cdn_id)
-		->update($data);
+		->delete();
 
 		return  $updateData;
 	}
@@ -503,11 +502,10 @@ class Sales extends Model{
 
 	public static function cancelAdvanceReceipt($ar_id){
 
-		$data['status'] = '0';
 		$updateData = DB::table('advance_receipt')
 		->where('ar_id', $ar_id)
-		->update($data);
-
+		->delete();
+		
 		return  $updateData;
 	}
 

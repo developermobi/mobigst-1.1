@@ -235,15 +235,15 @@ Route::get('goodsSalesInvoice/{id}', [
 	'as' => 'goodsSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@goodsSalesInvoice'
 	]);
 
-Route::get('sales/editSalesInvoice/{id}', [
-	'as' => 'sales/editSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@editSalesInvoice'
+Route::get('sales/editSalesInvoice/{id}/{gstin_id}', [
+	'as' => 'sales/editSalesInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@editSalesInvoice'
 	]);
 
-Route::get('sales/viewSalesInvoice/{id}', [
-	'as' => 'sales/viewSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@viewSalesInvoice'
+Route::get('sales/viewSalesInvoice/{id}/{gstin_id}', [
+	'as' => 'sales/viewSalesInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@viewSalesInvoice'
 	]);
 
-Route::get('printSalesInvoice/{id}',array('as'=>'printSalesInvoice','uses'=>'Api\V1\SalesController@printSalesInvoice'));
+Route::get('printSalesInvoice/{id}/{gstin_id}',array('as'=>'printSalesInvoice','uses'=>'Api\V1\SalesController@printSalesInvoice'));
 
 Route::get('servicesSalesInvoice/{id}', [
 	'as' => 'servicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@servicesSalesInvoice'
@@ -253,11 +253,11 @@ Route::get('sales/editServicesSalesInvoice/{id}', [
 	'as' => 'sales/editServicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@editServicesSalesInvoice'
 	]);
 
-Route::get('sales/viewServicesSalesInvoice/{id}', [
-	'as' => 'sales/viewServicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@viewServicesSalesInvoice'
+Route::get('sales/viewServicesSalesInvoice/{id}/{gstin_id}', [
+	'as' => 'sales/viewServicesSalesInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@viewServicesSalesInvoice'
 	]);
 
-Route::get('printServicesSalesInvoice/{id}',array('as'=>'printServicesSalesInvoice','uses'=>'Api\V1\SalesController@printServicesSalesInvoice'));
+Route::get('printServicesSalesInvoice/{id}/{gstin_id}',array('as'=>'printServicesSalesInvoice','uses'=>'Api\V1\SalesController@printServicesSalesInvoice'));
 
 Route::get('uploadSalesInvoice/{id}', [
 	'as' => 'uploadSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@uploadSalesInvoice'
@@ -271,15 +271,15 @@ Route::get('cdnote/{id}', [
 	'as' => 'cdnote/{id}', 'uses' => 'Api\V1\SalesController@cdnote'
 	]);
 
-Route::get('cdnote/editCdnote/{id}', [
-	'as' => 'cdnote/editCdnote/{id}', 'uses' => 'Api\V1\SalesController@editCdnote'
+Route::get('cdnote/editCdnote/{id}/{gstin_id}', [
+	'as' => 'cdnote/editCdnote/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@editCdnote'
 	]);
 
-Route::get('cdnote/viewCdnote/{id}', [
-	'as' => 'cdnote/viewCdnote/{id}', 'uses' => 'Api\V1\SalesController@viewCdnote'
+Route::get('cdnote/viewCdnote/{id}/{gstin_id}', [
+	'as' => 'cdnote/viewCdnote/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@viewCdnote'
 	]);
 
-Route::get('printCdnote/{id}',array('as'=>'printCdnote','uses'=>'Api\V1\SalesController@printCdnote'));
+Route::get('printCdnote/{id}/{gstin_id}',array('as'=>'printCdnote','uses'=>'Api\V1\SalesController@printCdnote'));
 
 Route::get('createAdvanceReceipt/{id}', [
 	'as' => 'createAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@createAdvanceReceipt'
@@ -289,15 +289,15 @@ Route::get('advanceReceipt/{id}', [
 	'as' => 'advanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@advanceReceipt'
 	]);
 
-Route::get('advanceReceipt/editAdvanceReceipt/{id}', [
-	'as' => 'advanceReceipt/editAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@editAdvanceReceipt'
+Route::get('advanceReceipt/editAdvanceReceipt/{id}/{gstin_id}', [
+	'as' => 'advanceReceipt/editAdvanceReceipt/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@editAdvanceReceipt'
 	]);
 
-Route::get('advanceReceipt/viewAdvanceReceipt/{id}', [
-	'as' => 'advanceReceipt/viewAdvanceReceipt/{id}', 'uses' => 'Api\V1\SalesController@viewAdvanceReceipt'
+Route::get('advanceReceipt/viewAdvanceReceipt/{id}/{gstin_id}', [
+	'as' => 'advanceReceipt/viewAdvanceReceipt/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@viewAdvanceReceipt'
 	]);
 
-Route::get('printAdvanceReceipt/{id}',array('as'=>'printAdvanceReceipt','uses'=>'Api\V1\SalesController@printAdvanceReceipt'));
+Route::get('printAdvanceReceipt/{id}/{gstin_id}',array('as'=>'printAdvanceReceipt','uses'=>'Api\V1\SalesController@printAdvanceReceipt'));
 
 $api->version('v1', function ($api) {
 	$api->get('getContact/{business_id}', 'App\Http\Controllers\Api\V1\SalesController@getContact');

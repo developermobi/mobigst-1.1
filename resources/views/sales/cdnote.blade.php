@@ -88,8 +88,8 @@
 							<td>{{$value->invoice_no}}</td>
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="viewCdnote/{{encrypt($value->note_no)}}">View</a>
-								<a class='btn btn-sm btn-warning' href="editCdnote/{{encrypt($value->note_no)}}">Edit</a>
+								<a class='btn btn-sm btn-info' href="viewCdnote/{{encrypt($value->note_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								<a class='btn btn-sm btn-warning' href="editCdnote/{{encrypt($value->note_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
 								<a class='btn btn-sm btn-danger' onclick=cancelCdnote(this); data-id='{{$value->cdn_id}}'>Delete</a>
 							</td>
 						</tr>
