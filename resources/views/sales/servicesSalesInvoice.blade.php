@@ -200,7 +200,6 @@
 					<table class="table table-bordered order-list" id="item_table">
 						<thead>
 							<tr>
-								<!-- <th rowspan="2">SR. NO.</th> -->
 								<th rowspan="2" width="20%"> ITEM 
 									<span style="float: right;cursor: pointer;">
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
@@ -212,9 +211,9 @@
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv"> <!-- <span onclick="removeDiscount(this);"><i class="fa fa-times" title="Remove Discount" aria-hidden="true"></i></span> --> Discount in %</th>
 								<th rowspan="2">Taxable Value</th>
-								<th colspan="2">CGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
-								<th colspan="2">SGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
-								<th colspan="2">IGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
+								<th colspan="2">CGST </th>
+								<th colspan="2">SGST </th>
+								<th colspan="2">IGST </th>
 								<th colspan="2">CESS</th>
 								<th rowspan="2">Total</th>
 								<th rowspan="2">#</th>
@@ -233,7 +232,6 @@
 						<tbody>
 							<tr id="t2">
 								<td colspan="7">Total Inv. Val</td>
-								<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
 								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
@@ -252,7 +250,6 @@
 							</tr>
 							<tr>
 								<td colspan="7">Tax under Reverse Charge</td>
-								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
 								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
@@ -260,6 +257,14 @@
 								<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
 							</tr>
 						</tbody>
+					</table>
+					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
+						<tr>
+							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" onchange="calculateTotal(this);"> Roundoff Total</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control roundoff" id="roundoff" name="roundoff" /></td>
+						</tr>
 					</table>
 					<table class="table table-bordered" id="item_table2">
 						<tr>

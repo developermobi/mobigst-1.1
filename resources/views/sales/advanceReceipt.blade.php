@@ -80,7 +80,7 @@
 							<td>{{$value->receipt_no}}</td>
 							<td>{{$value->contact_name}}</td>
 							<td>{{$value->created_date}}</td>
-							<td>{{$value->total_amount}}</td>
+							<td>{{$value->grand_total}}</td>
 							<td>
 								@if($value->status == '0')
 								Cancelled
@@ -91,7 +91,7 @@
 							<td>
 								<a class='btn btn-sm btn-info' href="viewAdvanceReceipt/{{encrypt($value->receipt_no)}}/{{$data['gstin_id']}}"> View </a>
 								<a class='btn btn-sm btn-warning' href="editAdvanceReceipt/{{encrypt($value->receipt_no)}}/{{$data['gstin_id']}}"> Edit </a>
-								<a class='btn btn-sm btn-danger' onclick=cancelAdvanceReceipt(this); data-id='{{$value->ar_id}}'> Delete </a>
+								<a class='btn btn-sm btn-danger' onclick=cancelAdvanceReceipt(this); data-id='{{$value->receipt_no}}' data-attr = '{{$value->gstin_id}}' > Delete </a>
 							</td>
 						</tr>
 						@endforeach

@@ -249,8 +249,8 @@ Route::get('servicesSalesInvoice/{id}', [
 	'as' => 'servicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@servicesSalesInvoice'
 	]);
 
-Route::get('sales/editServicesSalesInvoice/{id}', [
-	'as' => 'sales/editServicesSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@editServicesSalesInvoice'
+Route::get('sales/editServicesSalesInvoice/{id}/{gstin_id}', [
+	'as' => 'sales/editServicesSalesInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\SalesController@editServicesSalesInvoice'
 	]);
 
 Route::get('sales/viewServicesSalesInvoice/{id}/{gstin_id}', [
@@ -332,7 +332,7 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-	$api->post('cancelInvoice/{id}', 'App\Http\Controllers\Api\V1\SalesController@cancelInvoice');
+	$api->post('cancelInvoice/{id}/{gstin_id}', 'App\Http\Controllers\Api\V1\SalesController@cancelInvoice');
 });
 
 $api->version('v1', function ($api) {
@@ -360,7 +360,7 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-	$api->post('cancelCdnote/{id}', 'App\Http\Controllers\Api\V1\SalesController@cancelCdnote');
+	$api->post('cancelCdnote/{id}/{gstin_id}', 'App\Http\Controllers\Api\V1\SalesController@cancelCdnote');
 });
 
 $api->version('v1', function ($api) {
@@ -372,7 +372,7 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-	$api->post('cancelAdvanceReceipt/{id}', 'App\Http\Controllers\Api\V1\SalesController@cancelAdvanceReceipt');
+	$api->post('cancelAdvanceReceipt/{id}/{gstin_id}', 'App\Http\Controllers\Api\V1\SalesController@cancelAdvanceReceipt');
 });
 
 $api->version('v1', function ($api) {

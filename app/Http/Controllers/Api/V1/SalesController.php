@@ -34,7 +34,7 @@ class SalesController extends Controller{
 				$totalCGST += $value->total_cgst_amount;
 				$totalIGST += $value->total_igst_amount;
 				$totalCESS += $value->total_cess_amount;
-				$totalValue += $value->total_amount;
+				$totalValue += $value->grand_total;
 			}
 			$total = array();
 			$total['totalTransactions'] = sizeof($salesInvoiceData);
@@ -298,6 +298,12 @@ class SalesController extends Controller{
 			$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 			$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 			$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+			if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+				$salesInvoiceData['is_roundoff'] = '1';
+			}else{
+				$salesInvoiceData['is_roundoff'] = '0';
+			}
+			$salesInvoiceData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 			if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
 				$salesInvoiceData['is_freight_charge'] = '1';
 			}else{
@@ -565,13 +571,13 @@ class SalesController extends Controller{
 
 
 
-	public function cancelInvoice($id){
-		$getData = Sales::cancelInvoice($id);
+	public function cancelInvoice($id,$gstin_id){
+		$getData = Sales::cancelInvoice($id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "200";
-			$returnResponse['message'] = "Invoice cancelled successfully.";
+			$returnResponse['message'] = "Invoice deleted successfully.";
 			$returnResponse['data'] = $getData;
 		}else{
 			$returnResponse['status'] = "success";
@@ -892,6 +898,12 @@ class SalesController extends Controller{
 		$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+			$salesInvoiceData['is_roundoff'] = '1';
+		}else{
+			$salesInvoiceData['is_roundoff'] = '0';
+		}
+		$salesInvoiceData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
 			$salesInvoiceData['is_freight_charge'] = '1';
 		}else{
@@ -924,7 +936,7 @@ class SalesController extends Controller{
 		$insertSalesInvoice = Sales::updateSalesInvoice($salesInvoiceData,$si_id);
 
 		$invoiceDetailData = array();
-		$deleteInvoiceDetailBySiId = Sales::deleteInvoiceDetailBySiId($input['invoice_no']);
+		$deleteInvoiceDetailBySiId = Sales::deleteInvoiceDetailBySiId($input['invoice_no'],$input['gstin_id']);
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
@@ -1041,7 +1053,7 @@ class SalesController extends Controller{
 		$insertSalesInvoice = Sales::updateSalesInvoice($salesInvoiceData,$si_id);
 
 		$invoiceDetailData = array();
-		$deleteInvoiceDetailBySiId = Sales::deleteInvoiceDetailBySiId($input['invoice_no']);
+		$deleteInvoiceDetailBySiId = Sales::deleteInvoiceDetailBySiId($input['invoice_no'],$input['gstin_id']);
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
@@ -1375,7 +1387,6 @@ class SalesController extends Controller{
 					$cdnoteDetailData['cess_percentage'] = isset($input['cess_percentage']) ? $input['cess_percentage'] : "0";
 					$cdnoteDetailData['cess_amount'] = isset($input['cess_amount']) ? $input['cess_amount'] : "0";
 					$cdnoteDetailData['total'] = $input['total'];
-					return $cdnoteDetailData;
 					$insertInvoiceDetails = Sales::insertInvoiceDetails($cdnoteDetailData);
 
 					$returnResponse['status'] = "success";
@@ -1397,13 +1408,13 @@ class SalesController extends Controller{
 
 
 
-	public function cancelCdnote($id){
-		$getData = Sales::cancelCdnote($id);
+	public function cancelCdnote($id,$gstin_id){
+		$getData = Sales::cancelCdnote($id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "200";
-			$returnResponse['message'] = "Note cncelled successfully.";
+			$returnResponse['message'] = "Note deleted successfully.";
 			$returnResponse['data'] = $getData;
 		}else{
 			$returnResponse['status'] = "success";
@@ -1615,7 +1626,7 @@ class SalesController extends Controller{
 		$insertCdnote = Sales::updateCdnote($cdnoteData,$cdn_id);
 
 		$invoiceDetailData = array();
-		$deleteNoteDetailByDcnId = Sales::deleteNoteDetailByDcnId($input['note_no']);
+		$deleteNoteDetailByDcnId = Sales::deleteNoteDetailByDcnId($input['note_no'],$input['gstin_id']);
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {
@@ -1749,30 +1760,30 @@ class SalesController extends Controller{
 		$advanceReceiptData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$advanceReceiptData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
 		if(isset($input['is_freight_charge']) && $input['is_freight_charge'] == "on"){
-				$advanceReceiptData['is_freight_charge'] = '1';
-			}else{
-				$advanceReceiptData['is_freight_charge'] = '0';
-			}
-			$advanceReceiptData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
-			if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
-				$advanceReceiptData['is_lp_charge'] = '1';
-			}else{
-				$advanceReceiptData['is_lp_charge'] = '0';
-			}
-			$advanceReceiptData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
-			if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
-				$advanceReceiptData['is_insurance_charge'] = '1';
-			}else{
-				$advanceReceiptData['is_insurance_charge'] = '0';
-			}
-			$advanceReceiptData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
-			if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
-				$advanceReceiptData['is_other_charge'] = '1';
-			}else{
-				$advanceReceiptData['is_other_charge'] = '0';
-			}
-			$advanceReceiptData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
-			$advanceReceiptData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
+			$advanceReceiptData['is_freight_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_freight_charge'] = '0';
+		}
+		$advanceReceiptData['freight_charge'] = isset($input['freight_charge']) ? $input['freight_charge'] : "0";
+		if(isset($input['is_lp_charge']) && $input['is_lp_charge'] == "on"){
+			$advanceReceiptData['is_lp_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_lp_charge'] = '0';
+		}
+		$advanceReceiptData['lp_charge'] = isset($input['lp_charge']) ? $input['lp_charge'] : "0";
+		if(isset($input['is_insurance_charge']) && $input['is_insurance_charge'] == "on"){
+			$advanceReceiptData['is_insurance_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_insurance_charge'] = '0';
+		}
+		$advanceReceiptData['insurance_charge'] = isset($input['insurance_charge']) ? $input['insurance_charge'] : "0";
+		if(isset($input['is_other_charge']) && $input['is_other_charge'] == "on"){
+			$advanceReceiptData['is_other_charge'] = '1';
+		}else{
+			$advanceReceiptData['is_other_charge'] = '0';
+		}
+		$advanceReceiptData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
+		$advanceReceiptData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
@@ -1917,13 +1928,13 @@ class SalesController extends Controller{
 
 
 
-	public function cancelAdvanceReceipt($id){
-		$getData = Sales::cancelAdvanceReceipt($id);
+	public function cancelAdvanceReceipt($id,$gstin_id){
+		$getData = Sales::cancelAdvanceReceipt($id,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "200";
-			$returnResponse['message'] = "Receipt cncelled successfully.";
+			$returnResponse['message'] = "Receipt delete successfully.";
 			$returnResponse['data'] = $getData;
 		}else{
 			$returnResponse['status'] = "success";
@@ -2133,7 +2144,7 @@ class SalesController extends Controller{
 		$insertCdnote = Sales::updateAdvanceReceipt($advanceReceiptData,$ar_id);
 
 		$invoiceDetailData = array();
-		$deleteReceiptDetailByArId = Sales::deleteReceiptDetailByArId($input['receipt_no']);
+		$deleteReceiptDetailByArId = Sales::deleteReceiptDetailByArId($input['receipt_no'],$input['gstin_id']);
 
 		if(is_array($input['total'])){
 			foreach ($input['total'] as $key => $value) {

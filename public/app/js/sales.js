@@ -11,7 +11,7 @@ $(function(){
 function cancelInvoice(obj){
 
 	swal({
-		text: "Do you want to cancel this invoice ?",
+		text: "Do you want to delete this invoice ?",
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
@@ -19,10 +19,12 @@ function cancelInvoice(obj){
 		confirmButtonText: 'Yes'
 	}).then(function () {
 		var id = $(obj).attr('data-id');
+		var gstin_id = $(obj).attr('data-attr');
+
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelInvoice/"+id,
+			"url": SERVER_NAME+"/api/cancelInvoice/"+id+"/"+gstin_id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -65,7 +67,7 @@ function cancelInvoice(obj){
 function cancelCdnote(obj){
 
 	swal({
-		text: "Do you want to cancel this note ?",
+		text: "Do you want to delete this note ?",
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
@@ -73,10 +75,11 @@ function cancelCdnote(obj){
 		confirmButtonText: 'Yes'
 	}).then(function () {
 		var id = $(obj).attr('data-id');
+		var gstin_id = $(obj).attr('data-attr');
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelCdnote/"+id,
+			"url": SERVER_NAME+"/api/cancelCdnote/"+id+"/"+gstin_id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -119,7 +122,7 @@ function cancelCdnote(obj){
 function cancelAdvanceReceipt(obj){
 
 	swal({
-		text: "Do you want to cancel this receipt ?",
+		text: "Do you want to delete this receipt ?",
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
@@ -127,10 +130,11 @@ function cancelAdvanceReceipt(obj){
 		confirmButtonText: 'Yes'
 	}).then(function () {
 		var id = $(obj).attr('data-id');
+		var gstin_id = $(obj).attr('data-attr');
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelAdvanceReceipt/"+id,
+			"url": SERVER_NAME+"/api/cancelAdvanceReceipt/"+id+"/"+gstin_id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -167,48 +171,3 @@ function cancelAdvanceReceipt(obj){
 		});
 	});
 }
-
-
-
-/*function sendMail(){
-	$.ajax({
-		"async": true,
-		"crossDomain": true,
-		"url": SERVER_NAME+"/api/sendMail",
-		"method": "GET",
-		"headers": {
-			"cache-control": "no-cache",
-			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
-		},
-		"processData": false,
-		"dataType":"JSON",
-		beforeSend:function(){
-			$(".bodyLoaderWithOverlay").show();
-		},
-		success:function(response){
-			console.log(response);
-			return false;
-			if(response.code == 200){
-				swal({
-					title: "Success !",
-					text: response.message,
-					type: "success",
-					confirmButtonText: "OK",
-					width:'400px',
-				}).then(function () {
-					window.location.href = window.location.href;
-				});
-			}else{
-				swal({
-					title: "Failed!",
-					text: response.message,
-					type: "error",
-					confirmButtonText: "Close",
-				});
-			}
-		},
-		complete:function(){
-			$(".bodyLoaderWithOverlay").hide();
-		}
-	});
-}*/

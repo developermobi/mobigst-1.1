@@ -94,6 +94,7 @@ $(function(){
 		var total_igst_amount = $(".total_igst_amount").val();
 		var total_cess_amount = $(".total_cess_amount").val();
 
+		var total_tax = ''; var grand_total = ''; var total_in_words = '';
 		if ($(this).is(':checked')) {
 
 			$("#tt_cgst_amount").val('0');
@@ -116,22 +117,22 @@ $(function(){
 
 			$("#total_tax").val('0');
 
-			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			var total = $(".total_amount").val();
 
 			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax.toFixed(2)));
 			var total_amount = $(".total_amount").val();
 			$("#grand_total").val(total_amount);
-			var grand_total = $("#grand_total").val();
-			var total_in_words = number2text(grand_total);
+			grand_total = $("#grand_total").val();
+			total_in_words = number2text(grand_total);
 			$("#total_in_words").val(total_in_words);
 		}else{
-			var total_tax = $("#tt_total").val();
-			var grand_total = $("#grand_total").val();
+			total_tax = $("#tt_total").val();
+			grand_total = $("#grand_total").val();
 			$(".total_amount").val(parseFloat(grand_total) + parseFloat(total_tax));
 			$("#grand_total").val(parseFloat(grand_total) + parseFloat(total_tax));
 			var new_grand_total = $("#grand_total").val();
-			var total_in_words = number2text(new_grand_total);
+			total_in_words = number2text(new_grand_total);
 			$("#total_in_words").val(total_in_words);
 
 			$("#tt_cgst_amount").val('0');
@@ -178,11 +179,11 @@ function getContact(business_id){
 		},
 		success:function(response){
 			var contact_name_hidden = $('#contact_name_hidden').val();
-			var data = response['data'];
+			var data = response.data;
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['contact_name']+"' data-attr='"+data[i]['contact_id']+"'>"+data[i]['contact_name']+"</option>";
+					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+"</option>";
 				});
 			}
 			$(".contact_name").append(option);
@@ -210,11 +211,11 @@ function getStates(){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value=''></option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['state_name']+"'>"+data[i]['state_name']+"</option>";
+					option += "<option value='"+data[i].state_name+"'>"+data[i].state_name+"</option>";
 				});
 			}
 			$(".place_of_supply").append(option);
@@ -243,11 +244,11 @@ function getUnit(obj){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
 			$(obj).closest("tr").find(".unit").append(option);
@@ -275,11 +276,11 @@ function getItemUnit(){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value=''> Select Item Unit </option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
 			$(".item_unit").append(option);
@@ -306,14 +307,13 @@ function getContactInfo(obj){
 		},
 		success:function(response){
 			if(response.code == 302){
-				$("#bill_address").val(response.data[0]['address']);
-				$("#bill_pincode").val(response.data[0]['pincode']);
-				$("#bill_city").val(response.data[0]['city']);
-				$("#bill_state").val(response.data[0]['state']);
-				$("#bill_country").val(response.data[0]['country']);
-				$("#contact_gstin").val(response.data[0]['gstin_no']);
-				$("#place_of_supply").val(response.data[0]['state']);
-				//$("#customer_state").val(response.data[0]['state']);
+				$("#bill_address").val(response.data[0].address);
+				$("#bill_pincode").val(response.data[0].pincode);
+				$("#bill_city").val(response.data[0].city);
+				$("#bill_state").val(response.data[0].state);
+				$("#bill_country").val(response.data[0].country);
+				$("#contact_gstin").val(response.data[0].gstin_no);
+				$("#place_of_supply").val(response.data[0].state);
 
 				var place_of_supply = $("#place_of_supply").val();
 
@@ -378,11 +378,11 @@ function getItem(business_id){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value=''></option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['item_description']+"' data-attr='"+data[i]['item_id']+"'>"+data[i]['item_description']+"</option>";
+					option += "<option value='"+data[i].item_description+"' data-attr='"+data[i].item_id+"'>"+data[i].item_description+"</option>";
 				});
 			}
 			$(".item_name").append(option);
@@ -413,10 +413,10 @@ function getItemInfo(obj){
 			var hsn_sac_no = $(obj).closest("tr").find("#hsn_sac_no");
 			var total = $(obj).closest("tr").find("#total");
 			if(response.code == 302){
-				$(hsn_sac_no).val(response.data[0]['item_hsn_sac']);
-				$(rate).val(response.data[0]['item_sale_price']);
-				$(item_value).val(response.data[0]['item_sale_price']);
-				$(total).val(response.data[0]['item_sale_price']);
+				$(hsn_sac_no).val(response.data[0].item_hsn_sac);
+				$(rate).val(response.data[0].item_sale_price);
+				$(item_value).val(response.data[0].item_sale_price);
+				$(total).val(response.data[0].item_sale_price);
 			}
 			//Recalculate();
 			calCgstAmount(obj);
@@ -532,9 +532,12 @@ function calculateNew(obj){
 	var rate_element = $(obj).closest("tr").find(".rate");
 	rate_element.val(priceNquantity);
 
-	var amount = (parseFloat(priceNquantity) / 100) * discount;
+	/*var amount = (parseFloat(priceNquantity) / 100) * discount;
 	var new_rate = parseFloat(priceNquantity) - parseFloat(amount);
-	rate_element.val(new_rate.toFixed(2));
+	rate_element.val(new_rate.toFixed(2));*/
+
+	var amount = (parseFloat(priceNquantity)) - parseFloat(discount);
+	rate_element.val(amount.toFixed(2));
 
 	calCgstAmount(obj);
 
@@ -592,18 +595,87 @@ function calculateTotal(obj){
 	$(".total_igst_amount").val(igst_amount_sum.toFixed(2));
 	$(".total_cess_amount").val(cess_amount_sum.toFixed(2));
 
+	var freight_charge = $(".freight_charge").val();
+	if(freight_charge == ''){
+		freight_charge = 0;
+	}
+
+	var lp_charge = $(".lp_charge").val();
+	if(lp_charge == ''){
+		lp_charge = 0;
+	}
+
+	var insurance_charge = $(".insurance_charge").val();
+	if(insurance_charge == ''){
+		insurance_charge = 0;
+	}
+
+	var other_charge = $(".other_charge").val();
+	if(other_charge == ''){
+		other_charge = 0;
+	}
+
+	var total_charge = parseFloat(freight_charge) + parseFloat(lp_charge) + parseFloat(insurance_charge) + parseFloat(other_charge);
+
 	var total_tax = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum);
 	$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 	var total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 	$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
-	$("#grand_total").val(parseFloat(total_amount.toFixed(2)));
+	
+	var decimal = ''; var grand_total = ''; var tostring = ''; var new_grand_total = ''; var digit = '';
+
+	grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+	tostring = grand_total.toString();
+	new_grand_total = '';
+	if(tostring % 1 != 0){
+		if($('#is_roundoff').is(":checked")){
+			decimal = tostring.split('.')[1];
+			digit = tostring.split('.')[0];
+			if(decimal > 50){
+				$("#roundoff").val("0.".concat(decimal));
+				new_grand_total = parseFloat(digit) + 1;
+				$("#grand_total").val(new_grand_total);
+			}else{
+				$("#roundoff").val("-0.".concat(decimal));
+				$("#grand_total").val(digit);
+			}
+		}else{
+			$("#roundoff").val('0');
+			$("#grand_total").val(grand_total);
+		}
+	}else{
+		$("#grand_total").val(grand_total);
+	}
+
 	var total_in_words = number2text($("#grand_total").val());
 	$("#total_in_words").val(total_in_words);
-
+	
 	if($('#advance_setting').is(":checked")){
 		$("#total_tax").val('0');
 		$("#total_amount").val(parseFloat(rate_sum));
-		$("#grand_total").val(parseFloat(rate_sum));
+		
+		console.log("total checked ",rate_sum);
+		grand_total = parseFloat(rate_sum.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		tostring = grand_total.toString();
+		if(tostring % 1 != 0){
+			if($('#is_roundoff').is(":checked")){
+				decimal = tostring.split('.')[1];
+				digit = tostring.split('.')[0];
+				if(decimal > 50){
+					$("#roundoff").val("0.".concat(decimal));
+					new_grand_total = parseFloat(digit) + 1;
+					$("#grand_total").val(new_grand_total);
+				}else{
+					$("#roundoff").val("-0.".concat(decimal));
+					$("#grand_total").val(digit);
+				}
+			}else{
+				$("#roundoff").val('0');
+				$("#grand_total").val(grand_total);
+			}
+		}else{
+			$("#grand_total").val(grand_total);
+		}
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 
@@ -618,7 +690,28 @@ function calculateTotal(obj){
 		$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 		total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 		$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
-		$("#grand_total").val(parseFloat(total_amount.toFixed(2)));
+		
+		grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		tostring = grand_total.toString();
+		if(tostring % 1 != 0){
+			if($('#is_roundoff').is(":checked")){
+				decimal = tostring.split('.')[1];
+				digit = tostring.split('.')[0];
+				if(decimal > 50){
+					$("#roundoff").val("0.".concat(decimal));
+					new_grand_total = parseFloat(digit) + 1;
+					$("#grand_total").val(new_grand_total);
+				}else{
+					$("#roundoff").val("-0.".concat(decimal));
+					$("#grand_total").val(digit);
+				}
+			}else{
+				$("#roundoff").val('0');
+				$("#grand_total").val(grand_total);
+			}
+		}else{
+			$("#grand_total").val(grand_total);
+		}
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 	}

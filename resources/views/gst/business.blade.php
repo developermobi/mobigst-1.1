@@ -169,7 +169,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default btn-info" id="addBusinessButton">Add Business</button>
-					<button type="button" class="btn btn-default pull-left" id="cancelBusinessButton">Cancel</button>
+					<button type="button" class="btn btn-default pull-left" id="cancelBusinessButton">Clear</button>
 				</div>
 			</form>
 		</div>
@@ -206,7 +206,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addGstinButton">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Clear</button>
 			</div>
 		</div>
 	</div>

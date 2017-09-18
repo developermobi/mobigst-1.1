@@ -194,13 +194,19 @@ class Sales extends Model{
 
 
 
-	public static function cancelInvoice($business_id){
+	public static function cancelInvoice($id,$gstin_id){
 
 		$updateData = DB::table('sales_invoice')
-		->where('si_id', $business_id)
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
 		->delete();
 
-		return  $updateData;
+		$deleteData = DB::table('invoice_details')
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
+
+		return  $deleteData;
 	}
 
 
@@ -265,10 +271,11 @@ class Sales extends Model{
 
 
 
-	public static function deleteInvoiceDetailBySiId($invoice_no){
+	public static function deleteInvoiceDetailBySiId($invoice_no,$gstin_id){
 		
 		$data['status'] = '0';
 		$updateData = DB::table('invoice_details')
+		->where('gstin_id', $gstin_id)
 		->where('invoice_no', $invoice_no)
 		->update($data);
 
@@ -384,21 +391,28 @@ class Sales extends Model{
 
 
 
-	public static function cancelCdnote($cdn_id){
+	public static function cancelCdnote($cdn_id,$gstin_id){
 
 		$updateData = DB::table('cd_note')
-		->where('cdn_id', $cdn_id)
+		->where('note_no', $cdn_id)
+		->where('gstin_id', $gstin_id)
 		->delete();
 
-		return  $updateData;
+		$deleteData = DB::table('invoice_details')
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
+
+		return  $deleteData;
 	}
 
 
 
-	public static function getCdnoteData($note_no){
+	public static function getCdnoteData($note_no,$gstin_id){
 		
 		$getData = DB::table('cd_note')
 		->where('note_no',$note_no)
+		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->get();
 
@@ -418,10 +432,11 @@ class Sales extends Model{
 
 
 
-	public static function deleteNoteDetailByDcnId($invoice_no){
+	public static function deleteNoteDetailByDcnId($invoice_no,$gstin_id){
 		
 		$data['status'] = '0';
 		$updateData = DB::table('invoice_details')
+		->where('gstin_id', $gstin_id)
 		->where('invoice_no', $invoice_no)
 		->update($data);
 
@@ -500,13 +515,19 @@ class Sales extends Model{
 
 
 
-	public static function cancelAdvanceReceipt($ar_id){
+	public static function cancelAdvanceReceipt($ar_id,$gstin_id){
 
 		$updateData = DB::table('advance_receipt')
 		->where('ar_id', $ar_id)
+		->where('gstin_id', $gstin_id)
+		->delete();
+
+		$deleteData = DB::table('invoice_details')
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
 		->delete();
 		
-		return  $updateData;
+		return  $deleteData;
 	}
 
 
@@ -534,10 +555,11 @@ class Sales extends Model{
 
 
 
-	public static function deleteReceiptDetailByArId($invoice_no){
+	public static function deleteReceiptDetailByArId($invoice_no,$gstin_id){
 		
 		$data['status'] = '0';
 		$updateData = DB::table('invoice_details')
+		->where('gstin_id', $gstin_id)
 		->where('invoice_no', $invoice_no)
 		->update($data);
 

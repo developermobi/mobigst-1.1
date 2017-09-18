@@ -257,11 +257,11 @@
 						</table>
 						<table class="pull-right">
 							<tr>
-								<td>
+								<!-- <td>
 									<a href="javascript:void();">
 										<button class="btn btn-primary" type="button">Back</button>
 									</a>
-								</td>
+								</td> -->
 								<td>
 									<a href="#">
 										<button class="btn btn-success" type="button" id="update_invoice">Update Receipt</button>
