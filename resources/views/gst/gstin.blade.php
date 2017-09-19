@@ -77,12 +77,12 @@
 			</div>
 			<div class="modal-body">
 				<form role="form" id="gstinForm">
-					<input type="hidden" class="form-control" name="business_id" id="business_id" placeholder="GSTIN Number" value="">
+					<input type="hidden" class="form-control" name="business_id" id="business_id" value="">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="gstin_no">GSTIN Number</label>
-								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number">
+								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number"  style="text-transform: uppercase;">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -96,7 +96,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addGstinButton">Add</button>
-				<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Clear</button>
 			</div>
 		</div>
 	</div>
@@ -118,7 +118,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="gstin_no">GSTIN Number</label>
-								<input type="text" class="form-control" name="gstin_no" id="gstin_no" placeholder="GSTIN Number">
+								<input type="text" class="form-control" name="gstin_no" id="gstin_no" placeholder="GSTIN Number" style="text-transform: uppercase;">
 							</div>
 						</div>
 						<div class="col-md-6">

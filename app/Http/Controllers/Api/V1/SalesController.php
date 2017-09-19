@@ -477,6 +477,12 @@ class SalesController extends Controller{
 			$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 			$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 			$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+			if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+				$salesInvoiceData['is_roundoff'] = '1';
+			}else{
+				$salesInvoiceData['is_roundoff'] = '0';
+			}
+			$salesInvoiceData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 			$salesInvoiceData['total_in_words'] = $input['total_in_words'];
 			$salesInvoiceData['total_tax'] = $input['total_tax'];
 			$salesInvoiceData['grand_total'] = $input['grand_total'];
@@ -1046,6 +1052,12 @@ class SalesController extends Controller{
 		$salesInvoiceData['tt_igst_amount'] = isset($input['tt_igst_amount']) ? $input['tt_igst_amount'] : "0";
 		$salesInvoiceData['tt_cess_amount'] = isset($input['tt_cess_amount']) ? $input['tt_cess_amount'] : "0";
 		$salesInvoiceData['tt_total'] = isset($input['tt_total']) ? $input['tt_total'] : "0";
+		if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+			$salesInvoiceData['is_roundoff'] = '1';
+		}else{
+			$salesInvoiceData['is_roundoff'] = '0';
+		}
+		$salesInvoiceData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 		$salesInvoiceData['total_in_words'] = $input['total_in_words'];
 		$salesInvoiceData['total_tax'] = $input['total_tax'];
 		$salesInvoiceData['grand_total'] = $input['grand_total'];
@@ -1313,6 +1325,12 @@ class SalesController extends Controller{
 			$cdnoteData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
 			$cdnoteData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 			$cdnoteData['total_amount'] = $input['total_amount'];
+			if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+				$cdnoteData['is_roundoff'] = '1';
+			}else{
+				$cdnoteData['is_roundoff'] = '0';
+			}
+			$cdnoteData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 			$cdnoteData['grand_total'] = $input['grand_total'];
 			$cdnoteData['total_in_words'] = $input['total_in_words'];
 			$cdnoteData['total_tax'] = $input['total_tax'];
@@ -1619,6 +1637,12 @@ class SalesController extends Controller{
 		$cdnoteData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
 		$cdnoteData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "0";
 		$cdnoteData['total_amount'] = $input['total_amount'];
+		if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+			$cdnoteData['is_roundoff'] = '1';
+		}else{
+			$cdnoteData['is_roundoff'] = '0';
+		}
+		$cdnoteData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 		$cdnoteData['grand_total'] = $input['grand_total'];
 		$cdnoteData['total_in_words'] = $input['total_in_words'];
 		$cdnoteData['total_tax'] = $input['total_tax'];
@@ -1785,6 +1809,12 @@ class SalesController extends Controller{
 		$advanceReceiptData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
 		$advanceReceiptData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
+		if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+			$advanceReceiptData['is_roundoff'] = '1';
+		}else{
+			$advanceReceiptData['is_roundoff'] = '0';
+		}
+		$advanceReceiptData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
 		$advanceReceiptData['grand_total'] = $input['grand_total'];
@@ -2137,6 +2167,12 @@ class SalesController extends Controller{
 		$advanceReceiptData['other_charge'] = isset($input['other_charge']) ? $input['other_charge'] : "0";
 		$advanceReceiptData['other_charge_name'] = isset($input['other_charge_name']) ? $input['other_charge_name'] : "0";
 		$advanceReceiptData['total_amount'] = $input['total_amount'];
+		if(isset($input['is_roundoff']) && $input['is_roundoff'] == "on"){
+			$advanceReceiptData['is_roundoff'] = '1';
+		}else{
+			$advanceReceiptData['is_roundoff'] = '0';
+		}
+		$advanceReceiptData['roundoff'] = isset($input['roundoff']) ? $input['roundoff'] : "0";
 		$advanceReceiptData['total_in_words'] = $input['total_in_words'];
 		$advanceReceiptData['total_tax'] = $input['total_tax'];
 		$advanceReceiptData['grand_total'] = $input['grand_total'];

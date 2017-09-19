@@ -45,6 +45,7 @@
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
 			zIndexOffset: 1035,
+			autoclose:true,
 		});
 	});
 </script>
@@ -79,7 +80,7 @@
 						<tbody>
 							<tr>
 								<td><input type="text" class="form-control note_no" name="note_no" value="{{$data['note_no']}}" style="text-align:center;" /></td>
-								<td><input type="text" class="form-control datepicker" name="note_issue_date" /></td>
+								<td><input type="text" class="form-control datepicker" name="note_issue_date" value="<?php echo date("Y-m-d");?>"/></td>
 								<td>
 									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" value="1" checked>CREDIT</label>
 									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" value="2">DEBIT</label>

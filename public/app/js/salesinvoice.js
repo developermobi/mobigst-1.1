@@ -1,6 +1,7 @@
 $(function(){
 
 	$('.rate').css('pointer-events','none');
+	$('.roundoff').css('pointer-events','none');
 
 	$("#tt_taxable_value").val('0');
 	$("#tt_taxable_value").prop('disabled', true);
@@ -100,7 +101,7 @@ $(function(){
 		var total_igst_amount = $(".total_igst_amount").val();
 		var total_cess_amount = $(".total_cess_amount").val();
 
-		var total_tax = '';var grand_total = '';var total_in_words = '';var freight_charge = '';var lp_charge = '';var insurance_charge = '';var other_charge = '';var total_charge = '';
+		var total_tax = '';var grand_total = '';var total_in_words = '';
 
 		if ($(this).is(':checked')) {
 
@@ -262,7 +263,7 @@ function test_calculate_gt(){
 	}
 
 	if($('#is_lp_charge').is(':checked')){
-		lpc = $("#freight_charge").val();
+		lpc = $("#lp_charge").val();
 		if(lpc == ''){
 			lpc = 0;
 		}
@@ -270,7 +271,7 @@ function test_calculate_gt(){
 	}
 
 	if($('#is_insurance_charge').is(':checked')){
-		ic = $("#freight_charge").val();
+		ic = $("#insurance_charge").val();
 		if(ic == ''){
 			ic = 0;
 		}
@@ -278,7 +279,7 @@ function test_calculate_gt(){
 	}
 
 	if($('#is_other_charge').is(':checked')){
-		oc = $("#freight_charge").val();
+		oc = $("#other_charge").val();
 		if(oc == ''){
 			oc = 0;
 		}

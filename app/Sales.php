@@ -391,10 +391,10 @@ class Sales extends Model{
 
 
 
-	public static function cancelCdnote($cdn_id,$gstin_id){
+	public static function cancelCdnote($id,$gstin_id){
 
 		$updateData = DB::table('cd_note')
-		->where('note_no', $cdn_id)
+		->where('note_no', $id)
 		->where('gstin_id', $gstin_id)
 		->delete();
 

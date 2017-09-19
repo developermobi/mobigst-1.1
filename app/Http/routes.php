@@ -81,6 +81,10 @@ Route::post ( '/items', function () {
 	return view('gst.items',['data'=>$data]);
 } );
 
+Route::get('itemList/{business_id}', [
+	'as' => 'itemList/{business_id}', 'uses' => 'Api\V1\GstController@itemList'
+	]);
+
 Route::get('editItem/{id}', [
 	'as' => 'editItem/{id}', 'uses' => 'Api\V1\GstController@editItem'
 	]);

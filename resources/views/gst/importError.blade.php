@@ -25,13 +25,13 @@
 				<div class="row"  style="padding: 160px 0px;">
 					<center>
 						<span style="font-size: 30px; color: #f12626;">
-							There is something wrong with your imported file. Plaese check sample file.
+							There is something wrong with your imported file. Please check sample file.
 						</span>
 						<br>
 						<span style="font-size: 25px; color: grey;margin-top: 25px;">
-							<a href="importcontact">
+							<!-- <a href="importcontact"> -->
 								<button class="btn btn-primary" type="button" onclick="history.back();">Click Here</button>
-							</a> to go back to import page.
+							<!-- </a> --> to go back to import page.
 						</span>
 					</center>
 				</div>

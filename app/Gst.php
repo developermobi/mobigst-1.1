@@ -513,5 +513,14 @@ class Gst extends Model{
 
 
 
+	public static function getUnit(){
+
+		$unit = DB::table('unit')
+		->get();
+		return $unit;
+	}
+
+
+
 
 }

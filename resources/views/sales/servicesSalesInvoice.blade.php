@@ -45,11 +45,13 @@
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
 			zIndexOffset: 1035,
+			autoclose:true,
 		});
 		$('.due_datepicker').datepicker({
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
 			zIndexOffset: 1035,
+			autoclose:true,
 		})
 		.on('hide', due_dateChanged);
 	});
@@ -100,7 +102,7 @@
 						<tbody>
 							<tr>
 								<td><input type="text" class="form-control" name="invoice_no" value="{{$data['invoice_no']}}" style="text-align:center;" /></td>
-								<td><input type="text" class="form-control datepicker" name="invoice_date" /></td>
+								<td><input type="text" class="form-control datepicker" name="invoice_date" value="<?php echo date("Y-m-d");?>"/></td>
 								<td><input type="text" class="form-control" name="reference" /></td>
 								<td><input type="text" class="form-control due_datepicker" name="due_date" /></td>
 							</tr>
@@ -275,7 +277,7 @@
 						<tr>
 							<td><input type="text" class="form-control total_in_words" id="total_in_words" name="total_in_words" /></td>
 							<td><input type="text" class="form-control total_tax" id="total_tax" name="total_tax" /></td>
-							<td><input type="text" class="form-control" name="grand_total" id="grand_total" /></td>
+							<td><input type="text" class="form-control grand_total" name="grand_total" id="grand_total" /></td>
 						</tr>
 					</table>
 					<table class="pull-right">

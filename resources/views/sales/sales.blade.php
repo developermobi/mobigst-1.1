@@ -79,7 +79,7 @@
 						<tr>
 							<td>{{$value->invoice_no}}</td>
 							<td>{{$value->contact_name}}</td>
-							<td>{{$value->created_date}}</td>
+							<td>{{$value->invoice_date}}</td>
 							<td>{{$value->due_date}}</td>
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->grand_total}} </td>
 							<td>

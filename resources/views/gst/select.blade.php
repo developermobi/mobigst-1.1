@@ -19,7 +19,7 @@
 
 <div class="class">
 	<div class="container">
-		<h2>Select an action</h2>
+		<h2 style="padding-top: 50px;">Select an action</h2>
 		<div class="class-grids w3l">
 			<div class="class-grid wow fadeInLeft animated animated" data-wow-delay="0.4s">
 				<div class="class-top">

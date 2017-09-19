@@ -35,6 +35,7 @@
 				<h2 style="margin-top:0px;">Edit Customer Or Vendor</h2>
 				<form id="updateCustomerForm" role="form">
 					<input type="hidden" class="form-control" id="contact_id"  value="{{$data['data']['contactData'][0]->contact_id}}">
+					<input type="hidden" class="form-control" id="business_id" name="business_id"  value="{{$data['data']['contactData'][0]->business_id}}">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -69,7 +70,14 @@
 							</div>
 							<div class="form-group">
 								<label for="state">State:</label>
-								<select class="form-control state" name="">
+								<select class="form-control state" name="state">
+									<?php
+									foreach ($data['data']['states'] as $key => $value) {
+										?>
+										<option value="<?php echo $value->state_name;?>" <?php if($data['data']['contactData'][0]->state == $value->state_name){ echo "selected";} ?> ><?php echo $value->state_name;?></option>
+										<?php
+									}
+									?>
 								</select>
 							</div>
 							<div class="form-group">
@@ -86,8 +94,7 @@
 						<label for="add">Address:</label>
 						<textarea class="form-control" rows="5"  placeholder="Enter Address" name="address">{{$data['data']['contactData'][0]->address}}</textarea>
 					</div>
-					<button type="button" class="btn btn-danger">Back</button>
-					<button type="button" class="btn btn-default">Cancel</button>
+					<button type="button" class="btn btn-danger" onclick="window.history.go(-1); return false;" >Back</button>
 					<button type="button" class="btn btn-success" id="updateCustomer">Update</button>
 				</form>
 			</div>

@@ -77,7 +77,6 @@
 					@endif
 				</tbody>
 			</table>
-			<input type="hidden" id="business_id" value="{{$data[0]->business_id}}">
 		</div>
 	</div>
 </div>

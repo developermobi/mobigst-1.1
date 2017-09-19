@@ -65,7 +65,7 @@
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
-							<th>Invoice ID</th>
+							<th>Receipt ID</th>
 							<th>Contact</th>
 							<th>Created Date</th>
 							<th>Total Amount</th>

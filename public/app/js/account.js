@@ -13,6 +13,12 @@ $(function(){
 		login();
 	});
 
+	$("input").keypress(function(e){
+		if (e.keyCode == 13){
+			login();
+		}
+	});
+
 	$('#forgotButton').click(function(){
 		forgotpassword();
 	});
@@ -80,20 +86,20 @@ $(function(){
     });
 
     //RESET PASSWORD VALIDATION     
-	$("#resetForm").validate({
-		rules: {    
-			password:{
-				required: true,
-			},
-			confirm_password:{
-				required: true,
-			},
-		},
-		messages: {    
-			password:"Please enter password.",
-			confirm_password:"Please enter confirm password.",
-		}
-	});
+    $("#resetForm").validate({
+    	rules: {    
+    		password:{
+    			required: true,
+    		},
+    		confirm_password:{
+    			required: true,
+    		},
+    	},
+    	messages: {    
+    		password:"Please enter password.",
+    		confirm_password:"Please enter confirm password.",
+    	}
+    });
 
 });
 

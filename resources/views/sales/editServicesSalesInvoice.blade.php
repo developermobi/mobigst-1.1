@@ -45,11 +45,13 @@ a:hover, a:link{
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
 			zIndexOffset: 1035,
+			autoclose:true,
 		});
 		$('.due_datepicker').datepicker({
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
 			zIndexOffset: 1035,
+			autoclose:true,
 		})
 		.on('hide', due_dateChanged);
 	});
@@ -643,9 +645,9 @@ a:hover, a:link{
 		$(".igst_amount").prop('disabled', true);
 	}
 
-	$('#place_of_supply').css('pointer-events','none');
-	$('#tddd').css('pointer-events','none');
-	$('#contact_gstin').css('pointer-events','none');
+	//$('#place_of_supply').css('pointer-events','none');
+	//$('#tddd').css('pointer-events','none');
+	//$('#contact_gstin').css('pointer-events','none');
 </script>
 
 <script src="{{URL::asset('app/js/editservicessalesinvoice.js')}}"></script>

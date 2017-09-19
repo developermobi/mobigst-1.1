@@ -137,48 +137,6 @@ $(function(){
 		}
 	});
 
-	$('#is_freight_charge').change(function(){
-		if ($('#is_freight_charge').is(':checked') == true){
-			$('#freight_charge').prop('disabled', false);
-		} else {
-			$('#freight_charge').val('');
-			calculateTotal(this);
-			$('#freight_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_lp_charge').change(function(){
-		if ($('#is_lp_charge').is(':checked') == true){
-			$('#lp_charge').prop('disabled', false);
-		} else {
-			$('#lp_charge').val('');
-			calculateTotal(this);
-			$('#lp_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_insurance_charge').change(function(){
-		if ($('#is_insurance_charge').is(':checked') == true){
-			$('#insurance_charge').prop('disabled', false);
-		} else {
-			$('#insurance_charge').val('');
-			calculateTotal(this);
-			$('#insurance_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_other_charge').change(function(){
-		if ($('#is_other_charge').is(':checked') == true){
-			$('#other_charge').prop('disabled', false);
-			$('#other_charge_name').prop('disabled', false);
-		} else {
-			$('#other_charge').val('');
-			calculateTotal(this);
-			$('#other_charge').prop('disabled', true);
-			$('#other_charge_name').prop('disabled', true);
-		}
-	});
-
 	$('#save_invoice').click(function(){
 		saveServicesSalesInvoice();
 	});
@@ -625,28 +583,6 @@ function calculateTotal(obj){
 	$(".total_igst_amount").val(igst_amount_sum.toFixed(2));
 	$(".total_cess_amount").val(cess_amount_sum.toFixed(2));
 
-	var freight_charge = $(".freight_charge").val();
-	if(freight_charge == ''){
-		freight_charge = 0;
-	}
-
-	var lp_charge = $(".lp_charge").val();
-	if(lp_charge == ''){
-		lp_charge = 0;
-	}
-
-	var insurance_charge = $(".insurance_charge").val();
-	if(insurance_charge == ''){
-		insurance_charge = 0;
-	}
-
-	var other_charge = $(".other_charge").val();
-	if(other_charge == ''){
-		other_charge = 0;
-	}
-
-	var total_charge = parseFloat(freight_charge) + parseFloat(lp_charge) + parseFloat(insurance_charge) + parseFloat(other_charge);
-
 	var total_tax = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum);
 	$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 	var total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
@@ -654,7 +590,7 @@ function calculateTotal(obj){
 	
 	var decimal = ''; var grand_total = ''; var tostring = ''; var new_grand_total = ''; var digit = '';
 
-	grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+	grand_total = parseFloat(total_amount.toFixed(2));
 	tostring = grand_total.toString();
 	new_grand_total = '';
 	if(tostring % 1 != 0){
@@ -685,7 +621,7 @@ function calculateTotal(obj){
 		$("#total_amount").val(parseFloat(rate_sum));
 		
 		console.log("total checked ",rate_sum);
-		grand_total = parseFloat(rate_sum.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		grand_total = parseFloat(rate_sum.toFixed(2));
 		tostring = grand_total.toString();
 		if(tostring % 1 != 0){
 			if($('#is_roundoff').is(":checked")){
@@ -721,7 +657,7 @@ function calculateTotal(obj){
 		total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 		$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
 		
-		grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		grand_total = parseFloat(total_amount.toFixed(2));
 		tostring = grand_total.toString();
 		if(tostring % 1 != 0){
 			if($('#is_roundoff').is(":checked")){

@@ -30,11 +30,23 @@ $(function(){
 			item_sale_price:{
 				required: true,
 			},
+			item_type:{
+				required: true,
+			},
+			item_hsn_sac:{
+				required: true,
+			},
+			item_unit:{
+				required: true,
+			},
 		},
 		messages: {    
 			business_id:"Please select business.",
 			item_description:"Please enter item description.",
 			item_sale_price:"Please enter item sale price.",
+			item_type:"Please select item type.",
+			item_hsn_sac:"Please enter item hsn/sac number.",
+			item_unit:"Please select item unit.",
 		}
 	});
 
@@ -89,11 +101,11 @@ function getBusiness(){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value='' disabled selected>Select Business</option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['business_id']+"'>"+data[i]['name']+"</option>";
+					option += "<option value='"+data[i].business_id+"'>"+data[i].name+"</option>";
 				});
 			}
 			$(".dynamicBusiness").html('');
@@ -122,11 +134,11 @@ function getUnit(){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value=''> Select Unit </option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
 			$(".unit").append(option);
@@ -173,7 +185,7 @@ function addItem(){
 					confirmButtonText: "OK",
 					width:'400px',
 				}).then(function () {
-					window.location.href = window.location.href;
+					window.location.href = SERVER_NAME+"/importitem";
 				});
 			}else{
 				swal({
@@ -248,7 +260,10 @@ function updateItem(){
 
 
 function deleteItem(obj) {
-
+	var business_id = $("#business_id").val();
+	var encode_id = window.btoa(business_id);
+	//alert(encode_id);
+	//return false;
 	swal({
 		text: "Do you want to delete this Item ?",
 		type: 'warning',
@@ -281,7 +296,7 @@ function deleteItem(obj) {
 						confirmButtonText: "OK",
 						width: '400px',
 					}).then(function() {
-						window.location.href = window.location.href;
+						window.location.href = SERVER_NAME+"/itemList/" + encode_id;
 					});
 				} else {
 					swal({

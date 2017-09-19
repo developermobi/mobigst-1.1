@@ -6,6 +6,10 @@ $(function(){
 
 	getStates();
 
+	$('#cancelBusinessButton').click(function(){
+		$('#businessForm').trigger("reset");
+	});
+
 	jQuery.validator.addMethod("pan", function(value, element) {
 		return this.optional( element ) || /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/.test( value );
 	}, 'Please enter a valid pan number.');

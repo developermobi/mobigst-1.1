@@ -32,6 +32,9 @@ $(function(){
 			business_id:{
 				required: true,
 			},
+			contact_name:{
+				required: true,
+			},
 			pan_no:{
 				required: true,
 				pan:true,
@@ -50,9 +53,10 @@ $(function(){
 		messages: {    
 			business_id:"Please select business.",
 			pan_no:"Please enter pan no.",
+			contact_name:"Please enter contact name",
 			gstin_no:"Please enter valid gstin no.",
 			email:"Please enter email.",
-			mobile_no:"Please enter phone no.",
+			mobile_no:"Please enter mobile no.",
 		}
 	});
 
@@ -172,7 +176,7 @@ function addCustomer(){
 					confirmButtonText: "OK",
 					width:'400px',
 				}).then(function () {
-					window.location.href = window.location.href;
+					window.location.href = SERVER_NAME+"/contacts/"+response.data.business_id;
 				});
 			}else{
 				swal({
@@ -227,7 +231,7 @@ function updateCustomer(){
 					confirmButtonText: "OK",
 					width:'400px',
 				}).then(function () {
-					window.location.href = SERVER_NAME+"/business";
+					window.location.href = SERVER_NAME+"/contacts/"+response.data.business_id;
 				});
 			}else{
 				swal({

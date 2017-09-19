@@ -635,7 +635,7 @@ class GstController extends Controller{
 				$key_value[$key]['contact_person'] = $res[$key][4];
 				$key_value[$key]['email'] = $res[$key][5];
 				$key_value[$key]['pan_no'] = $res[$key][6];
-				$key_value[$key]['phone_no'] = $res[$key][7];
+				$key_value[$key]['mobile_no'] = $res[$key][7];
 				$key_value[$key]['alternate_no'] = $res[$key][8];
 				$key_value[$key]['address'] = $res[$key][9];
 				$key_value[$key]['city'] = $res[$key][10];
@@ -726,10 +726,12 @@ class GstController extends Controller{
 		$addCustomer = Gst::addCustomer($input);
 		
 		if($addCustomer > 0){
+			$data = array();
+			$data['business_id'] = encrypt($input['business_id']);
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "201";
 			$returnResponse['message'] = "Customer added Sucessfully.";
-			$returnResponse['data'] = $addCustomer;
+			$returnResponse['data'] = $data;
 		}else{
 			$returnResponse['status'] = "failed";
 			$returnResponse['code'] = "302";
@@ -821,10 +823,12 @@ class GstController extends Controller{
 		$updateContact = Gst::updateContact($input,$id);
 
 		if($updateContact > 0){
+			$data = array();
+			$data['business_id'] = encrypt($input['business_id']);
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "201";
 			$returnResponse['message'] = "Contact updated successfully.";
-			$returnResponse['data'] = $updateContact;
+			$returnResponse['data'] = $data;
 		}else{
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "204";
@@ -991,12 +995,17 @@ class GstController extends Controller{
 	public function editItem($id){
 		$item = decrypt($id);
 		$getData = Gst::getItemData($item);
+		$getUnit = Gst::getUnit();
+
+		$data = array();
+		$data['item_info'] = $getData;
+		$data['units'] = $getUnit;
 
 		if (sizeof($getData) > 0) {
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "200";
 			$returnResponse['message'] = "Data found.";
-			$returnResponse['data'] = $getData;
+			$returnResponse['data'] = $data;
 		}else{
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "204";
@@ -1044,6 +1053,26 @@ class GstController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 		return response()->json($returnResponse);
+	}
+
+
+
+	public function itemList($business_id){
+		$id = base64_decode($business_id);
+		$getData = Gst::items($id);
+
+		if (sizeof($getData) > 0) {
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "200";
+			$returnResponse['message'] = "Data found.";
+			$returnResponse['data'] = $getData;
+		}else{
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "204";
+			$returnResponse['message'] = "No data found.";
+			$returnResponse['data'] = $getData;
+		}
+		return view('gst.itemsList')->with('data', $returnResponse);
 	}
 
 

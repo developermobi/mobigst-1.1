@@ -125,7 +125,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="gstin_no">GSTIN Number</label>
-								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number" required>
+								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number" required style="text-transform: uppercase;">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -192,7 +192,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="gstin_no">GSTIN Number</label>
-								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number">
+								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number" style="text-transform: uppercase;">
 							</div>
 						</div>
 						<div class="col-md-6">

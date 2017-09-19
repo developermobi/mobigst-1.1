@@ -1,6 +1,7 @@
 $(function(){
 
 	$('.rate').css('pointer-events','none');
+	$('.roundoff').css('pointer-events','none');
 
 	var business_id = $("#business_id").val();
 
@@ -247,7 +248,7 @@ function test_calculate_gt(){
 	}
 
 	if($('#is_lp_charge').is(':checked')){
-		lpc = $("#freight_charge").val();
+		lpc = $("#lp_charge").val();
 		if(lpc == ''){
 			lpc = 0;
 		}
@@ -255,7 +256,7 @@ function test_calculate_gt(){
 	}
 
 	if($('#is_insurance_charge').is(':checked')){
-		ic = $("#freight_charge").val();
+		ic = $("#insurance_charge").val();
 		if(ic == ''){
 			ic = 0;
 		}
@@ -263,7 +264,7 @@ function test_calculate_gt(){
 	}
 
 	if($('#is_other_charge').is(':checked')){
-		oc = $("#freight_charge").val();
+		oc = $("#other_charge").val();
 		if(oc == ''){
 			oc = 0;
 		}

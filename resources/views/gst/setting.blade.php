@@ -104,7 +104,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="gstin_no">GSTIN Number</label>
-								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number" required>
+								<input type="text" class="form-control" name="gstin_no" placeholder="GSTIN Number" required  style="text-transform: uppercase;">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -148,7 +148,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default btn-success" id="addBusinessButton">Add</button>
-					<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-default pull-left" id="cancelBusinessButton">Clear</button>
 				</div>
 			</form>
 		</div>
