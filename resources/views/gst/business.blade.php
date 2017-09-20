@@ -100,7 +100,7 @@
 			<form id="businessForm" role="form">
 				<div class="modal-header modal-header-info">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Add your business</h4>
+					<h4 class="modal-title">Add Your Business</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -155,8 +155,8 @@
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="phone">Phone</label>
-								<input type="text" class="form-control" name="phone" placeholder="Phone" required>
+								<label for="phone">Mobile No. </label>
+								<input type="text" class="form-control" name="phone" placeholder="Mobile No." required>
 							</div>
 						</div>
 						<div class="col-md-6">

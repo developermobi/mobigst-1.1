@@ -136,7 +136,7 @@ a:hover, a:link{
 									<td>Place of Supply</td>
 								</tr>
 								<tr>
-									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" /></td>
+									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" style="text-transform: uppercase;" /></td>
 									<td>
 										<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
 										</select>

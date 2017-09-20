@@ -27,9 +27,6 @@ $(function(){
 			item_description:{
 				required: true,
 			},
-			item_sale_price:{
-				required: true,
-			},
 			item_type:{
 				required: true,
 			},
@@ -43,7 +40,6 @@ $(function(){
 		messages: {    
 			business_id:"Please select business.",
 			item_description:"Please enter item description.",
-			item_sale_price:"Please enter item sale price.",
 			item_type:"Please select item type.",
 			item_hsn_sac:"Please enter item hsn/sac number.",
 			item_unit:"Please select item unit.",
@@ -52,20 +48,24 @@ $(function(){
 
 	$("#updateItemForm").validate({
 		rules: {    
-			business_id:{
-				required: true,
-			},
 			item_description:{
 				required: true,
 			},
-			item_sale_price:{
+			item_type:{
+				required: true,
+			},
+			item_hsn_sac:{
+				required: true,
+			},
+			item_unit:{
 				required: true,
 			},
 		},
 		messages: {    
-			business_id:"Please select business.",
 			item_description:"Please enter item description.",
-			item_sale_price:"Please enter item sale price.",
+			item_type:"Please select item type.",
+			item_hsn_sac:"Please enter item hsn/sac number.",
+			item_unit:"Please select item unit.",
 		}
 	});
 

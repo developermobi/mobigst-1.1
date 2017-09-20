@@ -46,52 +46,52 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="custname">Customer Or Vendor Name:</label>
+								<label for="custname">Customer Or Vendor Name</label>
 								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name">
 							</div>
 							<div class="form-group">
-								<label for="gstin">GSTIN NO:</label>
+								<label for="gstin">GSTIN NO</label>
 								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no">
 							</div>
 							<div class="form-group">
-								<label for="country">Country:</label>
+								<label for="country">Country</label>
 								<input type="text" class="form-control" placeholder="Enter Country" name="country">
 							</div>
 							<div class="form-group">
-								<label for="conper">Contact Person:</label>
+								<label for="conper">Contact Person</label>
 								<input type="text" class="form-control" placeholder="Contact Person" name="contact_person">
 							</div>
 							<div class="form-group">
-								<label for="pin">Pincode:</label>
+								<label for="pin">Pincode</label>
 								<input type="text" class="form-control" placeholder="Enter Pincode" name="pincode">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="email">Email Id:</label>
+								<label for="email">Email Id</label>
 								<input type="email" class="form-control" placeholder="Email Id" name="email">
 							</div>
 							<div class="form-group">
-								<label for="pan">PAN:</label>
+								<label for="pan">PAN</label>
 								<input type="text" class="form-control" placeholder="Enter PAN" name="pan_no">
 							</div>
 							<div class="form-group">
-								<label for="state">State:</label>
+								<label for="state">State</label>
 								<select class="form-control state" name="state">
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="mob">Mobile No:</label>
+								<label for="mob">Mobile No</label>
 								<input type="text" class="form-control" placeholder="Enter Mobile No" name="mobile_no">
 							</div>
 							<div class="form-group">
-								<label for="city">City:</label>
+								<label for="city">City</label>
 								<input type="text" class="form-control" placeholder="Enter City" name="city">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="add">Address:</label>
+						<label for="add">Address</label>
 						<textarea class="form-control" rows="5"  placeholder="Enter Address" name="address"></textarea>
 					</div>
 					<button type="button" onclick="history.back();" class="btn btn-danger">Back</button>

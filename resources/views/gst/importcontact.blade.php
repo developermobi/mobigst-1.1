@@ -50,12 +50,12 @@
 								<button class="btn btn-success" type="button">Download Sample File</button>
 							</a>
 						</div>	
-						<!-- <div class="image-upload"> -->
-							<!-- <label for="file-input">
+						<div class="image-upload">
+							<label for="file-input">
 								<img src="images/csv.png"/ draggable="true" width="25%;">
-							</label> -->
+							</label>
 							<center><input type="file" id="file-input" name="contact_csv"></center>
-						<!-- </div> -->
+						</div>
 					</div>
 					<button type="submit" class="btn btn-info" id="import_file">Submit</button>
 				</form>

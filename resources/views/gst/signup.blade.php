@@ -67,9 +67,9 @@
 				<center><p>OR</p></center>
 				<h4>Sign up with your email address</h4>
 				<form id="signupForm" role="form">
-					<input type="text" name="email" placeholder="Email" required>
+					<input type="text" class="Email" name="email" placeholder="Email" required>
 					<input type="password" name="password" id="password" placeholder="Password" required>
-					<input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+					<input type="password" class="confirm_password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
 					<p style="margin-bottom: 10px;">
 						By creating an account, you hereby agree to follow these <a href="javascript:void();"> terms and conditions.</a>
 					</p>

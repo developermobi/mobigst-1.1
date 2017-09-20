@@ -135,7 +135,7 @@ function addItem(){
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/addItem",
+		"url": SERVER_NAME+"/api/addItemInvoice",
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -157,7 +157,11 @@ function addItem(){
 					confirmButtonText: "OK",
 					width:'400px',
 				}).then(function () {
-					window.location.href = window.location.href;
+					var data = response;
+					var option = "";
+					option += "<option value='"+data.data[0].item_description+"' data-attr='"+data.data[0].item_id+"'>"+data.data[0].item_description+"</option>";
+					$(".item_name").append(option);
+					$("#addItemModal").modal('hide');
 				});
 			}else{
 				swal({

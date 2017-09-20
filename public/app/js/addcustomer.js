@@ -45,6 +45,7 @@ $(function(){
 			},
 			email:{
 				required: true,
+				email: true
 			},
 			mobile_no:{
 				required: true,
@@ -53,7 +54,7 @@ $(function(){
 		messages: {    
 			business_id:"Please select business.",
 			pan_no:"Please enter pan no.",
-			contact_name:"Please enter contact name",
+			contact_name:"Please enter customer name",
 			gstin_no:"Please enter valid gstin no.",
 			email:"Please enter email.",
 			mobile_no:"Please enter mobile no.",

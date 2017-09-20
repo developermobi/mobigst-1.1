@@ -46,12 +46,21 @@ $(function(){
 			display_name:{
 				required: true,
 			},
+			Phone:{
+				required: true,
+			},
+			email: {
+    			required: true,
+    			email: true
+    		},
 		},
 		messages: {    
-			name:"Please enter password.",
+			name:"Please enter business name.",
 			pan_no:"Please enter pan no.",
 			gstin_no:"Please enter valid gstin no.",
 			display_name:"Please enter display name.",
+			Phone:"Please enter valid phone number.",
+			email: "Please enter a valid email address",
 		}
 	});
 

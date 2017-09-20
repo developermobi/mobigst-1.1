@@ -43,7 +43,7 @@ a:hover, a:link{
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
-					<a href="../../../printAdvanceReceipt/{{encrypt($data['data']['invoice_data'][0]->receipt_no)}}" target="_BLANK">
+					<a href="../../../printAdvanceReceipt/{{encrypt($data['data']['invoice_data'][0]->receipt_no)}}/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" target="_BLANK">
 						<input type="button" class="btn btn-default" value="Print" style="float: right;">
 					</a>
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right; margin-right: 10px;" data-toggle="modal" data-target="#quick">
@@ -224,7 +224,7 @@ a:hover, a:link{
 							@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
 							<tr>
 								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > <!-- Advanced Settings --> Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked >Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
@@ -238,7 +238,7 @@ a:hover, a:link{
 							@else
 							<tr>
 								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied">  Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
@@ -260,23 +260,29 @@ a:hover, a:link{
 							<td colspan="2">Other Charges</td>
 						</tr>
 						<tr>
-							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->freight_charge}}" ></td>
-							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->lp_charge}}" ></td>
-							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->insurance_charge}}"  ></td>
+							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge"  value="{{$data['data']['invoice_data'][0]->freight_charge}}" ></td>
+							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge"  value="{{$data['data']['invoice_data'][0]->lp_charge}}" ></td>
+							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge"  value="{{$data['data']['invoice_data'][0]->insurance_charge}}"  ></td>
 							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name" value="{{$data['data']['invoice_data'][0]->other_charge_name}}"  placeholder="Enter Charge Name" /></td>
-							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="calculateTotal(this);" value="{{$data['data']['invoice_data'][0]->other_charge}}" ></td>
+							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge"  value="{{$data['data']['invoice_data'][0]->other_charge}}" ></td>
+						</tr>
+					</table>
+					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
+						<tr>
+							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" <?php if($data['data']['invoice_data'][0]->is_roundoff == '1'){echo "checked";}?>  > Roundoff Total</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control roundoff" id="roundoff" name="roundoff" value="{{$data['data']['invoice_data'][0]->roundoff}}"/></td>
 						</tr>
 					</table>
 					<table class="table table-bordered">
 						<tr>
 							<td width="40%">Total In Words</td>
-							<!-- <td>Taxable Amount</td> -->
 							<td>Total Tax</td>
 							<td>GRAND TOTAL</td>
 						</tr>
 						<tr>
 							<td><input type="text" class="form-control total_in_words" name="total_in_words" id="total_in_words" value="{{$data['data']['invoice_data'][0]->total_in_words}}"/></td>
-							<!-- <td><input type="text" class="form-control taxable_amount" id="taxable_amount"/></td> -->
 							<td><input type="text" class="form-control total_tax" name="total_tax" id="total_tax" value="{{$data['data']['invoice_data'][0]->total_tax}}" /></td>
 							<td><input type="text" class="form-control" name="grand_total" id="grand_total" value="{{$data['data']['invoice_data'][0]->grand_total}}"/></td>
 						</tr>

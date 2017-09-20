@@ -13,9 +13,33 @@ $(function(){
 		login();
 	});
 
-	$("input").keypress(function(e){
+	$("#email").keypress(function(e){
 		if (e.keyCode == 13){
 			login();
+		}
+	});
+
+	$(".password").keypress(function(e){
+		if (e.keyCode == 13){
+			login();
+		}
+	});
+
+	$(".email").keypress(function(e){
+		if (e.keyCode == 13){
+			registration();
+		}
+	});
+
+	$("#password").keypress(function(e){
+		if (e.keyCode == 13){
+			registration();
+		}
+	});
+
+	$("#confirm_password").keypress(function(e){
+		if (e.keyCode == 13){
+			registration();
 		}
 	});
 

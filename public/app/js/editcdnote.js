@@ -119,6 +119,7 @@ $(function(){
 			$('#other_charge_name').focus();
 		} else {
 			$('#other_charge').val('');
+			$('#other_charge_name').val('');
 			calculateTotal(this);
 			$('#other_charge').prop('disabled', true);
 			$('#other_charge_name').prop('disabled', true);

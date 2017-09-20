@@ -209,7 +209,6 @@
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
-								<!-- <th rowspan="2">SR. NO.</th> -->
 								<th rowspan="2" width="20%"> ITEM 
 									<span style="float: right;cursor: pointer;">
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
@@ -276,7 +275,6 @@
 						@endif
 						<tr id="t2">
 							<td colspan="7">Total Inv. Val</td>
-							<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
 							<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="{{$data['data']['invoice_data'][0]->total_cgst_amount}}" /></td>
 							<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
 							<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="{{$data['data']['invoice_data'][0]->total_igst_amount}}" /></td>
@@ -305,7 +303,7 @@
 						@else
 						<tr>
 							<td colspan="17">
-								<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
+								<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge </p>
 							</td>
 						</tr>
 						<tr>
@@ -319,6 +317,14 @@
 						@endif
 					</tbody>
 				</table>
+				<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
+						<tr>
+							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" <?php if($data['data']['invoice_data'][0]->is_roundoff == '1'){echo "checked";}?> > Roundoff Total</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control roundoff" id="roundoff" name="roundoff" value="{{$data['data']['invoice_data'][0]->roundoff}}"/></td>
+						</tr>
+					</table>
 				<table class="table table-bordered">
 					<tr>
 						<td width="50%">Total In Words</td>

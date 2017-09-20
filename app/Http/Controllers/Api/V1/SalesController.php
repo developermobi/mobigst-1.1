@@ -168,6 +168,30 @@ class SalesController extends Controller{
 
 
 
+	public function addItemInvoice(Request $request){
+		$input = $request->all();
+
+		$addItem = Sales::addItem($input);
+
+		if($addItem > 0){
+
+			$getItemInfo = Sales::getItemInfo($addItem);
+			$returnResponse['status'] = "success";
+			$returnResponse['code'] = "201";
+			$returnResponse['message'] = "Item added Sucessfully.";
+			$returnResponse['data'] = $getItemInfo;
+		}else{
+			$returnResponse['status'] = "failed";
+			$returnResponse['code'] = "302";
+			$returnResponse['message'] = "Error while adding item. Please try again.";
+			$returnResponse['data'] = $addItem;
+		}
+		
+		return response()->json($returnResponse);
+	}
+
+
+
 	public function getUnit(){
 
 		$getUnit = Sales::getUnit();
@@ -645,11 +669,15 @@ class SalesController extends Controller{
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+				$returnResponse['gstin'] = $getGstinInfo[0]->gstin_no;
 			}
+
+			$getBusinessInfo = Sales::getBusinessInfo($getGstinInfo[0]->business_id);
 
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['business_details'] = $getBusinessInfo;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -666,7 +694,7 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 
-		view()->share('data',$returnResponse);
+		/*view()->share('data',$returnResponse);
 		$pdf = PDF::loadView('sales.printSalesInvoice');
 
 		if($request->has('download')){
@@ -674,7 +702,8 @@ class SalesController extends Controller{
 			return $pdf->download('SalesInvoice.pdf');
 		}
 		return $pdf->stream('SalesInvoice.pdf');
-		return view('sales.printSalesInvoice');
+		return view('sales.printSalesInvoice');*/
+		return view('sales.printSalesInvoice')->with('data', $returnResponse);
 	}
 
 
@@ -728,11 +757,15 @@ class SalesController extends Controller{
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+				$returnResponse['gstin'] = $getGstinInfo[0]->gstin_no;
 			}
+
+			$getBusinessInfo = Sales::getBusinessInfo($getGstinInfo[0]->business_id);
 
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['business_details'] = $getBusinessInfo;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -749,7 +782,7 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 
-		view()->share('data',$returnResponse);
+		/*view()->share('data',$returnResponse);
 		$pdf = PDF::loadView('sales.printServicesSalesInvoice');
 
 		if($request->has('download')){
@@ -757,7 +790,8 @@ class SalesController extends Controller{
 			return $pdf->download('SalesInvoice.pdf');
 		}
 		return $pdf->stream('SalesInvoice.pdf');
-		return view('sales.printServicesSalesInvoice');
+		return view('sales.printServicesSalesInvoice');*/
+		return view('sales.printSalesInvoice')->with('data', $returnResponse);
 	}
 
 
@@ -1494,11 +1528,15 @@ class SalesController extends Controller{
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+				$returnResponse['gstin'] = $getGstinInfo[0]->gstin_no;
 			}
+
+			$getBusinessInfo = Sales::getBusinessInfo($getGstinInfo[0]->business_id);
 
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['business_details'] = $getBusinessInfo;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -1515,7 +1553,7 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 
-		view()->share('data',$returnResponse);
+		/*view()->share('data',$returnResponse);
 		$pdf = PDF::loadView('sales.printCdnote');
 
 		if($request->has('download')){
@@ -1523,7 +1561,8 @@ class SalesController extends Controller{
 			return $pdf->download('CreditDebitNote.pdf');
 		}
 		return $pdf->stream('CreditDebitNote.pdf');
-		return view('sales.printCdnote');
+		return view('sales.printCdnote');*/
+		return view('sales.printCdnote')->with('data', $returnResponse);
 	}
 
 
@@ -2066,11 +2105,15 @@ class SalesController extends Controller{
 			if(sizeof($getGstinInfo) > 0){
 				$returnResponse['state_code'] = $getGstinInfo[0]->state_code;
 				$returnResponse['state_name'] = $getGstinInfo[0]->state_name;
+				$returnResponse['gstin'] = $getGstinInfo[0]->gstin_no;
 			}
+
+			$getBusinessInfo = Sales::getBusinessInfo($getGstinInfo[0]->business_id);
 
 			$data = array();
 			$data['invoice_data'] = $getData;
 			$data['invoice_details'] = $getInvoiceDetail;
+			$data['business_details'] = $getBusinessInfo;
 
 			if(sizeof($getBusinessByGstin) > 0){
 				$returnResponse['business_id'] = $getBusinessByGstin[0]->business_id;
@@ -2087,7 +2130,7 @@ class SalesController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 
-		view()->share('data',$returnResponse);
+		/*view()->share('data',$returnResponse);
 		$pdf = PDF::loadView('sales.printAdvanceReceipt');
 
 		if($request->has('download')){
@@ -2095,7 +2138,8 @@ class SalesController extends Controller{
 			return $pdf->download('AdvanceReceipt.pdf');
 		}
 		return $pdf->stream('AdvanceReceipt.pdf');
-		return view('sales.printAdvanceReceipt');
+		return view('sales.printAdvanceReceipt');*/
+		return view('sales.printAdvanceReceipt')->with('data', $returnResponse);
 	}
 
 

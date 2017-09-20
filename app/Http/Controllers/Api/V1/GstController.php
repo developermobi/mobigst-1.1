@@ -628,19 +628,16 @@ class GstController extends Controller{
 
 			foreach($res as $key => $val){
 				$key_value[$key]['business_id'] = $input['business_id'];
-				$key_value[$key]['unique_id'] = $res[$key][0];
-				$key_value[$key]['contact_type'] = $res[$key][1];
-				$key_value[$key]['contact_name'] = $res[$key][2];
-				$key_value[$key]['gstin_no'] = $res[$key][3];
-				$key_value[$key]['contact_person'] = $res[$key][4];
-				$key_value[$key]['email'] = $res[$key][5];
-				$key_value[$key]['pan_no'] = $res[$key][6];
-				$key_value[$key]['mobile_no'] = $res[$key][7];
-				$key_value[$key]['alternate_no'] = $res[$key][8];
-				$key_value[$key]['address'] = $res[$key][9];
-				$key_value[$key]['city'] = $res[$key][10];
-				$key_value[$key]['state'] = $res[$key][11];
-				$key_value[$key]['pincode'] = $res[$key][12];
+				$key_value[$key]['contact_name'] = $res[$key][0];
+				$key_value[$key]['gstin_no'] = $res[$key][1];
+				$key_value[$key]['contact_person'] = $res[$key][2];
+				$key_value[$key]['email'] = $res[$key][3];
+				$key_value[$key]['pan_no'] = $res[$key][4];
+				$key_value[$key]['mobile_no'] = $res[$key][5];
+				$key_value[$key]['address'] = $res[$key][6];
+				$key_value[$key]['city'] = $res[$key][7];
+				$key_value[$key]['state'] = $res[$key][8];
+				$key_value[$key]['pincode'] = $res[$key][9];
 				$key_value[$key]['created_at'] = date('Y-m-d H:i:s');
 			}
 
@@ -652,7 +649,7 @@ class GstController extends Controller{
 
 			/*CHECK STATE NAME*/
 			foreach($res as $key => $val){
-				if (in_array($res[$key][11], $name)) {
+				if (in_array($res[$key][8], $name)) {
 
 				}else{
 					$response['status'] = "fail";
@@ -666,7 +663,7 @@ class GstController extends Controller{
 
 			/*CHECK GSTIN*/
 			foreach($res as $key => $val){
-				$validateGstin = Gst::checkGstin($res[$key][3]);
+				$validateGstin = Gst::checkGstin($res[$key][1]);
 				if ($validateGstin > 0) {
 
 				}else{
@@ -681,7 +678,7 @@ class GstController extends Controller{
 
 			/*CHECK PAN*/
 			foreach($res as $key => $val){
-				$validatePan = Gst::checkPan($res[$key][6]);
+				$validatePan = Gst::checkPan($res[$key][4]);
 				if ($validatePan > 0) {
 
 				}else{

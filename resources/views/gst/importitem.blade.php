@@ -52,12 +52,12 @@
 							</a>
 							<button class="btn btn-warning" type="button" data-toggle="modal" data-target="#viewItem"> View Items </button> -->
 						</div>	
-						<!-- <div class="image-upload">
+						<div class="image-upload">
 							<label for="file-input">
 								<img src="images/csv.png"/ draggable="true">
-							</label> -->
+							</label>
 							<center><input type="file" id="file-input" name="item_csv" required></center>
-						<!-- </div> -->
+						</div>
 					</div>
 					<button type="submit" class="btn btn-info" id="import_file">Submit</button>
 				</form>

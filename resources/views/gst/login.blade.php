@@ -64,8 +64,8 @@
 			<center><p>OR</p></center>
 			<h4>Login with your email address</h4>
 			<form id="loginForm" role="form">
-				<input type="text" name="email" placeholder="Email" required>
-				<input type="password" name="password" placeholder="Password" required>
+				<input type="text" name="email" id="email" placeholder="Email" required>
+				<input type="password" name="password" class="password"  placeholder="Password" required>
 				<a href="forgotpassword" class="pull-right">Forgot password ?</a>
 				<button type="button" id="loginButton" class="btn btn-block btn-info">Login</button>
 			</form>

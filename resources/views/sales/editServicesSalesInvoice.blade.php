@@ -220,9 +220,9 @@ a:hover, a:link{
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv"> <!-- <span onclick="removeDiscount(this);"><i class="fa fa-times" title="Remove Discount" aria-hidden="true"></i></span> --> Discount in %</th>
 								<th rowspan="2">Taxable Value</th>
-								<th colspan="2">CGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
-								<th colspan="2">SGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
-								<th colspan="2">IGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
+								<th colspan="2">CGST </th>
+								<th colspan="2">SGST </th>
+								<th colspan="2">IGST </th>
 								<th colspan="2">CESS</th>
 								<th rowspan="2">Total</th>
 								<th rowspan="2">#</th>
@@ -311,7 +311,6 @@ a:hover, a:link{
 							@endif
 							<tr id="t2">
 								<td colspan="7">Total Inv. Val</td>
-								<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
 								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="{{$data['data']['invoice_data'][0]->total_cgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="{{$data['data']['invoice_data'][0]->total_sgst_amount}}" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="{{$data['data']['invoice_data'][0]->total_igst_amount}}" /></td>
@@ -376,11 +375,6 @@ a:hover, a:link{
 					</table>
 					<table class="pull-right">
 						<tr>
-							<!-- <td>
-								<a href="javascript:void();">
-									<button class="btn btn-primary" type="button">Back</button>
-								</a>
-							</td> -->
 							<td>
 								<a href="#">
 									<button class="btn btn-success" type="button" id="update_invoice">Update Invoice</button>

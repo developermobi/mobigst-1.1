@@ -320,6 +320,10 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
+	$api->post('addItemInvoice', 'App\Http\Controllers\Api\V1\SalesController@addItemInvoice');
+});
+
+$api->version('v1', function ($api) {
 	$api->get('getItem/{business_id}', 'App\Http\Controllers\Api\V1\SalesController@getItem');
 });
 

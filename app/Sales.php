@@ -90,6 +90,17 @@ class Sales extends Model{
 
 
 
+	public static function addItem($input){
+		$input['created_at'] = date('Y-m-d H:i:s');
+
+		$addItem = DB::table('item')
+		->insertGetId($input);
+
+		return $addItem;
+	}
+
+
+
 	public static function getContactInfo($contact_id){
 
 		$getContactInfo = DB::table('contact')
@@ -564,6 +575,17 @@ class Sales extends Model{
 		->update($data);
 
 		return  $updateData;
+	}
+
+
+
+	public static function getBusinessInfo($business_id){
+		$getData = DB::table('business')
+		->where('business_id',$business_id)
+		->where('status',1)
+		->get();
+
+		return $getData;
 	}
 
 }

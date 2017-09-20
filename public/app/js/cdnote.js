@@ -48,6 +48,8 @@ $(function(){
 		var total_igst_amount = $(".total_igst_amount").val();
 		var total_cess_amount = $(".total_cess_amount").val();
 
+		var total_tax = '';var grand_total = '';var total_in_words = '';
+
 		if ($(this).is(':checked')) {
 
 			$("#tt_cgst_amount").val('0');
@@ -70,22 +72,22 @@ $(function(){
 
 			$("#total_tax").val('0');
 
-			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			var total = $(".total_amount").val();
 
 			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax.toFixed(2)));
 			var total_amount = $(".total_amount").val();
 			$("#grand_total").val(total_amount);
-			var grand_total = $("#grand_total").val();
-			var total_in_words = number2text(grand_total);
+			grand_total = $("#grand_total").val();
+			total_in_words = number2text(grand_total);
 			$("#total_in_words").val(total_in_words);
 		}else{
-			var total_tax = $("#tt_total").val();
-			var grand_total = $("#grand_total").val();
+			total_tax = $("#tt_total").val();
+			grand_total = $("#grand_total").val();
 			$(".total_amount").val(parseFloat(grand_total) + parseFloat(total_tax));
 			$("#grand_total").val(parseFloat(grand_total) + parseFloat(total_tax));
 			var new_grand_total = $("#grand_total").val();
-			var total_in_words = number2text(new_grand_total);
+			total_in_words = number2text(new_grand_total);
 			$("#total_in_words").val(total_in_words);
 
 			$("#tt_cgst_amount").val('0');
@@ -144,6 +146,7 @@ $(function(){
 			$('#other_charge_name').focus();
 		} else {
 			$('#other_charge').val('');
+			$('#other_charge_name').val('');
 			calculateTotal(this);
 			$('#other_charge').prop('disabled', true);
 			$('#other_charge_name').prop('disabled', true);

@@ -49,7 +49,7 @@
 								<input type="text" class="form-control" placeholder="Item Description" name="item_description" required>
 							</div>
 							<div class="form-group">
-								<label for="item_type">Item Type:</label>
+								<label for="item_type">Item Type</label>
 								<select class="form-control" name="item_type">
 									<option value=" "> Select Item Type</option>
 									<option value="Goods">Goods</option>
@@ -57,41 +57,40 @@
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="code">Item/SKU Code:</label>
+								<label for="code">Item/SKU Code</label>
 								<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
 							</div>
 							<div class="form-group">
-								<label for="purpr">Purchase Price:</label>
-								<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price" required>
+								<label for="purpr">Purchase Price</label>
+								<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="hsn">HSN/SAC Code:</label>
+								<label for="hsn">HSN/SAC Code</label>
 								<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
 							</div>
 							<div class="form-group">
-								<label for="unit">Unit:</label>
+								<label for="unit">Unit of Measurement</label>
 								<select class="form-control unit" name="item_unit">
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="selling">Selling Price:</label>
-								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price" required>
+								<label for="selling">Selling Price</label>
+								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 							
 							<div class="form-group">
-								<label for="dis">Discount(%):</label>
+								<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="note">Item Notes:</label>
+						<label for="note">Item Notes</label>
 						<textarea class="form-control" rows="5"  placeholder="Enter Item Notes" name="item_notes"></textarea>
 					</div>
 					<button type="button" onclick="history.back();" class="btn btn-danger">Back</button>
-					<!-- <button type="submit" class="btn btn-default">Cancel</button> -->
 					<button type="submit" class="btn btn-success" id="addItem">Save</button>
 				</form>
 			</div>
