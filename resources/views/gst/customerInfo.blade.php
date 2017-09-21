@@ -70,8 +70,8 @@
 						<label for="add">Address:</label>
 						<textarea class="form-control" rows="5"  placeholder="Enter Address" name="address">{{$data['data'][0]->address}}</textarea>
 					</div>
-					<button type="submit" class="btn btn-danger">Back</button>
-					<button type="submit" class="btn btn-default">Reset</button>
+					<!-- <button type="submit" class="btn btn-danger">Back</button>
+					<button type="submit" class="btn btn-default">Reset</button> -->
 					<button type="button" class="btn btn-success" id="updateCustomerInfo">Update</button>
 				</form>
 			</div>

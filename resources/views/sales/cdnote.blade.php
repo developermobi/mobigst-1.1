@@ -33,6 +33,11 @@
 					<button class="btn btn-default" type="button" data-toggle="modal" data-target="#quick" style="float: right;"> Quick Action </button>
 				</div>
 			</div>
+
+			<?php
+			$first_date = date('Y-m-01');
+			?>
+
 			<div class="table-responsive">
 				<table class="table table-striped table-bordered">
 					<tr>
@@ -89,7 +94,9 @@
 							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->grand_total}}</td>
 							<td>
 								<a class='btn btn-sm btn-info' href="viewCdnote/{{encrypt($value->note_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								@if($value->note_issue_date >= $first_date)
 								<a class='btn btn-sm btn-warning' href="editCdnote/{{encrypt($value->note_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
+								@endif
 								<a class='btn btn-sm btn-danger' onclick=cancelCdnote(this); data-id='{{$value->note_no}}' data-attr = '{{$value->gstin_id}}' >Delete</a>
 							</td>
 						</tr>

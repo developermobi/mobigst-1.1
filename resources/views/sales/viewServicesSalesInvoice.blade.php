@@ -81,7 +81,7 @@
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
-					<a href="../../../printServicesSalesInvoice/{{encrypt($data['data']['invoice_data'][0]->invoice_no)}}" target="_BLANK">
+					<a href="../../../printSalesInvoice/{{encrypt($data['data']['invoice_data'][0]->invoice_no)}}/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" target="_BLANK">
 						<input type="button" class="btn btn-default" value="Print" style="float: right;">
 					</a>
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">

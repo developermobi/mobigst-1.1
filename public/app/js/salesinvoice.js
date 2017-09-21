@@ -1,5 +1,21 @@
 $(function(){
 
+	/*jQuery.extend(jQuery.expr[':'], {
+		focusable: function (el, index, selector) {
+			return $(el).is('a, button, :input, [tabindex]');
+		}
+	});
+
+	$(document).on('keypress', 'input,select', function (e) {
+		if (e.which == 13) {
+			e.preventDefault();
+			var $canfocus = $(':focusable');
+			var index = $canfocus.index(document.activeElement) + 1;
+			if (index >= $canfocus.length) index = 0;
+			$canfocus.eq(index).focus();
+		}
+	});*/
+
 	$('.rate').css('pointer-events','none');
 	$('.roundoff').css('pointer-events','none');
 
@@ -233,7 +249,7 @@ function getContact(business_id){
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+"</option>";
+					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+" - "+data[i].city+"</option>";
 				});
 			}
 			$(".contact_name").append(option);
@@ -351,7 +367,7 @@ function getUnit(obj){
 					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
-			$(obj).closest("tr").find(".unit").append(option);
+			$(obj).closest("tr").find("#unit").append(option);
 		},
 		complete:function(){
 		}
@@ -499,7 +515,7 @@ function getItemInfo(obj){
 	var item_id = $(obj).find(':selected').attr('data-attr');
 	
 	$.ajax({
-		"async": false,
+		"async": true,
 		"crossDomain": true,
 		"url": SERVER_NAME+"/api/getItemInfo/"+item_id,
 		"method": "GET",
@@ -508,17 +524,19 @@ function getItemInfo(obj){
 			$("#subcity").html("");
 		},
 		success:function(response){
+			console.log(response.data[0].item_unit);
+			var unit = $(obj).closest("tr").find(".unit");
 			var rate = $(obj).closest("tr").find("#rate");
 			var item_value = $(obj).closest("tr").find("#item_value");
 			var hsn_sac_no = $(obj).closest("tr").find("#hsn_sac_no");
 			var total = $(obj).closest("tr").find("#total");
 			if(response.code == 302){
+				$(unit).val(response.data[0].item_unit);
 				$(hsn_sac_no).val(response.data[0].item_hsn_sac);
 				$(rate).val(response.data[0].item_sale_price);
 				$(item_value).val(response.data[0].item_sale_price);
 				$(total).val(response.data[0].item_sale_price);
 			}
-			//Recalculate();
 			calCgstAmount(obj);
 			calculateTotal(obj);
 		},

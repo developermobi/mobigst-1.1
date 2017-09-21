@@ -459,9 +459,9 @@ Route::get('advancePayment/viewAdvancePayment/{id}', [
 Route::get('printAdvancePayment/{id}',array('as'=>'printAdvancePayment','uses'=>'Api\V1\PurchaseController@printAdvancePayment'));
 
 
-$api->version('v1', function ($api) {
+/*$api->version('v1', function ($api) {
 	$api->get('getContact/{business_id}', 'App\Http\Controllers\Api\V1\PurchaseController@getContact');
-});
+});*/
 
 $api->version('v1', function ($api) {
 	$api->get('getStates', 'App\Http\Controllers\Api\V1\PurchaseController@getStates');

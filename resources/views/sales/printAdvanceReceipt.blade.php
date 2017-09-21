@@ -1,5 +1,5 @@
 <head>
-	<title>Print Credit Note</title>
+	<title>Print Advance Receipt</title>
 	<style>
 	table td{
 		padding:10px;
@@ -20,7 +20,7 @@
 <body>
 	<table  border="1"  cellspacing="10" width="100%">
 		<tr>
-			<td align="center" colspan="3"><strong>INVOICE COPY _______________</strong></td>
+			<td align="center" colspan="3"><strong>RECEIPT COPY _______________</strong></td>
 		</tr>
 		<tr>
 			<td width="50%" rowspan="2">
@@ -66,7 +66,7 @@
 	
 	<table border="1" cellspacing="0" width="100%" >
 		<tr>
-			<td colspan="8" style="font-size:20px; color:#F00; font-weight:bold;" align="center">SALES INVOICE</td>
+			<td colspan="8" style="font-size:20px; color:#F00; font-weight:bold;" align="center">ADVANCE RECEIPT</td>
 		</tr>
 		<tr>
 			<td width="5%">Sr. No.</td>
@@ -95,14 +95,14 @@
 
 		@if($data['data']['invoice_data'][0]->total_cgst_amount > 0)
 		<tr>
-			<td colspan="7" align="right">CGST <span>@{{$data['data']['invoice_details'][0]->cgst_percentage}}%</span></td>
+			<td colspan="7" align="right">CGST <span>@ {{$data['data']['invoice_details'][0]->cgst_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_cgst_amount}}</td>
 		</tr>
 		@endif
 
 		@if($data['data']['invoice_data'][0]->total_sgst_amount > 0)
 		<tr>
-			<td colspan="7" align="right">SGST <span>@{{$data['data']['invoice_details'][0]->sgst_percentage}}%</span></td>
+			<td colspan="7" align="right">SGST <span>@ {{$data['data']['invoice_details'][0]->sgst_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_sgst_amount}}</td>
 		</tr>
 		@endif
@@ -116,7 +116,7 @@
 
 		@if($data['data']['invoice_data'][0]->total_cess_amount > 0)
 		<tr>
-			<td colspan="7" align="right">CESS <span>@{{$data['data']['invoice_details'][0]->cess_percentage}}%</span></td>
+			<td colspan="7" align="right">CESS <span>@ {{$data['data']['invoice_details'][0]->cess_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_cess_amount}}</td>
 		</tr>
 		@endif

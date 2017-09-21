@@ -181,15 +181,34 @@ function editBusiness(id,this_obj){
 			$(".bodyLoaderWithOverlay").show();
 		},
 		success:function(response){
+			var data = response.data;
 			if(response.code == 200){
-				$("#name").val(response.data[0].name);
-				$("#pan").val(response.data[0].pan);
-				$("#city").val(response.data[0].city);
-				$("#state").val(response.data[0].state);
-				$("#pincode").val(response.data[0].pincode);
-				$("#address").val(response.data[0].address);
-				$("#phone").val(response.data[0].phone);
-				$("#email").val(response.data[0].email);
+				$("#name").val(response.data.business_data[0].name);
+				$("#pan").val(response.data.business_data[0].pan);
+				$("#city").val(response.data.business_data[0].city);
+				$("#state").val(response.data.business_data[0].state);
+				$("#pincode").val(response.data.business_data[0].pincode);
+				$("#address").val(response.data.business_data[0].address);
+				$("#phone").val(response.data.business_data[0].phone);
+				$("#email").val(response.data.business_data[0].email);
+				var option = "";
+				$(".abc").empty();
+				if(data.gstin_data.length > 0){
+					$.each(data.gstin_data, function(i, item) {
+						option += "<div class='col-md-6'>";
+						option += "<div class='form-group'>";
+						option += "<input type='hidden' class='form-control' name='gstin_id' id='gstin_id' value='"+data.gstin_data[i].gstin_id+"'>";
+						option += "<input type='text' class='form-control' name='gstin_no' placeholder='GSTIN Number'  style='text-transform: uppercase;' value='"+data.gstin_data[i].gstin_no+"'>";
+						option += "</div>";
+						option += "</div>";
+						option += "<div class='col-md-6'>";
+						option += "<div class='form-group'>";
+						option += "<input type='text' class='form-control' name='display_name' placeholder='Display Name' value='"+data.gstin_data[i].display_name+"'>";
+						option += "</div>";
+						option += "</div>";
+					});
+				}
+				$(".abc").append(option);
 			}else{
 				swal({
 					title: "Failed!",

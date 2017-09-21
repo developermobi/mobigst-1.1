@@ -5,16 +5,16 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
-	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
 </style>
 
 <div class="content">
@@ -33,6 +33,11 @@
 					<button class="btn btn-default" type="button" data-toggle="modal" data-target="#quick" style="float: right;"> Quick Action </button>
 				</div>
 			</div>
+
+			<?php
+			$first_date = date('Y-m-01');
+			?>
+
 			<div class="table-responsive">
 				<table class="table table-striped table-bordered">
 					<tr>
@@ -85,10 +90,14 @@
 							<td>
 								@if($value->invoice_type == 1)
 								<a class='btn btn-sm btn-info' href="viewSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								@if($value->invoice_date >= $first_date)
 								<a class='btn btn-sm btn-warning' href="editSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
+								@endif
 								@else
 								<a class='btn btn-sm btn-info' href="viewServicesSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								@if($value->invoice_date >= $first_date)
 								<a class='btn btn-sm btn-warning' href="editServicesSalesInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
+								@endif
 								@endif
 								<a class='btn btn-sm btn-danger' onclick=cancelInvoice(this); data-id='{{$value->invoice_no}}' data-attr = '{{$value->gstin_id}}'>Delete</a>
 							</td>

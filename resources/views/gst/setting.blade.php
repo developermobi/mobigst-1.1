@@ -5,22 +5,22 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
-	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
-	table td{
-		cursor: pointer;
-	}
-	table tr:hover{
-		background-color: #ffec65 !important;
-	}
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
+table td{
+	cursor: pointer;
+}
+table tr:hover{
+	background-color: #ffec65 !important;
+}
 </style>
 
 <div class="train w3-agile">
@@ -218,6 +218,21 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<center><label for="gstin_no">GSTIN Number</label></center>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<center><label for="display_name">Display Name</label></center>
+							</div>
+						</div>
+						<dir class="abc">
+							
+						</dir>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -236,9 +251,9 @@
 		var business_id = $(this).data('id');
 		$(".modal-body #business_id").val( business_id );
 	});*/
-	$('td[data-href]').on("click", function() {
+	/*$('td[data-href]').on("click", function() {
 		document.location = $(this).data('href');
-	});
+	});*/
 </script>
 
 @endsection

@@ -18,7 +18,7 @@
 </head>
 
 <body>
-	<!-- <table  border="1"  cellspacing="10" width="100%">
+	<table  border="1"  cellspacing="10" width="100%">
 		<tr>
 			<td align="center" colspan="3"><strong>INVOICE COPY _______________</strong></td>
 		</tr>
@@ -97,14 +97,14 @@
 
 		@if($data['data']['invoice_data'][0]->total_cgst_amount > 0)
 		<tr>
-			<td colspan="7" align="right">CGST <span>@{{$data['data']['invoice_details'][0]->cgst_percentage}}%</span></td>
+			<td colspan="7" align="right">CGST <span>@ {{$data['data']['invoice_details'][0]->cgst_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_cgst_amount}}</td>
 		</tr>
 		@endif
 
 		@if($data['data']['invoice_data'][0]->total_sgst_amount > 0)
 		<tr>
-			<td colspan="7" align="right">SGST <span>@{{$data['data']['invoice_details'][0]->sgst_percentage}}%</span></td>
+			<td colspan="7" align="right">SGST <span>@ {{$data['data']['invoice_details'][0]->sgst_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_sgst_amount}}</td>
 		</tr>
 		@endif
@@ -118,7 +118,7 @@
 
 		@if($data['data']['invoice_data'][0]->total_cess_amount > 0)
 		<tr>
-			<td colspan="7" align="right">CESS <span>@{{$data['data']['invoice_details'][0]->cess_percentage}}%</span></td>
+			<td colspan="7" align="right">CESS <span>@ {{$data['data']['invoice_details'][0]->cess_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_cess_amount}}</td>
 		</tr>
 		@endif
@@ -126,7 +126,7 @@
 		@if($data['data']['invoice_data'][0]->is_freight_charge == 1)
 		<tr>
 			<td colspan="7" align="right">Freight Charges</td>
-			<td>{{$data['data']['invoice_data'][0]->freight_charg}}</td>
+			<td>{{$data['data']['invoice_data'][0]->freight_charge}}</td>
 		</tr>
 		@endif
 
@@ -176,7 +176,7 @@
 				Authorised Signatory
 			</td>
 		</tr>
-	</table> -->
+	</table>
 	
 </body>
 </html>

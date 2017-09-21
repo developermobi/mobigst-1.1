@@ -62,7 +62,7 @@ class Sales extends Model{
 	public static function getContact($business_id){
 
 		$contact = DB::table('contact')
-		->select('contact_id','contact_name')
+		->select('contact_id','contact_name','city')
 		->where('business_id',$business_id)
 		->where('status',1)
 		->get();

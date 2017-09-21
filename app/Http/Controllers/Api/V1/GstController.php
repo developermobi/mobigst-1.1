@@ -444,10 +444,15 @@ class GstController extends Controller{
 		$getData = Gst::getBusinessData($id);
 
 		if (sizeof($getData) > 0) {
+
+			$getBusinessGstin = Gst::gstin($getData[0]->business_id);
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "200";
 			$returnResponse['message'] = "Data found.";
-			$returnResponse['data'] = $getData;
+			$data = array();
+			$data['business_data'] = $getData;
+			$data['gstin_data'] = $getBusinessGstin;
+			$returnResponse['data'] = $data;
 		}else{
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "204";
@@ -462,19 +467,42 @@ class GstController extends Controller{
 	public function updateBusiness(Request $requestData,$id){
 		$input = $requestData->all();
 
-		$updateBusiness = Gst::updateBusiness($input,$id);
+		$business_data = array();
+		$business_data['name'] = $input['name'];
+		$business_data['pan'] = $input['pan'];
+		$business_data['city'] = $input['city'];
+		$business_data['state'] = $input['state'];
+		$business_data['pincode'] = $input['pincode'];
+		$business_data['address'] = $input['address'];
+		$business_data['phone'] = $input['phone'];
+		$business_data['email'] = $input['email'];
 
-		if($updateBusiness > 0){
-			$returnResponse['status'] = "success";
-			$returnResponse['code'] = "200";
-			$returnResponse['message'] = "Business details updated successfully.";
-			$returnResponse['data'] = $updateBusiness;
+		$updateBusiness = Gst::updateBusiness($business_data,$id);
+
+		//if($updateBusiness > 0){
+		if(is_array($input['gstin_id'])){
+			foreach ($input['gstin_id'] as $key => $value) {
+				$data = array();
+				$data['gstin_no'] = $input['gstin_no'][$key];
+				$data['display_name'] = $input['display_name'][$key];
+				$updateGstin = Gst::updateGstin($data,$input['gstin_id'][$key]);
+			}
 		}else{
+			$data = array();
+			$data['gstin_no'] = $input['gstin_no'];
+			$data['display_name'] = $input['display_name'];
+			$updateGstin = Gst::updateGstin($data,$input['gstin_id']);
+		}
+		$returnResponse['status'] = "success";
+		$returnResponse['code'] = "200";
+		$returnResponse['message'] = "Business details updated successfully.";
+		$returnResponse['data'] = $updateBusiness;
+		/*}else{
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "204";
 			$returnResponse['message'] = "Not updated.";
 			$returnResponse['data'] = $updateBusiness;
-		}
+		}*/
 		return response()->json($returnResponse);
 	}
 
@@ -614,7 +642,7 @@ class GstController extends Controller{
 				$fileName1 = preg_replace('/\s+/', '', $fileName1);
 				$file_upload1 = $file1->move(
 					base_path() . '/public/Contact/', $fileName1
-					);
+				);
 				$fileName['contact_csv'] = $file1;
 				$input['contact_csv']=$file1;
 			}
@@ -821,10 +849,9 @@ class GstController extends Controller{
 
 		if($updateContact > 0){
 			$data = array();
-			$data['business_id'] = encrypt($input['business_id']);
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "201";
-			$returnResponse['message'] = "Contact updated successfully.";
+			$returnResponse['message'] = "Information updated successfully.";
 			$returnResponse['data'] = $data;
 		}else{
 			$returnResponse['status'] = "success";
@@ -910,7 +937,7 @@ class GstController extends Controller{
 				$fileName1 = preg_replace('/\s+/', '', $fileName1);
 				$file_upload1 = $file1->move(
 					base_path() . '/public/Contact/', $fileName1
-					);
+				);
 				$fileName['item_csv'] = $file1;
 				$input['item_csv'] = $file1;
 			}

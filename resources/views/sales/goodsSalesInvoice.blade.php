@@ -207,11 +207,11 @@ a:hover, a:link{
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2"><a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN</th>
+								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN</th>
 								<th rowspan="2">QTY</th>
 								<th rowspan="2" width="5%">Unit</th>
 								<th rowspan="2">Price</th>
-								<th rowspan="2" class="removeDiv"> <!-- <span onclick="removeDiscount(this);"><i class="fa fa-times" title="Remove Discount" aria-hidden="true"></i></span> --> Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
+								<th rowspan="2" class="removeDiv"> Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
 								<th colspan="2">CGST </th>
 								<th colspan="2">SGST </th>

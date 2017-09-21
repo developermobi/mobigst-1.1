@@ -1,5 +1,5 @@
 <head>
-	<title>Print Credit Note</title>
+	<title>Print Credit / Debit Note</title>
 	<style>
 	table td{
 		padding:10px;
@@ -18,9 +18,13 @@
 </head>
 
 <body>
-	<!-- <table  border="1"  cellspacing="10" width="100%">
+	<table  border="1"  cellspacing="10" width="100%">
 		<tr>
-			<td align="center" colspan="3"><strong>INVOICE COPY _______________</strong></td>
+			@if($data['data']['invoice_data'][0]->note_type == 1)
+			<td align="center" colspan="3"><strong>CREDIT NOTE COPY _______________</strong></td>
+			@else
+			<td align="center" colspan="3"><strong>DEBIT NOTE COPY _______________</strong></td>
+			@endif
 		</tr>
 		<tr>
 			<td width="50%" rowspan="2">
@@ -28,7 +32,7 @@
 				{{$data['data']['business_details'][0]->address}}, {{$data['data']['business_details'][0]->city}}, {{$data['data']['business_details'][0]->state}} - {{$data['data']['business_details'][0]->pincode}}<br>
 				<strong>GSTIN</strong>: {{$data['gstin']}}<br>
 				<strong>PAN</strong> : {{$data['data']['business_details'][0]->pan}}<br>
-				<strong>CIN No</strong>.: U74900MH2011PTC216001
+				<strong>CIN No</strong>: U74900MH2011PTC216001
 			</td>
 			
 			<td colspan="2">
@@ -45,8 +49,13 @@
 		
 		<tr>
 			<td>
+				@if($data['data']['invoice_data'][0]->note_type == 1)
 				<strong><p>Credit Note Number : {{$data['data']['invoice_data'][0]->invoice_no}}</p></strong>
 				<strong><p>Credit Note Issue Date : {{$data['data']['invoice_data'][0]->note_issue_date}}</p></strong>
+				@else
+				<strong><p>Debit Note Number : {{$data['data']['invoice_data'][0]->invoice_no}}</p></strong>
+				<strong><p>Debit Note Issue Date : {{$data['data']['invoice_data'][0]->note_issue_date}}</p></strong>
+				@endif
 				<strong><p>Invoice No : {{$data['data']['invoice_data'][0]->invoice_no}}</p></strong>
 			</td>
 			
@@ -167,7 +176,7 @@
 				Authorised Signatory
 			</td>
 		</tr>
-	</table> -->
+	</table>
 	
 </body>
 </html>

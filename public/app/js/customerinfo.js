@@ -1,7 +1,5 @@
 $(function(){
 
-	//getBusiness();
-
 	$('#updateCustomerInfo').click(function(){
 		updateCustomerInfo();
 	});

@@ -81,6 +81,7 @@ class SalesController extends Controller{
 		$getBusinessByGstin = Sales::getBusinessByGstin($gstin_id);
 		$getSalesInvoiceCount = Sales::getSalesInvoiceCount($gstin_id);
 		$getGstinInfo = Sales::getGstinInfo($gstin_id);
+		$getUnit = Sales::getUnit();
 
 		if(sizeof($getSalesInvoiceCount) > 0){
 			$data['invoice_no'] = "INV".($getSalesInvoiceCount[0]->count + 1);
@@ -97,6 +98,7 @@ class SalesController extends Controller{
 			$data['state_code'] = $getGstinInfo[0]->state_code;
 			$data['state_name'] = $getGstinInfo[0]->state_name;
 		}
+		$data['unit'] = $getUnit;
 		return view('sales.goodsSalesInvoice')->with('data', $data);
 	}
 
@@ -1177,12 +1179,12 @@ class SalesController extends Controller{
 				if($value->note_type == 1){
 					$key = 1;
 					$creditTransaction += $key;
-					$creditValue += $value->total_amount;
+					$creditValue += $value->grand_total;
 				}
 				if($value->note_type == 2){
 					$key = 1;
 					$debitTransaction += $key;
-					$debitValue += $value->total_amount;
+					$debitValue += $value->grand_total;
 				}
 			}
 			$total = array();
@@ -1308,9 +1310,9 @@ class SalesController extends Controller{
 			$cdnoteData['bill_state'] = $input['bill_state'];
 			$cdnoteData['bill_country'] = $input['bill_country'];
 			if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
-				$advanceReceiptData['sh_address_same'] = '1';
+				$cdnoteData['sh_address_same'] = '1';
 			}else{
-				$advanceReceiptData['sh_address_same'] = '0';
+				$cdnoteData['sh_address_same'] = '0';
 			}
 			$cdnoteData['sh_address'] = $input['sh_address'];
 			$cdnoteData['sh_pincode'] = $input['sh_pincode'];
@@ -1625,9 +1627,9 @@ class SalesController extends Controller{
 		$cdnoteData['bill_state'] = $input['bill_state'];
 		$cdnoteData['bill_country'] = $input['bill_country'];
 		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
-			$advanceReceiptData['sh_address_same'] = '1';
+			$cdnoteData['sh_address_same'] = '1';
 		}else{
-			$advanceReceiptData['sh_address_same'] = '0';
+			$cdnoteData['sh_address_same'] = '0';
 		}
 		$cdnoteData['sh_address'] = $input['sh_address'];
 		$cdnoteData['sh_pincode'] = $input['sh_pincode'];
@@ -1964,7 +1966,7 @@ class SalesController extends Controller{
 				$totalCGST += $value->total_cgst_amount;
 				$totalIGST += $value->total_igst_amount;
 				$totalCESS += $value->total_cess_amount;
-				$totalValue += $value->total_amount;
+				$totalValue += $value->grand_total;
 			}
 			$total = array();
 			$total['totalTransactions'] = sizeof($advanceReceiptData);

@@ -399,7 +399,7 @@ function getItemInfo(obj){
 	var item_id = $(obj).find(':selected').attr('data-attr');
 	
 	$.ajax({
-		"async": false,
+		"async": true,
 		"crossDomain": true,
 		"url": SERVER_NAME+"/api/getItemInfo/"+item_id,
 		"method": "GET",
