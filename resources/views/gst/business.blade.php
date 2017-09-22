@@ -63,7 +63,7 @@
 									@foreach($data[$key]->details as $d_key => $d_value)
 									<div id="gstn_div" style="padding: 20px 0px;">
 										<div class="col-md-10" style="">
-											<span style="font-size: 16px;"><b>{{$d_value->display_name}}</b> - GSTIN no. ( {{$d_value->gstin_no}} )</span>
+											<span style="font-size: 16px;"><b>{{$d_value->display_name}}</b> - GSTIN no. ( {{strtoupper($d_value->gstin_no)}} )</span>
 										</div>
 										<div class="col-md-2">
 											<a href="select/{{encrypt($d_value->gstin_id)}}">
@@ -131,7 +131,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="city">City</label>
-								<input type="text" class="form-control" name="city" placeholder="City" required>
+								<input type="text" class="form-control" name="city" placeholder="City">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -144,19 +144,19 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="pincode">Pincode</label>
-								<input type="text" class="form-control" name="pincode" placeholder="Pincode" required>
+								<input type="text" class="form-control" name="pincode" placeholder="Pincode">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="address">Address</label>
-								<input type="text" class="form-control" name="address" placeholder="Address" required>
+								<input type="text" class="form-control" name="address" placeholder="Address">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="phone">Mobile No. </label>
-								<input type="text" class="form-control" name="phone" placeholder="Mobile No." required>
+								<input type="text" class="form-control" name="phone" placeholder="Mobile No.">
 							</div>
 						</div>
 						<div class="col-md-6">

@@ -205,6 +205,8 @@ a:hover, a:link{
 							</table>
 						</div>
 					</div>
+				</div>
+				<div class="table-responsive scroll_tab">
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
@@ -215,7 +217,7 @@ a:hover, a:link{
 								</th>
 								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>SAC</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv">Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
@@ -352,6 +354,8 @@ a:hover, a:link{
 							@endif
 						</tbody>
 					</table>
+				</div>
+				<div class="table-responsive">
 					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
 						<tr>
 							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" <?php if($data['data']['invoice_data'][0]->is_roundoff == '1'){echo "checked";}?>  onchange="calculateTotal(this);"> Roundoff Total</td>
@@ -381,8 +385,8 @@ a:hover, a:link{
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

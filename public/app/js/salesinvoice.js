@@ -17,6 +17,9 @@ $(function(){
 	});*/
 
 	$('.rate').css('pointer-events','none');
+	$('.cgst_amount').css('pointer-events','none');
+	$('.sgst_amount').css('pointer-events','none');
+	$('.igst_amount').css('pointer-events','none');
 	$('.roundoff').css('pointer-events','none');
 
 	$("#tt_taxable_value").val('0');
@@ -214,6 +217,10 @@ $(function(){
 			$('#other_charge').prop('disabled', true);
 			$('#other_charge_name').prop('disabled', true);
 		}
+	});
+
+	$('#cancelGstinButton').click(function(){
+		$('#customerForm').trigger("reset");
 	});
 
 	$('#save_invoice').click(function(){
@@ -524,7 +531,6 @@ function getItemInfo(obj){
 			$("#subcity").html("");
 		},
 		success:function(response){
-			console.log(response.data[0].item_unit);
 			var unit = $(obj).closest("tr").find(".unit");
 			var rate = $(obj).closest("tr").find("#rate");
 			var item_value = $(obj).closest("tr").find("#item_value");
@@ -850,7 +856,50 @@ function saveSalesInvoice(){
 		});
 		return false;
 	}
-	
+
+	if($('.igst_percentage').prop('disabled')){
+	}else{
+		$(".igst_percentage").each(function() {
+			if($(this).val() == 0){
+				swal({
+					title: "Failed!",
+					text: "Please Select IGST",
+					type: "error",
+					confirmButtonText: "Close",
+				});
+				return false;
+			}
+		});
+	}
+	if($('.sgst_percentage').prop('disabled')){
+	}else{
+		$(".sgst_percentage").each(function() {
+			if($(this).val() == 0){
+				swal({
+					title: "Failed!",
+					text: "Please Select SGST",
+					type: "error",
+					confirmButtonText: "Close",
+				});
+				return false;
+			}
+		});
+	}
+	if($('.cgst_percentage').prop('disabled')){
+	}else{
+		$(".cgst_percentage").each(function() {
+			if($(this).val() == 0){
+				swal({
+					title: "Failed!",
+					text: "Please Select CGST",
+					type: "error",
+					confirmButtonText: "Close",
+				});
+				return false;
+			}
+		});
+	}
+
 	$.ajax({
 		"async": true,
 		"crossDomain": true,

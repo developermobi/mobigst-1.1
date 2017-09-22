@@ -5,27 +5,27 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
+.table .form-control{
+	padding: 0px;
+}
+@media (min-width: 1200px) {
+	.container {
+		width: 1300px;
 	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
-	.table .form-control{
-		padding: 0px;
-	}
-	@media (min-width: 1200px) {
-		.container {
-			width: 1300px;
-		}
-	}
-	#item_table td{
-		padding: 4px;
-	}
+}
+#item_table td{
+	padding: 4px;
+}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -65,8 +65,8 @@
 				</div>
 			</div>
 			<h2 style="margin-top: 0px;">Create Credit / Debit Note</h2>
-			<div class="table-responsive" style="padding-top: 20px;">
-				<form id="invoiceForm" role="form">
+			<form id="invoiceForm" role="form">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
 					<table class="table table-bordered">
 						<thead>
@@ -174,116 +174,120 @@
 							</table>
 						</div>
 					</div>
-					<table class="table table-bordered order-list" id="item_table">
-						<thead>
+					<div class="table-responsive scroll_tab">
+						<table class="table table-bordered order-list" id="item_table">
+							<thead>
+								<tr>
+									<th rowspan="2" width="20%">ITEM
+										<span style="float: right;cursor: pointer;">
+											<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
+										</span>
+									</th>
+									<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC </th>
+									<th rowspan="2">QTY</th>
+									<th rowspan="2" width="5%">UOM</th>
+									<th rowspan="2">Price</th>
+									<th rowspan="2">Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
+									<th rowspan="2">Taxable Value</th>
+									<th colspan="2">CGST</th>
+									<th colspan="2">SGST</th>
+									<th colspan="2">IGST</th>
+									<th colspan="2">CESS</th>
+									<th rowspan="2">Total</th>
+									<th rowspan="2">#</th>
+								</tr>
+								<tr>
+									<th width="5%">%</th>
+									<th>Amt (Rs.)</th>
+									<th width="5%">%</th>
+									<th>Amt (Rs.)</th>
+									<th width="5%">%</th>
+									<th>Amt (Rs.)</th>
+									<th>%</th>
+									<th>Amt (Rs.)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr id="t2">
+									<td colspan="7">Total Inv. Val</td>
+									<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="0" /></td>
+								</tr>
+								<tr>
+									<td colspan="17">
+										<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
+									</td>
+								</tr>
+								<tr>
+									<td colspan="17">
+										<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge</p>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="7">Tax under Reverse Charge</td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
+									<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-bordered" id="item_table2">
 							<tr>
-								<th rowspan="2" width="20%">ITEM
-									<span style="float: right;cursor: pointer;">
-										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
-									</span>
-								</th>
-								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC </th>
-								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
-								<th rowspan="2">Price</th>
-								<th rowspan="2">Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
-								<th rowspan="2">Taxable Value</th>
-								<th colspan="2">CGST</th>
-								<th colspan="2">SGST</th>
-								<th colspan="2">IGST</th>
-								<th colspan="2">CESS</th>
-								<th rowspan="2">Total</th>
-								<th rowspan="2">#</th>
+								<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt()"> Freight Charges</td>
+								<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="test_calculate_gt()"> Loading and Packing Charges</td>
+								<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="test_calculate_gt();"> Insurance Charges</td>
+								<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt();"> Other Charges</td>
 							</tr>
 							<tr>
-								<th width="5%">%</th>
-								<th>Amt (Rs.)</th>
-								<th width="5%">%</th>
-								<th>Amt (Rs.)</th>
-								<th width="5%">%</th>
-								<th>Amt (Rs.)</th>
-								<th>%</th>
-								<th>Amt (Rs.)</th>
+								<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt()" /></td>
+								<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt()" /></td>
+								<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt();" /></td>
+								<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name"  placeholder="Enter Charge Name" /></td>
+								<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="test_calculate_gt();" /></td>
 							</tr>
-						</thead>
-						<tbody>
-							<tr id="t2">
-								<td colspan="7">Total Inv. Val</td>
-								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control total_cess_amount" name="total_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control total_amount" name="total_amount" id="total_amount" value="0" /></td>
+						</table>
+						<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
+							<tr>
+								<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" onchange="calculateTotal(this);"> Roundoff Total</td>
 							</tr>
 							<tr>
-								<td colspan="17">
-									<input type="button" id="addrow" class="btn btn-primary" onclick="createView(this);" value="Add Row" style="float: left;">
+								<td><input type="text" class="form-control roundoff" id="roundoff" name="roundoff" /></td>
+							</tr>
+						</table>
+						<table class="table table-bordered">
+							<tr>
+								<td width="40%">Total In Words</td>
+								<td>Total Tax</td>
+								<td>GRAND TOTAL</td>
+							</tr>
+							<tr>
+								<td><input type="text" class="form-control total_in_words" id="total_in_words" name="total_in_words" /></td>
+								<td><input type="text" class="form-control total_tax" id="total_tax" name="total_tax" /></td>
+								<td><input type="text" class="form-control" name="grand_total" id="grand_total" /></td>
+							</tr>
+						</table>
+						<table class="pull-right">
+							<tr>
+								<td>
+									<a href="javascript:void();">
+										<button class="btn btn-primary" type="button">Back</button>
+									</a>
+								</td>
+								<td>
+									<a href="#">
+										<button class="btn btn-success" type="button" id="save_invoice">Save Note</button>
+									</a>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge</p>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="7">Tax under Reverse Charge</td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_cess_amount" name="tt_cess_amount" value="0" /></td>
-								<td colspan="2"><input type="text" class="form-control" id="tt_total" name="tt_total" /></td>
-							</tr>
-						</tbody>
-					</table>
-					<table class="table table-bordered" id="item_table2">
-						<tr>
-							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt()"> Freight Charges</td>
-							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="test_calculate_gt()"> Loading and Packing Charges</td>
-							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="test_calculate_gt();"> Insurance Charges</td>
-							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt();"> Other Charges</td>
-						</tr>
-						<tr>
-							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt()" /></td>
-							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt()" /></td>
-							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt();" /></td>
-							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name"  placeholder="Enter Charge Name" /></td>
-							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="test_calculate_gt();" /></td>
-						</tr>
-					</table>
-					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
-						<tr>
-							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" onchange="calculateTotal(this);"> Roundoff Total</td>
-						</tr>
-						<tr>
-							<td><input type="text" class="form-control roundoff" id="roundoff" name="roundoff" /></td>
-						</tr>
-					</table>
-					<table class="table table-bordered">
-						<tr>
-							<td width="40%">Total In Words</td>
-							<td>Total Tax</td>
-							<td>GRAND TOTAL</td>
-						</tr>
-						<tr>
-							<td><input type="text" class="form-control total_in_words" id="total_in_words" name="total_in_words" /></td>
-							<td><input type="text" class="form-control total_tax" id="total_tax" name="total_tax" /></td>
-							<td><input type="text" class="form-control" name="grand_total" id="grand_total" /></td>
-						</tr>
-					</table>
-					<table class="pull-right">
-						<tr>
-							<td>
-								<a href="javascript:void();">
-									<button class="btn btn-primary" type="button">Back</button>
-								</a>
-							</td>
-							<td>
-								<a href="#">
-									<button class="btn btn-success" type="button" id="save_invoice">Save Note</button>
-								</a>
-							</td>
-						</tr>
-					</table>
+						</table>
+					</div>
 				</form>
 			</div>
 		</div>

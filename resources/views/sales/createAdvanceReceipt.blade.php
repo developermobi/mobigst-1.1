@@ -65,8 +65,8 @@ a:hover, a:link{
 				</div>
 			</div>
 			<h2 style="margin-top: 0px;">Create Advance Receipt</h2>
-			<div class="table-responsive" style="padding-top: 20px;">
-				<form id="invoiceForm" role="form">
+			<form id="invoiceForm" role="form">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
 					<div class="row">
 						<div class="col-md-6">
@@ -173,6 +173,8 @@ a:hover, a:link{
 						</div>
 						<p><input type="checkbox" id="same_address" name="sh_address_same"> Shipping Address is Same as billing address</p>
 					</div>
+				</div>
+				<div class="table-responsive scroll_tab">
 					<table class="table table-bordered order-list" id="item_table">
 						<thead>
 							<tr>
@@ -183,7 +185,7 @@ a:hover, a:link{
 								</th>
 								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
 								<th rowspan="2">Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
@@ -234,6 +236,8 @@ a:hover, a:link{
 							</tr>
 						</tbody>
 					</table>
+				</div>
+				<div class="table-responsive">
 					<table class="table table-bordered" id="item_table2">
 						<tr>
 							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);"> Freight Charges</td>
@@ -283,10 +287,11 @@ a:hover, a:link{
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>
 </div>
 
 <!-- Add Business Modal -->
@@ -308,7 +313,7 @@ a:hover, a:link{
 							</div>
 							<div class="form-group">
 								<label for="gstin">GSTIN NO:</label>
-								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no">
+								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no" style="text-transform: uppercase;">
 							</div>
 							<div class="form-group">
 								<label for="country">Country:</label>

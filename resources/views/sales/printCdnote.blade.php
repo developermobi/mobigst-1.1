@@ -76,7 +76,11 @@
 	
 	<table border="1" cellspacing="0" width="100%" >
 		<tr>
-			<td colspan="8" style="font-size:20px; color:#F00; font-weight:bold;" align="center">SALES INVOICE</td>
+			@if($data['data']['invoice_data'][0]->note_type == 1)
+			<td colspan="8" style="font-size:20px; color:#F00; font-weight:bold;" align="center">CREDIT NOTE</td>
+			@else
+			<td colspan="8" style="font-size:20px; color:#F00; font-weight:bold;" align="center">DEBIT NOTE</td>
+			@endif
 		</tr>
 		<tr>
 			<td width="5%">Sr. No.</td>
@@ -105,14 +109,14 @@
 
 		@if($data['data']['invoice_data'][0]->total_cgst_amount > 0)
 		<tr>
-			<td colspan="7" align="right">CGST <span>@{{$data['data']['invoice_details'][0]->cgst_percentage}}%</span></td>
+			<td colspan="7" align="right">CGST <span>@ {{$data['data']['invoice_details'][0]->cgst_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_cgst_amount}}</td>
 		</tr>
 		@endif
 
 		@if($data['data']['invoice_data'][0]->total_sgst_amount > 0)
 		<tr>
-			<td colspan="7" align="right">SGST <span>@{{$data['data']['invoice_details'][0]->sgst_percentage}}%</span></td>
+			<td colspan="7" align="right">SGST <span>@ {{$data['data']['invoice_details'][0]->sgst_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_sgst_amount}}</td>
 		</tr>
 		@endif
@@ -126,7 +130,7 @@
 
 		@if($data['data']['invoice_data'][0]->total_cess_amount > 0)
 		<tr>
-			<td colspan="7" align="right">CESS <span>@{{$data['data']['invoice_details'][0]->cess_percentage}}%</span></td>
+			<td colspan="7" align="right">CESS <span>@ {{$data['data']['invoice_details'][0]->cess_percentage}} %</span></td>
 			<td>{{$data['data']['invoice_data'][0]->total_cess_amount}}</td>
 		</tr>
 		@endif
@@ -134,7 +138,7 @@
 		@if($data['data']['invoice_data'][0]->is_freight_charge == 1)
 		<tr>
 			<td colspan="7" align="right">Freight Charges</td>
-			<td>{{$data['data']['invoice_data'][0]->freight_charg}}</td>
+			<td>{{$data['data']['invoice_data'][0]->freight_charge}}</td>
 		</tr>
 		@endif
 
@@ -154,7 +158,7 @@
 		
 		@if($data['data']['invoice_data'][0]->is_other_charge == 1)
 		<tr>
-			<td colspan="7" align="right">Other Charges</td>
+			<td colspan="7" align="right">{{$data['data']['invoice_data'][0]->other_charge_name}}</td>
 			<td>{{$data['data']['invoice_data'][0]->other_charge}}</td>
 		</tr>
 		@endif

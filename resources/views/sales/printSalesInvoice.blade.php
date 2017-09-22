@@ -51,7 +51,11 @@
 			</td>
 			
 			<td style="border-bottom:1px solid #000;">
+				@if($data['data']['invoice_data'][0]->due_date == '0000-00-00')
+				<p><strong>Due Date :  </strong></p>
+				@else
 				<p><strong>Due Date : {{$data['data']['invoice_data'][0]->due_date}} </strong></p>
+				@endif
 				<p><strong>Place of Supply : </strong> {{$data['data']['invoice_data'][0]->place_of_supply}} </p>
 			</td>
 			
@@ -146,7 +150,7 @@
 		
 		@if($data['data']['invoice_data'][0]->is_other_charge == 1)
 		<tr>
-			<td colspan="7" align="right">Other Charges</td>
+			<td colspan="7" align="right">{{$data['data']['invoice_data'][0]->other_charge_name}}</td>
 			<td>{{$data['data']['invoice_data'][0]->other_charge}}</td>
 		</tr>
 		@endif

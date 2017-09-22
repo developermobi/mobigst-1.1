@@ -5,24 +5,24 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
+.table .form-control{
+	padding: 0px;
+}
+@media (min-width: 1200px) {
+	.container {
+		width: 1300px;
 	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
-	.table .form-control{
-		padding: 0px;
-	}
-	@media (min-width: 1200px) {
-		.container {
-			width: 1300px;
-		}
-	}
+}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -61,8 +61,8 @@
 				</div>
 			</div>
 			<h2 style="margin-top: 0px;">Edit Credit / Debit Note</h2>
-			<div class="table-responsive" style="padding-top: 20px;">
-				<form id="invoiceForm" role="form">
+			<form id="invoiceForm" role="form">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
 					<input type="hidden" name="cdn_id" id="cdn_id" value="{{$data['data']['invoice_data'][0]->cdn_id}}">
 					<table class="table table-bordered">
@@ -171,6 +171,8 @@
 							</table>
 						</div>
 					</div>
+				</div>
+				<div class="table-responsive scroll_tab">
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
@@ -181,7 +183,7 @@
 								</th>
 								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv"> Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
@@ -318,6 +320,8 @@
 							@endif
 						</tbody>
 					</table>
+				</div>
+				<div class="table-responsive">
 					<table class="table table-bordered" id="item_table2">
 						<tr>
 							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_freight_charge == '1'){echo "checked";}?> > Freight Charges</td>
@@ -362,10 +366,11 @@
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>
 </div>
 
 <!-- Add Item Modal -->

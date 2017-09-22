@@ -50,7 +50,7 @@
 						<th>HNS / SAC</th>
 						<th>Selling Price</th>
 						<th>Purchase Price</th>
-						<th>Discount (%)</th>
+						<th>Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 						<th>ACTION</th>
 					</tr>
 				</thead>

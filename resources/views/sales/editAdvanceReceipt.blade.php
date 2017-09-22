@@ -64,8 +64,8 @@ a:hover, a:link{
 				</div>
 			</div>
 			<h2 style="margin-top: 0px;"> Edit Advance Receipt </h2>
-			<div class="table-responsive" style="padding-top: 20px;">
-				<form id="invoiceForm" role="form">
+			<form id="invoiceForm" role="form">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
 					<input type="hidden" name="ar_id" id="ar_id" value="{{$data['data']['invoice_data'][0]->ar_id}}">
 					<div class="row">
@@ -175,6 +175,8 @@ a:hover, a:link{
 							</table>
 						</div>
 					</div>
+				</div>
+				<div class="table-responsive scroll_tab">
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
@@ -185,7 +187,7 @@ a:hover, a:link{
 								</th>
 								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv"> Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
@@ -322,6 +324,8 @@ a:hover, a:link{
 							@endif
 						</tbody>
 					</table>
+				</div>
+				<div class="table-responsive">
 					<table class="table table-bordered" id="item_table2">
 						<tr>
 							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_freight_charge == '1'){echo "checked";}?> > Freight Charges</td>
@@ -366,10 +370,11 @@ a:hover, a:link{
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>
 </div>
 
 <!-- Add Item Modal -->

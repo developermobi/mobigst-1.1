@@ -326,10 +326,10 @@ a:hover, a:link{
 					</div>
 					<div class="col-md-12">
 						<center><h3>Settings</h3></center>
-						<a href="../../contacts/{{encrypt($data['business_id'])}}">
+						<a href="../../../contacts/{{encrypt($data['business_id'])}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Contacts List</button>
 						</a>
-						<a href="../../importitem">
+						<a href="../../../importitem">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Items List</button>
 						</a>
 					</div>

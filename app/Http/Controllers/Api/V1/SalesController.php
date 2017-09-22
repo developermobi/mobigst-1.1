@@ -1309,11 +1309,6 @@ class SalesController extends Controller{
 			$cdnoteData['bill_city'] = $input['bill_city'];
 			$cdnoteData['bill_state'] = $input['bill_state'];
 			$cdnoteData['bill_country'] = $input['bill_country'];
-			if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
-				$cdnoteData['sh_address_same'] = '1';
-			}else{
-				$cdnoteData['sh_address_same'] = '0';
-			}
 			$cdnoteData['sh_address'] = $input['sh_address'];
 			$cdnoteData['sh_pincode'] = $input['sh_pincode'];
 			$cdnoteData['sh_city'] = $input['sh_city'];
@@ -1626,11 +1621,6 @@ class SalesController extends Controller{
 		$cdnoteData['bill_city'] = $input['bill_city'];
 		$cdnoteData['bill_state'] = $input['bill_state'];
 		$cdnoteData['bill_country'] = $input['bill_country'];
-		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
-			$cdnoteData['sh_address_same'] = '1';
-		}else{
-			$cdnoteData['sh_address_same'] = '0';
-		}
 		$cdnoteData['sh_address'] = $input['sh_address'];
 		$cdnoteData['sh_pincode'] = $input['sh_pincode'];
 		$cdnoteData['sh_city'] = $input['sh_city'];

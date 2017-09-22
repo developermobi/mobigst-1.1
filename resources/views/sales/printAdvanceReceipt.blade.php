@@ -124,7 +124,7 @@
 		@if($data['data']['invoice_data'][0]->is_freight_charge == 1)
 		<tr>
 			<td colspan="7" align="right">Freight Charges</td>
-			<td>{{$data['data']['invoice_data'][0]->freight_charg}}</td>
+			<td>{{$data['data']['invoice_data'][0]->freight_charge}}</td>
 		</tr>
 		@endif
 
@@ -144,7 +144,7 @@
 		
 		@if($data['data']['invoice_data'][0]->is_other_charge == 1)
 		<tr>
-			<td colspan="7" align="right">Other Charges</td>
+			<td colspan="7" align="right">{{$data['data']['invoice_data'][0]->other_charge_name}}</td>
 			<td>{{$data['data']['invoice_data'][0]->other_charge}}</td>
 		</tr>
 		@endif

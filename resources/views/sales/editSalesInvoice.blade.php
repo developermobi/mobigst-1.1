@@ -205,6 +205,8 @@ a:hover, a:link{
 							</table>
 						</div>
 					</div>
+				</div>
+				<div class="table-responsive scroll_tab">
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
@@ -215,7 +217,7 @@ a:hover, a:link{
 								</th>
 								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv"> Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
@@ -352,6 +354,8 @@ a:hover, a:link{
 							@endif
 						</tbody>
 					</table>
+				</div>
+				<div class="table-responsive">
 					<table class="table table-bordered" id="item_table2">
 						<tr>
 							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_freight_charge == '1'){echo "checked";}?> > Freight Charges</td>
@@ -360,7 +364,11 @@ a:hover, a:link{
 							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_other_charge == '1'){echo "checked";}?> > Other Charges</td>
 						</tr>
 						<tr>
+							@if($data['data']['invoice_data'][0]->freight_charge > 0)
 							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->freight_charge}}" ></td>
+							@else
+							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" value=" " ></td>
+							@endif
 							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->lp_charge}}" ></td>
 							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->insurance_charge}}"  ></td>
 							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name" value="{{$data['data']['invoice_data'][0]->other_charge_name}}"  placeholder="Enter Charge Name" /></td>
@@ -396,8 +404,8 @@ a:hover, a:link{
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

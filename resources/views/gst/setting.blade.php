@@ -110,7 +110,7 @@ table tr:hover{
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="city">City</label>
-								<input type="text" class="form-control" name="city" placeholder="City" required>
+								<input type="text" class="form-control" name="city" placeholder="City">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -123,13 +123,13 @@ table tr:hover{
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="pincode">Pincode</label>
-								<input type="text" class="form-control" name="pincode" placeholder="Pincode" required>
+								<input type="text" class="form-control" name="pincode" placeholder="Pincode">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="address">Address</label>
-								<input type="text" class="form-control" name="address" placeholder="Address" required>
+								<input type="text" class="form-control" name="address" placeholder="Address">
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -251,9 +251,9 @@ table tr:hover{
 		var business_id = $(this).data('id');
 		$(".modal-body #business_id").val( business_id );
 	});*/
-	/*$('td[data-href]').on("click", function() {
+	$('td[data-href]').on("click", function() {
 		document.location = $(this).data('href');
-	});*/
+	});
 </script>
 
 @endsection

@@ -534,7 +534,7 @@ class Sales extends Model{
 		->delete();
 
 		$deleteData = DB::table('invoice_details')
-		->where('invoice_no', $id)
+		->where('invoice_no', $ar_id)
 		->where('gstin_id', $gstin_id)
 		->delete();
 		

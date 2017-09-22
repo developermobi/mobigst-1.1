@@ -19,10 +19,10 @@
 		<div class="benefits-grids">
 			<div class="col-md-6 about-grid1 wow fadeInLeft animated animated" data-wow-delay="0.4s">
 				<div class="latest-top">
-					<h4>easiest way of efiling Income Tax Returns in India</h4>
+					<h4>Easiest way of e-filing Income Tax Returns in India</h4>
 					<div class="latest-class">
 						<div class="latest-left">
-							<img src="{{URL::asset('images/business_type_red.png')}}" class="img-responsive" alt=""/>
+							<img src="{{URL::asset('images/lock.png')}}" class="img-responsive" alt=""/>
 						</div>
 						<div class="latest-right">
 							<h5>Your data is safe</h5>
@@ -35,7 +35,7 @@
 					</div>
 					<div class="latest-class">
 						<div class="latest-left">
-							<img src="{{URL::asset('images/business_type_red.png')}}" class="img-responsive" alt=""/>
+							<img src="{{URL::asset('images/folder.png')}}" class="img-responsive" alt=""/>
 						</div>
 						<div class="latest-right">
 							<h5>7 minutes and done</h5>
@@ -48,11 +48,11 @@
 					</div>
 					<div class="latest-class">
 						<div class="latest-left">
-							<img src="{{URL::asset('images/business_type_red.png')}}" class="img-responsive" alt=""/>
+							<img src="{{URL::asset('images/support.png')}}" class="img-responsive" alt=""/>
 						</div>
 						<div class="latest-right">
 							<h5>Excellent support and expert help anytime.</h5>
-							<p>Over 1000 CAs to help you. 24/7 support for resolution of your questions.</p>
+							<p>24/7 support for resolution of your questions.</p>
 						</div>
 						<div class="clearfix"></div>
 					</div>

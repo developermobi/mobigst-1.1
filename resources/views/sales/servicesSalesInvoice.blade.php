@@ -5,27 +5,27 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
+.table .form-control{
+	padding: 0px;
+}
+@media (min-width: 1200px) {
+	.container {
+		width: 1300px;
 	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
-	.table .form-control{
-		padding: 0px;
-	}
-	@media (min-width: 1200px) {
-		.container {
-			width: 1300px;
-		}
-	}
-	#item_table td,#item_table2 td{
-		padding: 4px;
-	}
+}
+#item_table td,#item_table2 td{
+	padding: 4px;
+}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -87,8 +87,8 @@
 				</div>
 			</div>
 			<h2 style="margin-top: 0px;">Create Services Sales Invoice</h2>
-			<div class="table-responsive" style="padding-top: 20px;">
-				<form id="invoiceForm" role="form">
+			<form id="invoiceForm" role="form">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
 					<table class="table table-bordered">
 						<thead>
@@ -199,6 +199,8 @@
 							</table>
 						</div>
 					</div>
+				</div>
+				<div class="table-responsive scroll_tab">
 					<table class="table table-bordered order-list" id="item_table">
 						<thead>
 							<tr>
@@ -209,7 +211,7 @@
 								</th>
 								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>SAC </th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv"> Discount in <i class="fa fa-inr" aria-hidden="true"></i> </th>
 								<th rowspan="2">Taxable Value</th>
@@ -260,6 +262,8 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+				<div class="table-responsive">
 					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
 						<tr>
 							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" onchange="calculateTotal(this);"> Roundoff Total</td>
@@ -292,8 +296,8 @@
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -317,7 +321,7 @@
 							</div>
 							<div class="form-group">
 								<label for="gstin">GSTIN NO:</label>
-								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no">
+								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no" style="text-transform: uppercase;">
 							</div>
 							<div class="form-group">
 								<label for="country">Country:</label>
@@ -360,7 +364,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addCustomer">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Clear</button>
 			</div>
 		</div>
 	</div>
