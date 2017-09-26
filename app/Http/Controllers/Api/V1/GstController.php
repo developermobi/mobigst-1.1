@@ -849,6 +849,7 @@ class GstController extends Controller{
 
 		if($updateContact > 0){
 			$data = array();
+			$data['business_id'] = encrypt($input['business_id']);
 			$returnResponse['status'] = "success";
 			$returnResponse['code'] = "201";
 			$returnResponse['message'] = "Information updated successfully.";

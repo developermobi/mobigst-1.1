@@ -356,7 +356,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addCustomer">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Clear</button>
 			</div>
 		</div>
 	</div>
@@ -411,7 +411,7 @@ a:hover, a:link{
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 							<div class="form-group">
-								<label for="dis">Discount(%):</label>
+								<label for="dis">Discount:</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>
@@ -420,7 +420,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Clear</button>
 			</div>
 		</div>
 	</div>

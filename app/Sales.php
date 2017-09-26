@@ -529,7 +529,7 @@ class Sales extends Model{
 	public static function cancelAdvanceReceipt($ar_id,$gstin_id){
 
 		$updateData = DB::table('advance_receipt')
-		->where('ar_id', $ar_id)
+		->where('receipt_no', $ar_id)
 		->where('gstin_id', $gstin_id)
 		->delete();
 
