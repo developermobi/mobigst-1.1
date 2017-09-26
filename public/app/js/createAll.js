@@ -47,20 +47,16 @@ $(function(){
 
 	$("#itemForm").validate({
 		rules: {    
-			business_id:{
-				required: true,
-			},
 			item_description:{
 				required: true,
 			},
-			item_sale_price:{
+			item_unit:{
 				required: true,
 			},
 		},
 		messages: {    
-			business_id:"Please select business.",
 			item_description:"Please enter item description.",
-			item_sale_price:"Please enter item sale price.",
+			item_unit:"Please select unit.",
 		}
 	});
 

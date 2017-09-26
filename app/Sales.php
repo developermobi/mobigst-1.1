@@ -527,9 +527,8 @@ class Sales extends Model{
 
 
 	public static function cancelAdvanceReceipt($ar_id,$gstin_id){
-
 		$updateData = DB::table('advance_receipt')
-		->where('ar_id', $ar_id)
+		->where('receipt_no', $ar_id)
 		->where('gstin_id', $gstin_id)
 		->delete();
 
@@ -586,6 +585,25 @@ class Sales extends Model{
 		->get();
 
 		return $getData;
+	}
+
+
+
+	public static function contact_serach($data){
+		$contact = DB::table('contact')->select(DB::raw('CONCAT (contact_name, " - " ,city) AS LABEL'),'contact_id AS ID')
+		->where('contact_name', 'like', '%'.$data.'%')
+		->orWhere('city', 'like', '%'.$data.'%')
+		->get();
+		return $contact;
+	}
+
+
+
+	public static function item_serach($data){
+		$item = DB::table('item')->select(DB::raw('CONCAT (item_description) AS LABEL'),'item_id AS ID')
+		->where('item_description', 'like', '%'.$data.'%')
+		->get();
+		return $item;
 	}
 
 }

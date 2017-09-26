@@ -1,6 +1,10 @@
 $(function(){
 
 	$('.rate').css('pointer-events','none');
+	$('.cgst_amount').css('pointer-events','none');
+	$('.sgst_amount').css('pointer-events','none');
+	$('.igst_amount').css('pointer-events','none');
+	$('.roundoff').css('pointer-events','none');
 
 	$("#tt_taxable_value").val('0');
 	$("#tt_taxable_value").prop('disabled', true);
@@ -31,11 +35,11 @@ $(function(){
 
 	$('.note_type').change(function(){
 		if ($('input[name=note_type]:checked').val() == 2){
-			var note_no = $(".note_no").val().slice(4);
+			var note_no = $(".note_no").val().slice(3);
 			var new_note_no = "VDN".concat(note_no);
 			$(".note_no").val(new_note_no);
 		}else{
-			var note_no = $(".note_no").val().slice(4);
+			var note_no = $(".note_no").val().slice(3);
 			var new_note_no = "VCN".concat(note_no);
 			$(".note_no").val(new_note_no);
 		}
@@ -46,6 +50,8 @@ $(function(){
 		var total_sgst_amount = $(".total_sgst_amount").val();
 		var total_igst_amount = $(".total_igst_amount").val();
 		var total_cess_amount = $(".total_cess_amount").val();
+
+		var total_tax = '';var grand_total = '';var total_in_words = '';
 
 		if ($(this).is(':checked')) {
 
@@ -66,27 +72,21 @@ $(function(){
 			$("#tt_cess_amount").val(total_cess_amount);
 			var tt_total = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			$("#tt_total").val(tt_total.toFixed(2));
-
 			$("#total_tax").val('0');
 
-			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+
 			var total = $(".total_amount").val();
-
 			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax.toFixed(2)));
-			var total_amount = $(".total_amount").val();
-			$("#grand_total").val(total_amount);
-			var grand_total = $("#grand_total").val();
-			var total_in_words = number2text(grand_total);
-			$("#total_in_words").val(total_in_words);
+			test_calculate_gt();
 		}else{
-			var total_tax = $("#tt_total").val();
-			var grand_total = $("#grand_total").val();
-			$(".total_amount").val(parseFloat(grand_total) + parseFloat(total_tax));
-			$("#grand_total").val(parseFloat(grand_total) + parseFloat(total_tax));
-			var new_grand_total = $("#grand_total").val();
-			var total_in_words = number2text(new_grand_total);
-			$("#total_in_words").val(total_in_words);
+			total_tax = $("#tt_total").val();
 
+			var temp_total_amount = $("#total_amount").val();
+			temp_total_amount = parseFloat(temp_total_amount) + parseFloat(total_tax);
+			$(".total_amount").val(temp_total_amount);
+			test_calculate_gt();
+			
 			$("#tt_cgst_amount").val('0');
 			$("#tt_cgst_amount").prop('disabled', true);
 			$("#tt_sgst_amount").val('0');
@@ -98,7 +98,7 @@ $(function(){
 			$("#tt_total").val('0');
 			$("#tt_total").prop('disabled', true);
 
-			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			$("#total_tax").val(total_tax.toFixed(2));
 		}
 	});
@@ -149,6 +149,10 @@ $(function(){
 		}
 	});
 
+	$('#cancelItemButton').click(function(){
+		$('#itemForm').trigger("reset");
+	});
+
 	$('#save_invoice').click(function(){
 		saveVcdnote();
 	});
@@ -195,7 +199,7 @@ function getInvoice(gstin){
 function getPurchaseInvoiceInfo(obj){
 	
 	var pi_id = $(obj).find(':selected').attr('data-attr');
-	alert(pi_id);
+
 	$.ajax({
 		"async": false,
 		"crossDomain": true,
@@ -259,6 +263,56 @@ function getPurchaseInvoiceInfo(obj){
 
 
 
+function test_calculate_gt(){
+	var total_amount = $(".total_amount").val();
+	var my_total_tax = $("#tt_total").val();
+	var fc = 0;
+	var lpc = 0;
+	var ic = 0;
+	var oc = 0;
+
+	var my_total= parseFloat(total_amount);
+
+	if($('#is_freight_charge').is(':checked')){
+		fc = $("#freight_charge").val();
+		if(fc == ''){
+			fc = 0;
+		}
+		my_total = my_total + parseFloat(fc);
+	}
+
+	if($('#is_lp_charge').is(':checked')){
+		lpc = $("#lp_charge").val();
+		if(lpc == ''){
+			lpc = 0;
+		}
+		my_total = my_total + parseFloat(lpc);
+	}
+
+	if($('#is_insurance_charge').is(':checked')){
+		ic = $("#insurance_charge").val();
+		if(ic == ''){
+			ic = 0;
+		}
+		my_total = my_total + parseFloat(ic);
+	}
+
+	if($('#is_other_charge').is(':checked')){
+		oc = $("#other_charge").val();
+		if(oc == ''){
+			oc = 0;
+		}
+		my_total = my_total + parseFloat(oc);
+	}
+
+	$("#grand_total").val(my_total);
+	var my_grand_total = $("#grand_total").val();
+	var my_total_in_words = number2text(my_grand_total);
+	$("#total_in_words").val(my_total_in_words);
+}
+
+
+
 function getUnit(obj){
 
 	$.ajax({
@@ -275,11 +329,11 @@ function getUnit(obj){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
 			$(obj).closest("tr").find(".unit").append(option);
@@ -339,11 +393,11 @@ function getItemUnit(){
 		beforeSend:function(){
 		},
 		success:function(response){
-			var data = response['data'];
+			var data = response.data;
 			var option = "<option value=''> Select Item Unit </option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i]['unit_name']+"'>"+data[i]['unit_name']+"</option>";
+					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
 			$(".item_unit").append(option);
@@ -360,7 +414,7 @@ function getItemInfo(obj){
 	var item_id = $(obj).find(':selected').attr('data-attr');
 	
 	$.ajax({
-		"async": false,
+		"async": true,
 		"crossDomain": true,
 		"url": SERVER_NAME+"/api/getItemInfo/"+item_id,
 		"method": "GET",
@@ -369,11 +423,13 @@ function getItemInfo(obj){
 			$("#subcity").html("");
 		},
 		success:function(response){
+			var unit = $(obj).closest("tr").find(".unit");
 			var rate = $(obj).closest("tr").find("#rate");
 			var item_value = $(obj).closest("tr").find("#item_value");
 			var hsn_sac_no = $(obj).closest("tr").find("#hsn_sac_no");
 			var total = $(obj).closest("tr").find("#total");
 			if(response.code == 302){
+				$(unit).val(response.data[0].item_unit);
 				$(hsn_sac_no).val(response.data[0].item_hsn_sac);
 				$(rate).val(response.data[0].item_sale_price);
 				$(item_value).val(response.data[0].item_sale_price);
@@ -482,9 +538,12 @@ function calculateNew(obj){
 	var rate_element = $(obj).closest("tr").find(".rate");
 	rate_element.val(priceNquantity);
 
-	var amount = (parseFloat(priceNquantity) / 100) * discount;
+	/*var amount = (parseFloat(priceNquantity) / 100) * discount;
 	var new_rate = parseFloat(priceNquantity) - parseFloat(amount);
-	rate_element.val(new_rate.toFixed(2));
+	rate_element.val(new_rate.toFixed(2));*/
+
+	var amount = (parseFloat(priceNquantity)) - parseFloat(discount);
+	rate_element.val(amount.toFixed(2));
 
 	calCgstAmount(obj);
 
@@ -511,6 +570,7 @@ function calculateNew(obj){
 
 
 function calculateTotal(obj){
+	
 	var rate_sum = 0;
 	$(".rate").each(function(){
 		rate_sum = rate_sum + parseFloat($(this).val());
@@ -567,14 +627,61 @@ function calculateTotal(obj){
 	$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 	var total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 	$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
-	$("#grand_total").val(parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2)));
+	
+	var decimal = ''; var grand_total = ''; var tostring = ''; var new_grand_total = ''; var digit = '';
+
+	grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+	tostring = grand_total.toString();
+	new_grand_total = '';
+	if(tostring % 1 != 0){
+		if($('#is_roundoff').is(":checked")){
+			decimal = tostring.split('.')[1];
+			digit = tostring.split('.')[0];
+			if(decimal > 50){
+				$("#roundoff").val("0.".concat(decimal));
+				new_grand_total = parseFloat(digit) + 1;
+				$("#grand_total").val(new_grand_total);
+			}else{
+				$("#roundoff").val("-0.".concat(decimal));
+				$("#grand_total").val(digit);
+			}
+		}else{
+			$("#roundoff").val('0');
+			$("#grand_total").val(grand_total);
+		}
+	}else{
+		$("#grand_total").val(grand_total);
+	}
+
 	var total_in_words = number2text($("#grand_total").val());
 	$("#total_in_words").val(total_in_words);
-
+	
 	if($('#advance_setting').is(":checked")){
 		$("#total_tax").val('0');
 		$("#total_amount").val(parseFloat(rate_sum));
-		$("#grand_total").val(parseFloat(rate_sum) + parseFloat(total_charge));
+		
+		console.log("total checked ",rate_sum);
+		grand_total = parseFloat(rate_sum.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		tostring = grand_total.toString();
+		if(tostring % 1 != 0){
+			if($('#is_roundoff').is(":checked")){
+				decimal = tostring.split('.')[1];
+				digit = tostring.split('.')[0];
+				if(decimal > 50){
+					$("#roundoff").val("0.".concat(decimal));
+					new_grand_total = parseFloat(digit) + 1;
+					$("#grand_total").val(new_grand_total);
+				}else{
+					$("#roundoff").val("-0.".concat(decimal));
+					$("#grand_total").val(digit);
+				}
+			}else{
+				$("#roundoff").val('0');
+				$("#grand_total").val(grand_total);
+			}
+		}else{
+			$("#grand_total").val(grand_total);
+		}
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 
@@ -589,7 +696,28 @@ function calculateTotal(obj){
 		$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 		total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 		$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
-		$("#grand_total").val(parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2)));
+		
+		grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		tostring = grand_total.toString();
+		if(tostring % 1 != 0){
+			if($('#is_roundoff').is(":checked")){
+				decimal = tostring.split('.')[1];
+				digit = tostring.split('.')[0];
+				if(decimal > 50){
+					$("#roundoff").val("0.".concat(decimal));
+					new_grand_total = parseFloat(digit) + 1;
+					$("#grand_total").val(new_grand_total);
+				}else{
+					$("#roundoff").val("-0.".concat(decimal));
+					$("#grand_total").val(digit);
+				}
+			}else{
+				$("#roundoff").val('0');
+				$("#grand_total").val(grand_total);
+			}
+		}else{
+			$("#grand_total").val(grand_total);
+		}
 		total_in_words = number2text($("#grand_total").val());
 		$("#total_in_words").val(total_in_words);
 	}
@@ -600,6 +728,59 @@ function calculateTotal(obj){
 function saveVcdnote(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
+
+	var flag = 1;
+
+	if($('.igst_percentage').prop('disabled')){
+	}else if(flag == 1){
+		$(".igst_percentage").each(function() {
+			if($(this).val() == 0){
+				swal({
+					title: "Failed!",
+					text: "Please Select Tax",
+					type: "error",
+					confirmButtonText: "Close",
+				});
+				flag = 0;
+				return false;
+			}
+		});
+	}
+
+	if($('.sgst_percentage').prop('disabled')){
+	}else if(flag == 1){
+		$(".sgst_percentage").each(function() {
+			if($(this).val() == 0){
+				swal({
+					title: "Failed!",
+					text: "Please Select Tax",
+					type: "error",
+					confirmButtonText: "Close",
+				});
+				flag = 0;
+				return false;
+			}
+		});
+	}
+	if($('.cgst_percentage').prop('disabled')){
+	}else if(flag == 1){
+		$(".cgst_percentage").each(function() {
+			if($(this).val() == 0){
+				swal({
+					title: "Failed!",
+					text: "Please Select Tax",
+					type: "error",
+					confirmButtonText: "Close",
+				});
+				flag = 0;
+				return false;
+			}
+		});
+	}
+
+	if(flag == 0){
+		return false;
+	}
 	
 	$.ajax({
 		"async": true,

@@ -69,7 +69,6 @@
 							<th>Contact</th>
 							<th>Created Date</th>
 							<th>Total Amount</th>
-							<th>Status</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -80,18 +79,11 @@
 							<td>{{$value->payment_no}}</td>
 							<td>{{$value->contact_name}}</td>
 							<td>{{$value->created_date}}</td>
-							<td>{{$value->total_amount}}</td>
+							<td>{{$value->grand_total}}</td>
 							<td>
-								@if($value->status == '0')
-								Cancelled
-								@else
-								Active
-								@endif
-							</td>
-							<td>
-								<a class='btn btn-sm btn-info' href="viewAdvancePayment/{{encrypt($value->payment_no)}}"> View </a>
-								<a class='btn btn-sm btn-warning' href="editAdvancePayment/{{encrypt($value->payment_no)}}"> Edit </a>
-								<a class='btn btn-sm btn-danger' onclick=cancelAdvancePayment(this); data-id='{{$value->ap_id}}'> Delete </a>
+								<a class='btn btn-sm btn-info' href="viewAdvancePayment/{{encrypt($value->payment_no)}}/{{$data['gstin_id']}}"> View </a>
+								<a class='btn btn-sm btn-warning' href="editAdvancePayment/{{encrypt($value->payment_no)}}/{{$data['gstin_id']}}"> Edit </a>
+								<a class='btn btn-sm btn-danger' onclick=cancelAdvancePayment(this); data-id='{{$value->payment_no}}' data-attr = '{{$value->gstin_id}}' > Delete </a>
 							</td>
 						</tr>
 						@endforeach
@@ -152,6 +144,6 @@
 	</div>
 </div>
 
-<script src="{{URL::asset('app/js/sales.js')}}"></script>
+<script src="{{URL::asset('app/js/purchase.js')}}"></script>
 
 @endsection

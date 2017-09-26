@@ -72,27 +72,21 @@ $(function(){
 			$("#tt_cess_amount").val(total_cess_amount);
 			var tt_total = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			$("#tt_total").val(tt_total.toFixed(2));
-
 			$("#total_tax").val('0');
 
 			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
-			var total = $(".total_amount").val();
 
+			var total = $(".total_amount").val();
 			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax.toFixed(2)));
-			var total_amount = $(".total_amount").val();
-			$("#grand_total").val(total_amount);
-			grand_total = $("#grand_total").val();
-			total_in_words = number2text(grand_total);
-			$("#total_in_words").val(total_in_words);
+			test_calculate_gt();
 		}else{
 			total_tax = $("#tt_total").val();
-			grand_total = $("#grand_total").val();
-			$(".total_amount").val(parseFloat(grand_total) + parseFloat(total_tax));
-			$("#grand_total").val(parseFloat(grand_total) + parseFloat(total_tax));
-			var new_grand_total = $("#grand_total").val();
-			total_in_words = number2text(new_grand_total);
-			$("#total_in_words").val(total_in_words);
 
+			var temp_total_amount = $("#total_amount").val();
+			temp_total_amount = parseFloat(temp_total_amount) + parseFloat(total_tax);
+			$(".total_amount").val(temp_total_amount);
+			test_calculate_gt();
+			
 			$("#tt_cgst_amount").val('0');
 			$("#tt_cgst_amount").prop('disabled', true);
 			$("#tt_sgst_amount").val('0');
@@ -104,7 +98,7 @@ $(function(){
 			$("#tt_total").val('0');
 			$("#tt_total").prop('disabled', true);
 
-			var total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
+			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			$("#total_tax").val(total_tax.toFixed(2));
 		}
 	});
@@ -154,6 +148,10 @@ $(function(){
 			$('#other_charge').prop('disabled', true);
 			$('#other_charge_name').prop('disabled', true);
 		}
+	});
+
+	$('#cancelItemButton').click(function(){
+		$('#itemForm').trigger("reset");
 	});
 
 	$('#save_invoice').click(function(){
@@ -732,47 +730,57 @@ function saveCdnote(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
 
+	var flag = 1;
+	
 	if($('.igst_percentage').prop('disabled')){
-	}else{
+	}else if(flag == 1){
 		$(".igst_percentage").each(function() {
 			if($(this).val() == 0){
 				swal({
 					title: "Failed!",
-					text: "Please Select IGST",
+					text: "Please Select Tax",
 					type: "error",
 					confirmButtonText: "Close",
 				});
+				flag = 0;
 				return false;
 			}
 		});
 	}
+
 	if($('.sgst_percentage').prop('disabled')){
-	}else{
+	}else if(flag == 1){
 		$(".sgst_percentage").each(function() {
 			if($(this).val() == 0){
 				swal({
 					title: "Failed!",
-					text: "Please Select SGST",
+					text: "Please Select Tax",
 					type: "error",
 					confirmButtonText: "Close",
 				});
+				flag = 0;
 				return false;
 			}
 		});
 	}
 	if($('.cgst_percentage').prop('disabled')){
-	}else{
+	}else if(flag == 1){
 		$(".cgst_percentage").each(function() {
 			if($(this).val() == 0){
 				swal({
 					title: "Failed!",
-					text: "Please Select CGST",
+					text: "Please Select Tax",
 					type: "error",
 					confirmButtonText: "Close",
 				});
+				flag = 0;
 				return false;
 			}
 		});
+	}
+
+	if(flag == 0){
+		return false;
 	}
 	
 	$.ajax({
