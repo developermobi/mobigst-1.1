@@ -77,7 +77,11 @@
 		<tr>
 			<td width="5%">Sr. No.</td>
 			<td>Description</td>
+			@if($data['data']['invoice_data'][0]->invoice_type == 1)
 			<td>HSN</td>
+			@else
+			<td>SAC</td>
+			@endif
 			<td>Qty</td>
 			<td>UOM</td>
 			<td>Rate</td>

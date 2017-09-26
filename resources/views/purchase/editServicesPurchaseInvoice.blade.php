@@ -23,6 +23,9 @@ a:hover, a:link{
 		width: 1300px;
 	}
 }
+#item_table td,#item_table2 td{
+	padding: 4px;
+}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -37,13 +40,34 @@ a:hover, a:link{
 	var year=date.getFullYear();
 	var month=date.getMonth();
 	$(document).ready(function() {
+		$(".contact_name").select2();
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
 			zIndexOffset: 1035,
-			autoclose:true,
 		});
+		$('.due_datepicker').datepicker({
+			format: 'yyyy-mm-dd',
+			startDate: new Date(year, month, '01'),
+			autoclose:true,
+		})
+		.on('hide', due_dateChanged);
 	});
+
+	function due_dateChanged(ev) {
+		var invoice_date = $(".datepicker").val();
+		if(invoice_date == ''){
+			$(".due_datepicker").val(" ");
+			alert('Please select Invoice date first');
+		}else{
+			var due_date = $(".due_datepicker").val();
+
+			if(invoice_date >= due_date){
+				alert('Due date should greater than invoice date');
+				$(".due_datepicker").val(" ");
+			}
+		}
+	}
 </script>
 
 <div class="content">
@@ -53,36 +77,33 @@ a:hover, a:link{
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../../cdnote/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Credit / Debit Notes </a>
+						<a href="../../../purchase/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Purchase Invoices </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Edit Credit / Debit Note</h2>
+			<h2 style="margin-top: 0px;">Edit Services Purchase Invoice</h2>
 			<form id="invoiceForm" role="form">
 				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
-					<input type="hidden" name="cdn_id" id="cdn_id" value="{{$data['data']['invoice_data'][0]->cdn_id}}">
+					<input type="hidden" name="pi_id" id="pi_id" value="{{$data['data']['invoice_data'][0]->pi_id}}">
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th>Credit / Debit Note Number</th>
-								<th>Issue date</th>
-								<th>Note Type</th>
-								<th>Invoice ID</th>
+								<th>Invoice Number</th>
+								<th>Invoice date</th>
+								<th>REF. P.O</th>
+								<th>Due date</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td><input type="text" class="form-control note_no" name="note_no" value="{{$data['data']['invoice_data'][0]->note_no}}" /></td>
-								<td><input type="text" class="form-control datepicker" name="note_issue_date" value="{{$data['data']['invoice_data'][0]->note_issue_date}}" /></td>
-								<td>
-									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '1'){echo "checked";}?> value="1">CREDIT</label>
-									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" <?php if($data['data']['invoice_data'][0]->note_type == '2'){echo "checked";}?> value="2">DEBIT</label>
-								</td>
-								<td><input type="text" class="form-control invoice_no" name="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" /></td>
+								<td><input type="text" class="form-control" name="invoice_no" id="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" style="text-align:center;"readonly /></td>
+								<td><input type="text" class="form-control datepicker" name="invoice_date" value="{{$data['data']['invoice_data'][0]->invoice_date}}" /></td>
+								<td><input type="text" class="form-control" name="reference" value="{{$data['data']['invoice_data'][0]->reference}}" /></td>
+								<td><input type="text" class="form-control due_datepicker" name="due_date" value="{{$data['data']['invoice_data'][0]->due_date}}" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -97,7 +118,10 @@ a:hover, a:link{
 								<tbody>
 									<tr>
 										<td id="tddd">
-											<input type="text" class="form-control" id="contact_name" name="contact_name" value="{{$data['data']['invoice_data'][0]->contact_name}}">
+											<input type="hidden" name="" id="contact_name_hidden" value="{{$data['data']['invoice_data'][0]->contact_name}}">
+											<select class="form-control contact_name" name="contact_name" onchange="getContactInfo(this);">
+												<option value="{{$data['data']['invoice_data'][0]->contact_name}}">{{$data['data']['invoice_data'][0]->contact_name}}</option>
+											</select>
 										</td>
 									</tr>
 								</tbody>
@@ -108,71 +132,19 @@ a:hover, a:link{
 									<td>Place of Supply</td>
 								</tr>
 								<tr>
+									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" /></td>
 									<td>
-										<input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" />
-									</td>
-									<td>
-										<input type="text" class="form-control" id="place_of_supply" placeholder="15 digit No." name="place_of_supply" value="{{$data['data']['invoice_data'][0]->place_of_supply}}" />
+										<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
+											<option value="{{$data['data']['invoice_data'][0]->place_of_supply}}">{{$data['data']['invoice_data'][0]->place_of_supply}}</option>
+										</select>
 									</td>
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 								</tr>
 							</table>
 						</div>
-						<div class="col-md-3">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Billing Address </th>
-									</tr> 
-								</thead>
-								<tbody>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_address" name="bill_address" placeholder="Address" value="{{$data['data']['invoice_data'][0]->bill_address}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_pincode" name="bill_pincode" placeholder="Pincode" value="{{$data['data']['invoice_data'][0]->bill_pincode}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_city" name="bill_city" placeholder="City" value="{{$data['data']['invoice_data'][0]->bill_city}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_state" name="bill_state" placeholder="State" value="{{$data['data']['invoice_data'][0]->bill_state}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="bill_country" name="bill_country" placeholder="Country" value="{{$data['data']['invoice_data'][0]->bill_country}}"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col-md-3">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Shipping Address</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_address" name="sh_address" placeholder="Address" value="{{$data['data']['invoice_data'][0]->sh_address}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_pincode" name="sh_pincode" placeholder="Pincode" value="{{$data['data']['invoice_data'][0]->sh_pincode}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_city" name="sh_city" placeholder="City" value="{{$data['data']['invoice_data'][0]->sh_city}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_state" name="sh_state" placeholder="State" value="{{$data['data']['invoice_data'][0]->sh_state}}"></td>
-									</tr>
-									<tr>
-										<td><input type="text" class="form-control" id="sh_country" name="sh_country" placeholder="Country" value="{{$data['data']['invoice_data'][0]->sh_country}}"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
 					</div>
 				</div>
-				<div class="table-responsive scroll_tab">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
@@ -181,11 +153,11 @@ a:hover, a:link{
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC</th>
+								<th rowspan="2">SAC </th>
 								<th rowspan="2">QTY</th>
 								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
-								<th rowspan="2" class="removeDiv"> Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
+								<th rowspan="2" class="removeDiv">  Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
 								<th colspan="2">CGST </th>
 								<th colspan="2">SGST </th>
@@ -292,7 +264,7 @@ a:hover, a:link{
 							@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
 							<tr>
 								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked >  Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
@@ -306,7 +278,7 @@ a:hover, a:link{
 							@else
 							<tr>
 								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
@@ -321,22 +293,7 @@ a:hover, a:link{
 						</tbody>
 					</table>
 				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered" id="item_table2">
-						<tr>
-							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_freight_charge == '1'){echo "checked";}?> > Freight Charges</td>
-							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_lp_charge == '1'){echo "checked";}?> > Loading and Packing Charges</td>
-							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_insurance_charge == '1'){echo "checked";}?> > Insurance Charges</td>
-							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_other_charge == '1'){echo "checked";}?> > Other Charges</td>
-						</tr>
-						<tr>
-							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->freight_charge}}" ></td>
-							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->lp_charge}}" ></td>
-							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->insurance_charge}}"  ></td>
-							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name" value="{{$data['data']['invoice_data'][0]->other_charge_name}}"  placeholder="Enter Charge Name" /></td>
-							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->other_charge}}" ></td>
-						</tr>
-					</table>
+				<div class="table-responsive" style="padding-top: 20px;">
 					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
 						<tr>
 							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" <?php if($data['data']['invoice_data'][0]->is_roundoff == '1'){echo "checked";}?>  onchange="calculateTotal(this);"> Roundoff Total</td>
@@ -347,7 +304,7 @@ a:hover, a:link{
 					</table>
 					<table class="table table-bordered">
 						<tr>
-							<td width="40%">Total In Words</td>
+							<td width="50%">Total In Words</td>
 							<td>Total Tax</td>
 							<td>GRAND TOTAL</td>
 						</tr>
@@ -361,7 +318,7 @@ a:hover, a:link{
 						<tr>
 							<td>
 								<a href="#">
-									<button class="btn btn-success" type="button" id="update_invoice">Update Note</button>
+									<button class="btn btn-success" type="button" id="update_invoice">Update Invoice</button>
 								</a>
 							</td>
 						</tr>
@@ -370,7 +327,6 @@ a:hover, a:link{
 			</form>
 		</div>
 	</div>
-</div>
 </div>
 
 <!-- Add Item Modal -->
@@ -392,11 +348,7 @@ a:hover, a:link{
 							</div>
 							<div class="form-group">
 								<label for="item_type">Item Type:</label>
-								<select class="form-control item_type" name="item_type">
-									<option value="">Select Item Type</option>
-									<option value="Goods">Goods</option>
-									<option value="Services">Services</option>
-								</select>
+								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
 							</div>
 							<div class="form-group">
 								<label for="code">Item/SKU Code:</label>
@@ -414,8 +366,7 @@ a:hover, a:link{
 							</div>
 							<div class="form-group">
 								<label for="unit">Unit:</label>
-								<select class="form-control item_unit" name="item_unit">
-								</select>
+								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
 							</div>
 							<div class="form-group">
 								<label for="selling">Selling Price:</label>
@@ -423,7 +374,7 @@ a:hover, a:link{
 							</div>
 
 							<div class="form-group">
-								<label for="dis">Discount:</label>
+								<label for="dis">Discount(%):</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>
@@ -432,7 +383,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Clear</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -470,10 +421,10 @@ a:hover, a:link{
 					</div>
 					<div class="col-md-12">
 						<center><h3>Settings</h3></center>
-						<a href="../../contacts/{{encrypt($data['business_id'])}}">
+						<a href="../../../contacts/{{encrypt($data['business_id'])}}">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Contacts List</button>
 						</a>
-						<a href="../../importitem">
+						<a href="../../../importitem">
 							<button type="button" class="btn btn-block btn-toolbar" style="margin: 10px 0px;">View Items List</button>
 						</a>
 					</div>
@@ -483,11 +434,7 @@ a:hover, a:link{
 	</div>
 </div>
 
-
 <script>
-	/*$(document).ready(function() {
-		createView();
-	});*/
 
 	function createView(){
 
@@ -496,54 +443,46 @@ a:hover, a:link{
 
 		var new_row= '<tr>'+
 		'<td>'+
-		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
+		'<select class="form-control item_name" name="item_name" onchange="getItemInfo(this);calculateTotal(this)">'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
-		'<td>'+
-		'<select class="form-control unit" name="unit" id="unit">'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
-		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
-		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
+		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateQuantity(this)"/></td>'+
+		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0" onkeyup="calculateCost(this)"/><input type="hidden" class="form-control item_value" name="item_value" id="item_value" value="0"/></td>'+
+		'<td><input type="text" class="form-control discount" name="discount" id="discount" value="0" onkeyup="calculateDiscount(this)"/></td>'+
 		'<td>'+
 		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.25">0.25</option>'+
-		'<option value="3">3</option>'+
-		'<option value="5">5</option>'+
+		'<option value="0.125">0.125</option>'+
+		'<option value="1.5">1.5</option>'+
+		'<option value="2.5">2.5</option>'+
+		'<option value="6">6</option>'+
 		'<option value="9">9</option>'+
-		'<option value="12">12</option>'+
-		'<option value="18">18</option>'+
-		'<option value="28">28</option>'+
+		'<option value="14">14</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.25">0.25</option>'+
-		'<option value="3">3</option>'+
-		'<option value="5">5</option>'+
+		'<option value="0.125">0.125</option>'+
+		'<option value="1.5">1.5</option>'+
+		'<option value="2.5">2.5</option>'+
+		'<option value="6">6</option>'+
 		'<option value="9">9</option>'+
-		'<option value="12">12</option>'+
-		'<option value="18">18</option>'+
-		'<option value="28">28</option>'+
+		'<option value="14">14</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.25">0.25</option>'+
-		'<option value="3">3</option>'+
-		'<option value="5">5</option>'+
+		'<option value="0.125">0.125</option>'+
+		'<option value="1.5">1.5</option>'+
+		'<option value="2.5">2.5</option>'+
+		'<option value="6">6</option>'+
 		'<option value="9">9</option>'+
-		'<option value="12">12</option>'+
-		'<option value="18">18</option>'+
-		'<option value="28">28</option>'+
+		'<option value="14">14</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
@@ -624,14 +563,12 @@ a:hover, a:link{
 		$(".igst_amount").prop('disabled', true);
 	}
 
-	$('#place_of_supply').css('pointer-events','none');
+	/*$('#place_of_supply').css('pointer-events','none');
 	$('#tddd').css('pointer-events','none');
-	$('#contact_gstin').css('pointer-events','none');
-	$('.note_no').css('pointer-events','none');
-	$('.invoice_no').css('pointer-events','none');
+	$('#contact_gstin').css('pointer-events','none');*/
 </script>
 
-<script src="{{URL::asset('app/js/editcdnote.js')}}"></script>
+<script src="{{URL::asset('app/js/editservicespurchaseinvoice.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

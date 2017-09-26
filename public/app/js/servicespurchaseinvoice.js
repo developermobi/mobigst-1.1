@@ -1,5 +1,33 @@
 $(function(){
 
+	jQuery.extend(jQuery.expr[':'], {
+		focusable: function (el, index, selector) {
+			return $(el).is('a, button, :input, [tabindex]');
+		}
+	});
+
+	$(document).on('keypress', 'input,select,checkbox', function (e) {
+		if (e.which == 13) {
+			e.preventDefault();
+			var $canfocus = $(':focusable');
+			var index = $canfocus.index(document.activeElement) + 1;
+			if (index >= $canfocus.length) index = 0;
+			$canfocus.eq(index).focus();
+		}
+	});
+
+	$('.contact_name').keypress(function(e) {
+		if(e.keyCode == 13) {
+			$('#sh_country').focus();
+		}
+	});
+
+	$('.item_name').keypress(function(e) {
+		if(e.keyCode == 13) {
+			$('#hsn_sac_no').focus();
+		}
+	});
+
 	$('.rate').css('pointer-events','none');
 	$('.cgst_amount').css('pointer-events','none');
 	$('.sgst_amount').css('pointer-events','none');
@@ -25,23 +53,54 @@ $(function(){
 	$("#other_charge").prop('disabled', true);
 	$('#other_charge_name').prop('disabled', true);
 
-	var gstin_id = $("#gstin_id").val();
+	var business_id = $("#business_id").val();
 
-	getInvoice(gstin_id);
+	getStates();
+	getItemUnit();
+	getContact(business_id);
 
 	if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === 'undefined'){
 		window.location.href = SERVER_NAME;
 	}
 
-	$('.note_type').change(function(){
-		if ($('input[name=note_type]:checked').val() == 2){
-			var note_no = $(".note_no").val().slice(2);
-			var new_note_no = "DN".concat(note_no);
-			$(".note_no").val(new_note_no);
+	$(".place_of_supply").change(function(event){
+		var place_of_supply = $("#place_of_supply").val();
+		var customer_state = $("#customer_state").val();
+
+		if(place_of_supply == customer_state){
+			$(".cgst_percentage").val('0');
+			$(".cgst_percentage").prop('disabled', false);
+			$(".cgst_amount").val('0');
+			$(".cgst_amount").prop('disabled', false);
+			$(".sgst_percentage").val('0');
+			$(".sgst_percentage").prop('disabled', false);
+			$(".sgst_amount").val('0');
+			$(".sgst_amount").prop('disabled', false);
+			$(".igst_percentage").val('0');
+			$(".igst_percentage").prop('disabled', true);
+			$(".igst_amount").val('0');
+			$(".igst_amount").prop('disabled', true);
+			$(".total_cgst_amount").val('0');
+			$(".total_sgst_amount").val('0');
+			$(".total_igst_amount").val('0');
+			Recalculate();
 		}else{
-			var note_no = $(".note_no").val().slice(2);
-			var new_note_no = "CN".concat(note_no);
-			$(".note_no").val(new_note_no);
+			$(".cgst_percentage").val('0');
+			$(".cgst_percentage").prop('disabled', true);
+			$(".cgst_amount").val('0');
+			$(".cgst_amount").prop('disabled', true);
+			$(".sgst_percentage").val('0');
+			$(".sgst_percentage").prop('disabled', true);
+			$(".sgst_amount").val('0');
+			$(".sgst_amount").prop('disabled', true);
+			$(".igst_percentage").val('0');
+			$(".igst_percentage").prop('disabled', false);
+			$(".igst_amount").val('0');
+			$(".igst_amount").prop('disabled', false);
+			$(".total_cgst_amount").val('0');
+			$(".total_sgst_amount").val('0');
+			$(".total_igst_amount").val('0');
+			Recalculate();
 		}
 	});
 
@@ -51,8 +110,7 @@ $(function(){
 		var total_igst_amount = $(".total_igst_amount").val();
 		var total_cess_amount = $(".total_cess_amount").val();
 
-		var total_tax = '';var grand_total = '';var total_in_words = '';
-
+		var total_tax = ''; var grand_total = ''; var total_in_words = '';
 		if ($(this).is(':checked')) {
 
 			$("#tt_cgst_amount").val('0');
@@ -72,21 +130,27 @@ $(function(){
 			$("#tt_cess_amount").val(total_cess_amount);
 			var tt_total = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
 			$("#tt_total").val(tt_total.toFixed(2));
+
 			$("#total_tax").val('0');
 
 			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
-
 			var total = $(".total_amount").val();
+
 			$(".total_amount").val(parseFloat(total) - parseFloat(total_tax.toFixed(2)));
-			test_calculate_gt();
+			var total_amount = $(".total_amount").val();
+			$("#grand_total").val(total_amount);
+			grand_total = $("#grand_total").val();
+			total_in_words = number2text(grand_total);
+			$("#total_in_words").val(total_in_words);
 		}else{
 			total_tax = $("#tt_total").val();
+			grand_total = $("#grand_total").val();
+			$(".total_amount").val(parseFloat(grand_total) + parseFloat(total_tax));
+			$("#grand_total").val(parseFloat(grand_total) + parseFloat(total_tax));
+			var new_grand_total = $("#grand_total").val();
+			total_in_words = number2text(new_grand_total);
+			$("#total_in_words").val(total_in_words);
 
-			var temp_total_amount = $("#total_amount").val();
-			temp_total_amount = parseFloat(temp_total_amount) + parseFloat(total_tax);
-			$(".total_amount").val(temp_total_amount);
-			test_calculate_gt();
-			
 			$("#tt_cgst_amount").val('0');
 			$("#tt_cgst_amount").prop('disabled', true);
 			$("#tt_sgst_amount").val('0');
@@ -98,56 +162,12 @@ $(function(){
 			$("#tt_total").val('0');
 			$("#tt_total").prop('disabled', true);
 
-			total_tax = parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount);
-			$("#total_tax").val(total_tax.toFixed(2));
+			$("#total_tax").val(parseFloat(total_cgst_amount) + parseFloat(total_sgst_amount) + parseFloat(total_igst_amount) + parseFloat(total_cess_amount));
 		}
 	});
 
-	$('#is_freight_charge').change(function(){
-		if ($('#is_freight_charge').is(':checked') == true){
-			$('#freight_charge').prop('disabled', false);
-			$('#freight_charge').focus();
-		} else {
-			$('#freight_charge').val('');
-			calculateTotal(this);
-			$('#freight_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_lp_charge').change(function(){
-		if ($('#is_lp_charge').is(':checked') == true){
-			$('#lp_charge').prop('disabled', false);
-			$('#lp_charge').focus();
-		} else {
-			$('#lp_charge').val('');
-			calculateTotal(this);
-			$('#lp_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_insurance_charge').change(function(){
-		if ($('#is_insurance_charge').is(':checked') == true){
-			$('#insurance_charge').prop('disabled', false);
-			$('#insurance_charge').focus();
-		} else {
-			$('#insurance_charge').val('');
-			calculateTotal(this);
-			$('#insurance_charge').prop('disabled', true);
-		}
-	});
-
-	$('#is_other_charge').change(function(){
-		if ($('#is_other_charge').is(':checked') == true){
-			$('#other_charge').prop('disabled', false);
-			$('#other_charge_name').prop('disabled', false);
-			$('#other_charge_name').focus();
-		} else {
-			$('#other_charge').val('');
-			$('#other_charge_name').val('');
-			calculateTotal(this);
-			$('#other_charge').prop('disabled', true);
-			$('#other_charge_name').prop('disabled', true);
-		}
+	$('#cancelGstinButton').click(function(){
+		$('#customerForm').trigger("reset");
 	});
 
 	$('#cancelItemButton').click(function(){
@@ -155,26 +175,55 @@ $(function(){
 	});
 
 	$('#save_invoice').click(function(){
-		saveCdnote();
-	});
-
-	$('#cancelItemButton').click(function(){
-		$('#itemForm').trigger("reset");
+		saveServicesPurchaseInvoice();
 	});
 
 	$('#update_invoice').click(function(){
-		updateCdnote();
+		updatePurchaseInvoice();
 	});
 
 });
 
 
-function getInvoice(gstin){
+function getContact(business_id){
 
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/getSalesInvoice/"+gstin,
+		"url": SERVER_NAME+"/api/getContact/"+business_id,
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var contact_name_hidden = $('#contact_name_hidden').val();
+			var data = response.data;
+			var option = "";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+"</option>";
+				});
+			}
+			$(".contact_name").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
+function getStates(){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getStates",
 		"method": "GET",
 		"headers": {
 			"cache-control": "no-cache",
@@ -186,134 +235,18 @@ function getInvoice(gstin){
 		},
 		success:function(response){
 			var data = response.data;
-			var option = "";
+			var option = "<option value=''></option>";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].invoice_no+"' data-attr='"+data[i].si_id+"'>"+data[i].invoice_no+"</option>";
+					option += "<option value='"+data[i].state_name+"'>"+data[i].state_name+"</option>";
 				});
 			}
-			$(".invoice_no").append(option);
+			$(".place_of_supply").append(option);
+			$(".state").append(option);
 		},
 		complete:function(){
 		}
 	}); 
-}
-
-
-
-function getInvoiceInfo(obj){
-	
-	var si_id = $(obj).find(':selected').attr('data-attr');
-	
-	$.ajax({
-		"async": false,
-		"crossDomain": true,
-		"url": SERVER_NAME+"/api/getInvoiceInfo/"+si_id,
-		"method": "GET",
-		"dataType":"JSON",
-		beforeSend:function(){
-			$("#subcity").html("");
-		},
-		success:function(response){
-			if(response.code == 302){
-				$("#bill_address").val(response.data[0].bill_address);
-				$("#bill_pincode").val(response.data[0].bill_pincode);
-				$("#bill_city").val(response.data[0].bill_city);
-				$("#bill_state").val(response.data[0].bill_state);
-				$("#bill_country").val(response.data[0].bill_country);
-				$("#contact_gstin").val(response.data[0].contact_gstin);
-				$("#place_of_supply").val(response.data[0].place_of_supply);
-				$("#sh_address").val(response.data[0].sh_address);
-				$("#sh_pincode").val(response.data[0].sh_pincode);
-				$("#sh_city").val(response.data[0].sh_city);
-				$("#sh_state").val(response.data[0].sh_state);
-				$("#sh_country").val(response.data[0].sh_country);
-				$("#contact_name").val(response.data[0].contact_name);
-
-				var place_of_supply = $("#place_of_supply").val();
-				var customer_state = $("#customer_state").val();
-				if(place_of_supply == customer_state){
-					$(".cgst_percentage").val('0');
-					$(".cgst_percentage").prop('disabled', false);
-					$(".cgst_amount").val('0');
-					$(".cgst_amount").prop('disabled', false);
-					$(".sgst_percentage").val('0');
-					$(".sgst_percentage").prop('disabled', false);
-					$(".sgst_amount").val('0');
-					$(".sgst_amount").prop('disabled', false);
-					$(".igst_percentage").val('0');
-					$(".igst_percentage").prop('disabled', true);
-					$(".igst_amount").val('0');
-					$(".igst_amount").prop('disabled', true);
-				}else{
-					$(".cgst_percentage").val('0');
-					$(".cgst_percentage").prop('disabled', true);
-					$(".cgst_amount").val('0');
-					$(".cgst_amount").prop('disabled', true);
-					$(".sgst_percentage").val('0');
-					$(".sgst_percentage").prop('disabled', true);
-					$(".sgst_amount").val('0');
-					$(".sgst_amount").prop('disabled', true);
-					$(".igst_percentage").val('0');
-					$(".igst_percentage").prop('disabled', false);
-					$(".igst_amount").val('0');
-					$(".igst_amount").prop('disabled', false);
-				}
-			}
-		},
-		complete:function(){
-		}
-	});
-}
-
-
-
-function test_calculate_gt(){
-	var total_amount = $(".total_amount").val();
-	var my_total_tax = $("#tt_total").val();
-	var fc = 0;
-	var lpc = 0;
-	var ic = 0;
-	var oc = 0;
-
-	var my_total= parseFloat(total_amount);
-
-	if($('#is_freight_charge').is(':checked')){
-		fc = $("#freight_charge").val();
-		if(fc == ''){
-			fc = 0;
-		}
-		my_total = my_total + parseFloat(fc);
-	}
-
-	if($('#is_lp_charge').is(':checked')){
-		lpc = $("#lp_charge").val();
-		if(lpc == ''){
-			lpc = 0;
-		}
-		my_total = my_total + parseFloat(lpc);
-	}
-
-	if($('#is_insurance_charge').is(':checked')){
-		ic = $("#insurance_charge").val();
-		if(ic == ''){
-			ic = 0;
-		}
-		my_total = my_total + parseFloat(ic);
-	}
-
-	if($('#is_other_charge').is(':checked')){
-		oc = $("#other_charge").val();
-		if(oc == ''){
-			oc = 0;
-		}
-		my_total = my_total + parseFloat(oc);
-	}
-
-	$("#grand_total").val(my_total);
-	var my_grand_total = $("#grand_total").val();
-	var my_total_in_words = number2text(my_grand_total);
-	$("#total_in_words").val(my_total_in_words);
 }
 
 
@@ -342,38 +275,6 @@ function getUnit(obj){
 				});
 			}
 			$(obj).closest("tr").find(".unit").append(option);
-		},
-		complete:function(){
-		}
-	}); 
-}
-
-
-
-function getItem(business_id){
-
-	$.ajax({
-		"async": true,
-		"crossDomain": true,
-		"url": SERVER_NAME+"/api/getItem/"+business_id,
-		"method": "GET",
-		"headers": {
-			"cache-control": "no-cache",
-			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
-		},
-		"processData": false,
-		"dataType":"JSON",                
-		beforeSend:function(){
-		},
-		success:function(response){
-			var data = response.data;
-			var option = "<option value=''></option>";
-			if(data.length > 0){
-				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].item_description+"' data-attr='"+data[i].item_id+"'>"+data[i].item_description+"</option>";
-				});
-			}
-			$(".item_name").append(option);
 		},
 		complete:function(){
 		}
@@ -414,6 +315,109 @@ function getItemUnit(){
 
 
 
+function getContactInfo(obj){
+	
+	//var contact_id = $('#contact_id').val();
+	var contact_id = $(obj).find(':selected').attr('data-attr');
+	
+	$.ajax({
+		"async": false,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getContactInfo/"+contact_id,
+		"method": "GET",
+		"dataType":"JSON",
+		beforeSend:function(){
+			$("#subcity").html("");
+		},
+		success:function(response){
+			if(response.code == 302){
+				$("#bill_address").val(response.data[0].address);
+				$("#bill_pincode").val(response.data[0].pincode);
+				$("#bill_city").val(response.data[0].city);
+				$("#bill_state").val(response.data[0].state);
+				$("#bill_country").val(response.data[0].country);
+				$("#contact_gstin").val(response.data[0].gstin_no);
+				$("#place_of_supply").val(response.data[0].state);
+
+				var place_of_supply = $("#place_of_supply").val();
+
+				var customer_state = $("#customer_state").val();
+				if(place_of_supply == customer_state){
+					$(".cgst_percentage").val('0');
+					$(".cgst_percentage").prop('disabled', false);
+					$(".cgst_amount").val('0');
+					$(".cgst_amount").prop('disabled', false);
+					$(".sgst_percentage").val('0');
+					$(".sgst_percentage").prop('disabled', false);
+					$(".sgst_amount").val('0');
+					$(".sgst_amount").prop('disabled', false);
+					$(".igst_percentage").val('0');
+					$(".igst_percentage").prop('disabled', true);
+					$(".igst_amount").val('0');
+					$(".igst_amount").prop('disabled', true);
+					$(".total_cgst_amount").val('0');
+					$(".total_sgst_amount").val('0');
+					$(".total_igst_amount").val('0');
+					Recalculate();
+				}else{
+					$(".cgst_percentage").val('0');
+					$(".cgst_percentage").prop('disabled', true);
+					$(".cgst_amount").val('0');
+					$(".cgst_amount").prop('disabled', true);
+					$(".sgst_percentage").val('0');
+					$(".sgst_percentage").prop('disabled', true);
+					$(".sgst_amount").val('0');
+					$(".sgst_amount").prop('disabled', true);
+					$(".igst_percentage").val('0');
+					$(".igst_percentage").prop('disabled', false);
+					$(".igst_amount").val('0');
+					$(".igst_amount").prop('disabled', false);
+					$(".total_cgst_amount").val('0');
+					$(".total_sgst_amount").val('0');
+					$(".total_igst_amount").val('0');
+					Recalculate();
+				}
+			}
+		},
+		complete:function(){
+		}
+	});
+}
+
+
+
+function getItem(business_id){
+
+	$.ajax({
+		"async": true,
+		"crossDomain": true,
+		"url": SERVER_NAME+"/api/getItem/"+business_id,
+		"method": "GET",
+		"headers": {
+			"cache-control": "no-cache",
+			"postman-token": "5d6d42d9-9cdb-e834-6366-d217b8e77f59"
+		},
+		"processData": false,
+		"dataType":"JSON",                
+		beforeSend:function(){
+		},
+		success:function(response){
+			var data = response.data;
+			var option = "<option value=''></option>";
+			if(data.length > 0){
+				$.each(data, function(i, item) {
+					option += "<option value='"+data[i].item_description+"' data-attr='"+data[i].item_id+"'>"+data[i].item_description+"</option>";
+				});
+			}
+			$(".item_name").append(option);
+		},
+		complete:function(){
+		}
+	}); 
+}
+
+
+
 function getItemInfo(obj){
 	
 	var item_id = $(obj).find(':selected').attr('data-attr');
@@ -440,13 +444,23 @@ function getItemInfo(obj){
 				$(item_value).val(response.data[0].item_sale_price);
 				$(total).val(response.data[0].item_sale_price);
 			}
-			//Recalculate();
 			calCgstAmount(obj);
 			calculateTotal(obj);
 		},
 		complete:function(){
 		}
 	});
+}
+
+
+
+function removeDiscount(obj){
+	$('.discount').val('0');
+	calculateNew(obj);
+	alert('msg');
+	calculateTotal(obj);
+	alert('msg1');
+	$('.removeDiv').hide();
 }
 
 
@@ -498,15 +512,16 @@ function calculateCESS(obj){
 	var rate = rate_element.val();
 
 	var cess_percentage = $(obj).closest("tr").find(".cess_percentage").val();
-	if(cess_percentage != ''){
-
-		var amount_element = $(obj).closest("tr").find(".cess_amount");
-		var amount = (rate / 100) * cess_percentage;
-		amount_element.val(amount);
-
-		calCgstAmount(obj);
-		calculateTotal(obj);
+	if(cess_percentage == ''){
+		cess_percentage = 0;
 	}
+
+	var amount_element = $(obj).closest("tr").find(".cess_amount");
+	var amount = (rate / 100) * cess_percentage;
+	amount_element.val(amount);
+
+	calCgstAmount(obj);
+	calculateTotal(obj);
 }
 
 
@@ -606,28 +621,6 @@ function calculateTotal(obj){
 	$(".total_igst_amount").val(igst_amount_sum.toFixed(2));
 	$(".total_cess_amount").val(cess_amount_sum.toFixed(2));
 
-	var freight_charge = $(".freight_charge").val();
-	if(freight_charge == ''){
-		freight_charge = 0;
-	}
-
-	var lp_charge = $(".lp_charge").val();
-	if(lp_charge == ''){
-		lp_charge = 0;
-	}
-
-	var insurance_charge = $(".insurance_charge").val();
-	if(insurance_charge == ''){
-		insurance_charge = 0;
-	}
-
-	var other_charge = $(".other_charge").val();
-	if(other_charge == ''){
-		other_charge = 0;
-	}
-
-	var total_charge = parseFloat(freight_charge) + parseFloat(lp_charge) + parseFloat(insurance_charge) + parseFloat(other_charge);
-
 	var total_tax = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(igst_amount_sum);
 	$("#total_tax").val(parseFloat(total_tax.toFixed(2)));
 	var total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
@@ -635,7 +628,7 @@ function calculateTotal(obj){
 	
 	var decimal = ''; var grand_total = ''; var tostring = ''; var new_grand_total = ''; var digit = '';
 
-	grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+	grand_total = parseFloat(total_amount.toFixed(2));
 	tostring = grand_total.toString();
 	new_grand_total = '';
 	if(tostring % 1 != 0){
@@ -666,7 +659,7 @@ function calculateTotal(obj){
 		$("#total_amount").val(parseFloat(rate_sum));
 		
 		console.log("total checked ",rate_sum);
-		grand_total = parseFloat(rate_sum.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		grand_total = parseFloat(rate_sum.toFixed(2));
 		tostring = grand_total.toString();
 		if(tostring % 1 != 0){
 			if($('#is_roundoff').is(":checked")){
@@ -702,7 +695,7 @@ function calculateTotal(obj){
 		total_amount = parseFloat(cgst_amount_sum) + parseFloat(sgst_amount_sum) + parseFloat(cess_amount_sum) + parseFloat(rate_sum) + parseFloat(igst_amount_sum);
 		$("#total_amount").val(parseFloat(total_amount.toFixed(2)));
 		
-		grand_total = parseFloat(total_amount.toFixed(2)) + parseFloat(total_charge.toFixed(2));
+		grand_total = parseFloat(total_amount.toFixed(2));
 		tostring = grand_total.toString();
 		if(tostring % 1 != 0){
 			if($('#is_roundoff').is(":checked")){
@@ -730,12 +723,23 @@ function calculateTotal(obj){
 
 
 
-function saveCdnote(){
+function saveServicesPurchaseInvoice(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-
+	
 	var flag = 1;
 	
+	if($("#contact_name").val() == '' && flag == 1){
+		flag = 0;
+		swal({
+			title: "Failed!",
+			text: "Please Select Contact",
+			type: "error",
+			confirmButtonText: "Close",
+		});
+		return false;
+	}
+
 	if($('.igst_percentage').prop('disabled')){
 	}else if(flag == 1){
 		$(".igst_percentage").each(function() {
@@ -790,7 +794,7 @@ function saveCdnote(){
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/saveCdnote",
+		"url": SERVER_NAME+"/api/saveServicesPurchaseInvoice",
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -933,15 +937,15 @@ function deleteInvoiceDetail(id_no,obj){
 
 
 
-function updateCdnote(){
+function updatePurchaseInvoice(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-	var cdn_id = $("#cdn_id").val();
-	
+	var pi_id = $("#pi_id").val();
+
 	$.ajax({
 		"async": true,
 		"crossDomain": true,
-		"url": SERVER_NAME+"/api/updateCdnote/"+cdn_id,
+		"url": SERVER_NAME+"/api/updatePurchaseInvoice/"+pi_id,
 		type:"POST",
 		"headers": {
 			"content-type": "application/json",
@@ -975,7 +979,7 @@ function updateCdnote(){
 			}
 		},
 		complete:function(){
-			$("#update_invoice").prop('disabled', false).text('Update Note');
+			$("#update_invoice").prop('disabled', false).text('Update Invoice');
 		}
 	});
 }

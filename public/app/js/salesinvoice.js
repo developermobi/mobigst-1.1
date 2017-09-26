@@ -6,7 +6,7 @@ $(function(){
 		}
 	});
 
-	$(document).on('keypress', 'input,select', function (e) {
+	$(document).on('keypress', 'input,select,checkbox', function (e) {
 		if (e.which == 13) {
 			e.preventDefault();
 			var $canfocus = $(':focusable');
@@ -421,6 +421,7 @@ function getItemUnit(){
 
 function getContactInfo(obj){
 	
+	//var contact_id = $('#contact_id').val();
 	var contact_id = $(obj).find(':selected').attr('data-attr');
 	
 	$.ajax({
@@ -850,7 +851,7 @@ function calculateTotal(obj){
 function saveSalesInvoice(){
 
 	var data = JSON.stringify($("#invoiceForm").serializeFormJSON());
-	
+
 	var flag = 1;
 	
 	if($("#contact_name").val() == '' && flag == 1){

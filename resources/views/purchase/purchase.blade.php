@@ -5,17 +5,21 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
-	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
 </style>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 
 <div class="content">
 	<div class="train w3-agile">
@@ -33,6 +37,11 @@
 					<button class="btn btn-default" type="button" data-toggle="modal" data-target="#quick" style="float: right;"> Quick Action </button>
 				</div>
 			</div>
+
+			<?php
+			$first_date = date('Y-m-01');
+			?>
+
 			<div class="table-responsive">
 				<table class="table table-striped table-bordered">
 					<tr>
@@ -62,7 +71,7 @@
 						@endif
 					</tr>
 				</table>
-				<table class="table table-striped table-bordered">
+				<table class="table table-striped table-bordered" id="example">
 					<thead>
 						<tr>
 							<th>Invoice ID</th>
@@ -79,13 +88,22 @@
 						<tr>
 							<td>{{$value->invoice_no}}</td>
 							<td>{{$value->contact_name}}</td>
-							<td>{{$value->created_date}}</td>
+							<td>{{$value->invoice_date}}</td>
 							<td>{{$value->due_date}}</td>
-							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->total_amount}}</td>
+							<td> <i class="fa fa-inr" aria-hidden="true"></i> {{$value->grand_total}}</td>
 							<td>
-								<a class='btn btn-sm btn-info' href="viewPurchaseInvoice/{{encrypt($value->invoice_no)}}">View</a>
-								<a class='btn btn-sm btn-warning' href="editPurchaseInvoice/{{encrypt($value->invoice_no)}}">Edit</a>
-								<a class='btn btn-sm btn-danger' onclick=cancelPurchaseInvoice(this); data-id='{{$value->pi_id}}'>Delete</a>
+								@if($value->invoice_type == 1)
+								<a class='btn btn-sm btn-info' href="viewPurchaseInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								@if($value->invoice_date >= $first_date)
+								<a class='btn btn-sm btn-warning' href="editPurchaseInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
+								@endif
+								@else
+								<a class='btn btn-sm btn-info' href="viewServicesPurchaseInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">View</a>
+								@if($value->invoice_date >= $first_date)
+								<a class='btn btn-sm btn-warning' href="editServicesPurchaseInvoice/{{encrypt($value->invoice_no)}}/{{encrypt($value->gstin_id)}}">Edit</a>
+								@endif
+								@endif
+								<a class='btn btn-sm btn-danger' onclick=cancelPurchaseInvoice(this); data-id='{{$value->invoice_no}}' data-attr = '{{$value->gstin_id}}'>Delete</a>
 							</td>
 						</tr>
 						@endforeach
@@ -145,6 +163,16 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#example').DataTable({
+			bFilter: false,
+			bLengthChange: false,
+			bInfo: false
+		});
+	} );
+</script>
 
 <script src="{{URL::asset('app/js/purchase.js')}}"></script>
 

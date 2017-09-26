@@ -5,24 +5,24 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
+a:hover, a:link{
+	text-decoration: none;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
+.table .form-control{
+	padding: 0px;
+}
+@media (min-width: 1200px) {
+	.container {
+		width: 1300px;
 	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
-	.table .form-control{
-		padding: 0px;
-	}
-	@media (min-width: 1200px) {
-		.container {
-			width: 1300px;
-		}
-	}
+}
 </style>
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
@@ -40,7 +40,9 @@
 		$(".contact_name").select2();
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
-			startDate: new Date(year, month, '01')
+			startDate: new Date(year, month, '01'),
+			zIndexOffset: 1035,
+			autoclose:true,
 		});
 	});
 </script>
@@ -52,7 +54,7 @@
 				<div class="col-md-10">
 					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
 						<a href="../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../advanceReceipt/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Advance Payment </a>
+						<a href="../advancePayment/{{encrypt($data['gstin_id'])}}" class="btn btn-default"> Advance Payment </a>
 					</div>
 				</div>
 				<div class="col-md-2" style="padding-top: 45px;">
@@ -60,8 +62,8 @@
 				</div>
 			</div>
 			<h2 style="margin-top: 0px;">Create Advance Payment</h2>
-			<div class="table-responsive" style="padding-top: 20px;">
-				<form id="invoiceForm" role="form">
+			<form id="invoiceForm" role="form">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
 					<div class="row">
 						<div class="col-md-6">
@@ -117,19 +119,22 @@
 							</table>
 						</div>
 					</div>
+				</div>
+				<div class="table-responsive" style="padding-top: 20px;">
 					<table class="table table-bordered order-list" style="margin-top: 10px;">
 						<thead>
 							<tr>
-								<!-- <th rowspan="2">SR. NO.</th> -->
-								<th rowspan="2" width="20%"> ITEM 
+								<th rowspan="2" width="20%">ITEM
 									<span style="float: right;cursor: pointer;">
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2">HSN/SAC</th>
+								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2">Cost</th>
-								<th rowspan="2">Discount</th>
+								<th rowspan="2" width="5%">UOM</th>
+								<th rowspan="2">Price</th>
+								<th rowspan="2">Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
+								<th rowspan="2">Taxable Value</th>
 								<th colspan="2">CGST</th>
 								<th colspan="2">SGST</th>
 								<th colspan="2">IGST</th>
@@ -150,8 +155,7 @@
 						</thead>
 						<tbody>
 							<tr id="t2">
-								<td colspan="5">Total Inv. Val</td>
-								<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
+								<td colspan="7">Total Inv. Val</td>
 								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
@@ -164,13 +168,12 @@
 								</td>
 							</tr>
 							<tr>
-								<td colspan="16">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge</p>
+								<td colspan="17">
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge</p>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="5">Tax under Reverse Charge</td>
-								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
+								<td colspan="7">Tax under Reverse Charge</td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
@@ -178,6 +181,31 @@
 								<td colspan="2"><input type="text" class="form-control tt_total" id="tt_total" name="tt_total" /></td>
 							</tr>
 						</tbody>
+					</table>
+				</div>
+				<div class="table-responsive" style="padding-top: 20px;">
+					<table class="table table-bordered" id="item_table2">
+						<tr>
+							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);"> Freight Charges</td>
+							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="test_calculate_gt(this);"> Loading and Packing Charges</td>
+							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="test_calculate_gt(this);"> Insurance Charges</td>
+							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt(this);"> Other Charges</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" /></td>
+							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt(this);" /></td>
+							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt(this);" /></td>
+							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name"  placeholder="Enter Charge Name" /></td>
+							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="test_calculate_gt(this);" /></td>
+						</tr>
+					</table>
+					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
+						<tr>
+							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" onchange="calculateTotal(this);"> Roundoff Total</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control roundoff" id="roundoff" name="roundoff" /></td>
+						</tr>
 					</table>
 					<table class="table table-bordered">
 						<tr>
@@ -207,8 +235,8 @@
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -227,45 +255,45 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="custname">Customer Or Vendor Name:</label>
+								<label for="custname">Customer Or Vendor Name</label>
 								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name">
 							</div>
 							<div class="form-group">
-								<label for="gstin">GSTIN NO:</label>
-								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no">
+								<label for="gstin">GSTIN NO</label>
+								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no" style="text-transform: uppercase;">
 							</div>
 							<div class="form-group">
-								<label for="country">Country:</label>
+								<label for="country">Country</label>
 								<input type="text" class="form-control" placeholder="Enter Country" name="country">
 							</div>
 							<div class="form-group">
-								<label for="conper">Contact Person:</label>
+								<label for="conper">Contact Person</label>
 								<input type="text" class="form-control" placeholder="Contact Person" name="contact_person">
 							</div>
 							<div class="form-group">
-								<label for="pin">Pincode:</label>
+								<label for="pin">Pincode</label>
 								<input type="text" class="form-control" placeholder="Enter Pincode" name="pincode">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="email">Email Id:</label>
+								<label for="email">Email Id</label>
 								<input type="email" class="form-control" placeholder="Email Id" name="email">
 							</div>
 							<div class="form-group">
-								<label for="pan">PAN:</label>
+								<label for="pan">PAN</label>
 								<input type="text" class="form-control" placeholder="Enter PAN" name="pan_no">
 							</div>
 							<div class="form-group">
-								<label for="state">State:</label>
+								<label for="state">State</label>
 								<input type="text" class="form-control" placeholder="Enter State" name="state">
 							</div>
 							<div class="form-group">
-								<label for="mob">Mobile No:</label>
+								<label for="mob">Mobile No</label>
 								<input type="text" class="form-control" placeholder="Enter Mobile No" name="mobile_no">
 							</div>
 							<div class="form-group">
-								<label for="city">City:</label>
+								<label for="city">City</label>
 								<input type="text" class="form-control" placeholder="Enter City" name="city">
 							</div>
 						</div>
@@ -274,7 +302,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addCustomer">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Clear</button>
 			</div>
 		</div>
 	</div>
@@ -294,38 +322,38 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="item_description">Item Description<span>*</span> :</label>
+								<label for="item_description">Item Description</label>
 								<input type="text" class="form-control" placeholder="Item Description" name="item_description">
 							</div>
 							<div class="form-group">
-								<label for="item_type">Item Type:</label>
+								<label for="item_type">Item Type</label>
 								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
 							</div>
 							<div class="form-group">
-								<label for="code">Item/SKU Code:</label>
+								<label for="code">Item/SKU Code</label>
 								<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
 							</div>
 							<div class="form-group">
-								<label for="purpr">Purchase Price:</label>
+								<label for="purpr">Purchase Price</label>
 								<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="hsn">HSN/SAC Code:</label>
+								<label for="hsn">HSN/SAC Code</label>
 								<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
 							</div>
 							<div class="form-group">
-								<label for="unit">Unit:</label>
+								<label for="unit">Unit</label>
 								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
 							</div>
 							<div class="form-group">
-								<label for="selling">Selling Price:</label>
+								<label for="selling">Selling Price</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 							
 							<div class="form-group">
-								<label for="dis">Discount(%):</label>
+								<label for="dis">Discount</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>
@@ -334,7 +362,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Clear</button>
 			</div>
 		</div>
 	</div>
@@ -397,46 +425,54 @@
 
 		var new_row= '<tr>'+
 		'<td>'+
-		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getItemInfo(this);calculateTotal(this)">'+
+		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateQuantity(this)"/></td>'+
-		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0" onkeyup="calculateCost(this)"/><input type="hidden" class="form-control item_value" name="item_value" id="item_value" value="0"/></td>'+
-		'<td><input type="text" class="form-control discount" name="discount" id="discount" value="0" onkeyup="calculateDiscount(this)"/></td>'+
+		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
+		'<td>'+
+		'<select class="form-control unit" name="unit" id="unit">'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
@@ -488,6 +524,10 @@
 	$(document).ready(function() {
 		$(".item_name").select2();
 	});
+
+	function refreshPage(){
+		window.location.reload();
+	}
 </script>
 
 <script src="{{URL::asset('app/js/advancePayment.js')}}"></script>

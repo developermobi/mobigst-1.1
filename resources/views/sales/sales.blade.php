@@ -17,6 +17,10 @@ a:hover, a:link{
 }
 </style>
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+
 <div class="content">
 	<div class="train w3-agile">
 		<div class="container">
@@ -67,7 +71,7 @@ a:hover, a:link{
 						@endif
 					</tr>
 				</table>
-				<table class="table table-striped table-bordered">
+				<table class="table table-striped table-bordered" id="example">
 					<thead>
 						<tr>
 							<th>Invoice ID</th>
@@ -160,6 +164,15 @@ a:hover, a:link{
 	</div>
 </div>
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#example').DataTable({
+			bFilter: false,
+			bLengthChange: false,
+			bInfo: false
+		});
+	} );
+</script>
 <script src="{{URL::asset('app/js/sales.js')}}"></script>
 
 @endsection

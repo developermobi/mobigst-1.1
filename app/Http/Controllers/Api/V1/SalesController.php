@@ -111,6 +111,7 @@ class SalesController extends Controller{
 		$getBusinessByGstin = Sales::getBusinessByGstin($gstin_id);
 		$getSalesInvoiceCount = Sales::getSalesInvoiceCount($gstin_id);
 		$getGstinInfo = Sales::getGstinInfo($gstin_id);
+		$getUnit = Sales::getUnit();
 
 		if(sizeof($getSalesInvoiceCount) > 0){
 			$data['invoice_no'] = "INV".($getSalesInvoiceCount[0]->count + 1);
@@ -127,6 +128,7 @@ class SalesController extends Controller{
 			$data['state_code'] = $getGstinInfo[0]->state_code;
 			$data['state_name'] = $getGstinInfo[0]->state_name;
 		}
+		$data['unit'] = $getUnit;
 		return view('sales.servicesSalesInvoice')->with('data', $data);
 	}
 
@@ -919,9 +921,9 @@ class SalesController extends Controller{
 		$salesInvoiceData['sh_state'] = $input['sh_state'];
 		$salesInvoiceData['sh_country'] = $input['sh_country'];
 		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
-			$advanceReceiptData['sh_address_same'] = '1';
+			$salesInvoiceData['sh_address_same'] = '1';
 		}else{
-			$advanceReceiptData['sh_address_same'] = '0';
+			$salesInvoiceData['sh_address_same'] = '0';
 		}
 		$salesInvoiceData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
 		$salesInvoiceData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
@@ -1067,9 +1069,9 @@ class SalesController extends Controller{
 		$salesInvoiceData['sh_state'] = $input['sh_state'];
 		$salesInvoiceData['sh_country'] = $input['sh_country'];
 		if(isset($input['sh_address_same']) && $input['sh_address_same'] == "on"){
-			$advanceReceiptData['sh_address_same'] = '1';
+			$salesInvoiceData['sh_address_same'] = '1';
 		}else{
-			$advanceReceiptData['sh_address_same'] = '0';
+			$salesInvoiceData['sh_address_same'] = '0';
 		}
 		$salesInvoiceData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
 		$salesInvoiceData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
@@ -1111,7 +1113,7 @@ class SalesController extends Controller{
 				$invoiceDetailData['unit'] = $input['unit'][$key];
 				$invoiceDetailData['item_name'] = $input['item_name'][$key];
 				$invoiceDetailData['item_value'] = $input['item_value'][$key];
-				$invoiceDetailData['item_type'] = "Goods";
+				$invoiceDetailData['item_type'] = "Services";
 				$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
 				$invoiceDetailData['quantity'] = $input['quantity'][$key];
 				$invoiceDetailData['rate'] = $input['rate'][$key];
@@ -1139,7 +1141,7 @@ class SalesController extends Controller{
 			$invoiceDetailData['unit'] = $input['unit'];
 			$invoiceDetailData['item_name'] = $input['item_name'];
 			$invoiceDetailData['item_value'] = $input['item_value'];
-			$invoiceDetailData['item_type'] = "Goods";
+			$invoiceDetailData['item_type'] = "Services";
 			$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 			$invoiceDetailData['quantity'] = $input['quantity'];
 			$invoiceDetailData['rate'] = $input['rate'];
@@ -2307,6 +2309,32 @@ class SalesController extends Controller{
 		}
 		return view('sales.uploadSalesInvoice')->with('data', $data);
 	}*/
+
+
+
+	/*public function autocomplete(Request $request){
+		//return $input = $request->all();
+        $data = DB::table('contact')
+        ->select("contact_name as name")
+        ->where("contact_name","LIKE","%{$request->input('query')}%")
+        ->where("city","LIKE","%{$request->input('query')}%")
+        ->get();
+        return response()->json($data);
+    }*/
+
+
+
+    public function contact_serach($request){
+        $data=Sales::contact_serach($request);
+        return $data;
+    }
+
+
+
+    public function item_serach($request){
+        $data=Sales::item_serach($request);
+        return $data;
+    }
 
 
 }

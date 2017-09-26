@@ -263,9 +263,9 @@ Route::get('sales/viewServicesSalesInvoice/{id}/{gstin_id}', [
 
 Route::get('printServicesSalesInvoice/{id}/{gstin_id}',array('as'=>'printServicesSalesInvoice','uses'=>'Api\V1\SalesController@printServicesSalesInvoice'));
 
-Route::get('uploadSalesInvoice/{id}', [
+/*Route::get('uploadSalesInvoice/{id}', [
 	'as' => 'uploadSalesInvoice/{id}', 'uses' => 'Api\V1\SalesController@uploadSalesInvoice'
-	]);
+	]);*/
 
 Route::get('createCdnote/{id}', [
 	'as' => 'createCdnote/{id}', 'uses' => 'Api\V1\SalesController@createCdnote'
@@ -412,15 +412,29 @@ Route::get('goodsPurchaseInvoice/{id}', [
 	'as' => 'goodsPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@goodsPurchaseInvoice'
 	]);
 
-Route::get('purchase/editPurchaseInvoice/{id}', [
-	'as' => 'purchase/editPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@editPurchaseInvoice'
+Route::get('servicesPurchaseInvoice/{id}', [
+	'as' => 'servicesPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@servicesPurchaseInvoice'
 	]);
 
-Route::get('purchase/viewPurchaseInvoice/{id}', [
-	'as' => 'purchase/viewPurchaseInvoice/{id}', 'uses' => 'Api\V1\PurchaseController@viewPurchaseInvoice'
+Route::get('purchase/editPurchaseInvoice/{id}/{gstin_id}', [
+	'as' => 'purchase/editPurchaseInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@editPurchaseInvoice'
 	]);
 
-Route::get('printPurchaseInvoice/{id}',array('as'=>'printPurchaseInvoice','uses'=>'Api\V1\PurchaseController@printPurchaseInvoice'));
+Route::get('purchase/editServicesPurchaseInvoice/{id}/{gstin_id}', [
+	'as' => 'purchase/editServicesPurchaseInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@editServicesPurchaseInvoice'
+	]);
+
+Route::get('purchase/viewPurchaseInvoice/{id}/{gstin_id}', [
+	'as' => 'purchase/viewPurchaseInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@viewPurchaseInvoice'
+	]);
+
+Route::get('purchase/viewServicesPurchaseInvoice/{id}/{gstin_id}', [
+	'as' => 'purchase/viewServicesPurchaseInvoice/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@viewServicesPurchaseInvoice'
+	]);
+
+Route::get('printPurchaseInvoice/{id}/{gstin_id}',array('as'=>'printPurchaseInvoice','uses'=>'Api\V1\PurchaseController@printPurchaseInvoice'));
+
+Route::get('printServicesPurchaseInvoice/{id}/{gstin_id}',array('as'=>'printServicesPurchaseInvoice','uses'=>'Api\V1\PurchaseController@printServicesPurchaseInvoice'));
 
 Route::get('createVcdnote/{id}', [
 	'as' => 'createVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@createVcdnote'
@@ -430,15 +444,15 @@ Route::get('vcdnote/{id}', [
 	'as' => 'vcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@vcdnote'
 	]);
 
-Route::get('vcdnote/editVcdnote/{id}', [
-	'as' => 'vcdnote/editVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@editVcdnote'
+Route::get('vcdnote/editVcdnote/{id}/{gstin_id}', [
+	'as' => 'vcdnote/editVcdnote/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@editVcdnote'
 	]);
 
-Route::get('vcdnote/viewVcdnote/{id}', [
-	'as' => 'vcdnote/viewVcdnote/{id}', 'uses' => 'Api\V1\PurchaseController@viewVcdnote'
+Route::get('vcdnote/viewVcdnote/{id}/{gstin_id}', [
+	'as' => 'vcdnote/viewVcdnote/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@viewVcdnote'
 	]);
 
-Route::get('printVcdnote/{id}',array('as'=>'printVcdnote','uses'=>'Api\V1\PurchaseController@printVcdnote'));
+Route::get('printVcdnote/{id}/{gstin_id}',array('as'=>'printVcdnote','uses'=>'Api\V1\PurchaseController@printVcdnote'));
 
 Route::get('createAdvancePayment/{id}', [
 	'as' => 'createAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@createAdvancePayment'
@@ -448,15 +462,15 @@ Route::get('advancePayment/{id}', [
 	'as' => 'advancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@advancePayment'
 	]);
 
-Route::get('advancePayment/editAdvancePayment/{id}', [
-	'as' => 'advancePayment/editAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@editAdvancePayment'
+Route::get('advancePayment/editAdvancePayment/{id}/{gstin_id}', [
+	'as' => 'advancePayment/editAdvancePayment/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@editAdvancePayment'
 	]);
 
-Route::get('advancePayment/viewAdvancePayment/{id}', [
-	'as' => 'advancePayment/viewAdvancePayment/{id}', 'uses' => 'Api\V1\PurchaseController@viewAdvancePayment'
+Route::get('advancePayment/viewAdvancePayment/{id}/{gstin_id}', [
+	'as' => 'advancePayment/viewAdvancePayment/{id}/{gstin_id}', 'uses' => 'Api\V1\PurchaseController@viewAdvancePayment'
 	]);
 
-Route::get('printAdvancePayment/{id}',array('as'=>'printAdvancePayment','uses'=>'Api\V1\PurchaseController@printAdvancePayment'));
+Route::get('printAdvancePayment/{id}/{gstin_id}',array('as'=>'printAdvancePayment','uses'=>'Api\V1\PurchaseController@printAdvancePayment'));
 
 
 /*$api->version('v1', function ($api) {
@@ -484,15 +498,23 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-	$api->post('cancelPurchaseInvoice/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelPurchaseInvoice');
+	$api->post('saveServicesPurchaseInvoice', 'App\Http\Controllers\Api\V1\PurchaseController@saveServicesPurchaseInvoice');
 });
 
 $api->version('v1', function ($api) {
-	$api->post('deleteInvoiceDetail/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@deleteInvoiceDetail');
+	$api->post('cancelPurchaseInvoice/{id}/{gstin_id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelPurchaseInvoice');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('deleteInvoiceDetail/{id}/{gstin_id}', 'App\Http\Controllers\Api\V1\PurchaseController@deleteInvoiceDetail');
 });
 
 $api->version('v1', function ($api) {
 	$api->post('updatePurchaseInvoice/{pi_id}', 'App\Http\Controllers\Api\V1\PurchaseController@updatePurchaseInvoice');
+});
+
+$api->version('v1', function ($api) {
+	$api->post('updateServicesPurchaseInvoice/{pi_id}', 'App\Http\Controllers\Api\V1\PurchaseController@updateServicesPurchaseInvoice');
 });
 
 $api->version('v1', function ($api) {
@@ -508,7 +530,7 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-	$api->post('cancelVcdnote/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelVcdnote');
+	$api->post('cancelVcdnote/{id}/{gstin_id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelVcdnote');
 });
 
 $api->version('v1', function ($api) {
@@ -520,9 +542,19 @@ $api->version('v1', function ($api) {
 });
 
 $api->version('v1', function ($api) {
-	$api->post('cancelAdvancePayment/{id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelAdvancePayment');
+	$api->post('cancelAdvancePayment/{id}/{gstin_id}', 'App\Http\Controllers\Api\V1\PurchaseController@cancelAdvancePayment');
 });
 
 $api->version('v1', function ($api) {
 	$api->post('updateAdvancePayment/{ap_id}', 'App\Http\Controllers\Api\V1\PurchaseController@updateAdvancePayment');
+});
+
+
+/*Autocomplete*/
+$api->version('v1', function ($api) {
+    $api->get('contact_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@contact_serach');
+});
+
+$api->version('v1', function ($api) {
+    $api->get('item_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@item_serach');
 });

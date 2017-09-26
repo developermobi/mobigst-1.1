@@ -42,6 +42,7 @@ a:hover, a:link{
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
 			zIndexOffset: 1035,
+			autoclose:true,
 		});
 	});
 </script>
@@ -61,8 +62,8 @@ a:hover, a:link{
 				</div>
 			</div>
 			<h2 style="margin-top: 0px;">Create Vendor Credit / Debit Note</h2>
-			<div class="table-responsive" style="padding-top: 20px;">
-				<form id="invoiceForm" role="form">
+			<form id="invoiceForm" role="form">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
 					<table class="table table-bordered">
 						<thead>
@@ -76,7 +77,7 @@ a:hover, a:link{
 						<tbody>
 							<tr>
 								<td><input type="text" class="form-control note_no" name="note_no" value="{{$data['note_no']}}" style="text-align:center;" /></td>
-								<td><input type="text" class="form-control datepicker" name="note_issue_date" /></td>
+								<td><input type="text" class="form-control datepicker" name="note_issue_date" value="<?php echo date("Y-m-d");?>"/></td>
 								<td>
 									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" value="1" checked>CREDIT</label>
 									<label class="radio-inline"><input type="radio" class="note_type" name="note_type" value="2">DEBIT</label>
@@ -118,24 +119,25 @@ a:hover, a:link{
 							</table>
 						</div>
 					</div>
+				</div>
+				<div class="table-responsive" style="padding-top: 20px;">
 					<table class="table table-bordered order-list" id="item_table">
 						<thead>
 							<tr>
-								<!-- <th rowspan="2">SR. NO.</th> -->
-								<th rowspan="2" width="20%"> ITEM 
+								<th rowspan="2" width="20%">ITEM
 									<span style="float: right;cursor: pointer;">
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2">HSN <a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a> </th>
+								<th rowspan="2">HSN/SAC </th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">Unit</th>
+								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
-								<th rowspan="2" class="removeDiv"> <!-- <span onclick="removeDiscount(this);"><i class="fa fa-times" title="Remove Discount" aria-hidden="true"></i></span> --> Discount in %</th>
+								<th rowspan="2">Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
-								<th colspan="2">CGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
-								<th colspan="2">SGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
-								<th colspan="2">IGST <!-- <br> <input type="checkbox" name=""><span style="font-size: 10px;">Round Off</span> --> </th>
+								<th colspan="2">CGST</th>
+								<th colspan="2">SGST</th>
+								<th colspan="2">IGST</th>
 								<th colspan="2">CESS</th>
 								<th rowspan="2">Total</th>
 								<th rowspan="2">#</th>
@@ -154,7 +156,6 @@ a:hover, a:link{
 						<tbody>
 							<tr id="t2">
 								<td colspan="7">Total Inv. Val</td>
-								<!-- <td><input type="text" class="form-control" name="total_discount" /></td> -->
 								<td colspan="2"><input type="text" class="form-control total_cgst_amount" name="total_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_sgst_amount" name="total_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control total_igst_amount" name="total_igst_amount" value="0" /></td>
@@ -168,12 +169,11 @@ a:hover, a:link{
 							</tr>
 							<tr>
 								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge</p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge</p>
 								</td>
 							</tr>
 							<tr>
 								<td colspan="7">Tax under Reverse Charge</td>
-								<!-- <td><input type="text" class="form-control" id="tt_taxable_value" name="tt_taxable_value" value="0" /></td> -->
 								<td colspan="2"><input type="text" class="form-control" id="tt_cgst_amount" name="tt_cgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_sgst_amount" name="tt_sgst_amount" value="0" /></td>
 								<td colspan="2"><input type="text" class="form-control" id="tt_igst_amount" name="tt_igst_amount" value="0" /></td>
@@ -182,19 +182,29 @@ a:hover, a:link{
 							</tr>
 						</tbody>
 					</table>
+				</div>
+				<div class="table-responsive" style="padding-top: 20px;">
 					<table class="table table-bordered" id="item_table2">
 						<tr>
-							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="calculateTotal(this);"> Freight Charges</td>
-							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="calculateTotal(this);"> Loading and Packing Charges</td>
-							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="calculateTotal(this);"> Insurance Charges</td>
-							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="calculateTotal(this);"> Other Charges</td>
+							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);"> Freight Charges</td>
+							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="test_calculate_gt(this);"> Loading and Packing Charges</td>
+							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="test_calculate_gt(this);"> Insurance Charges</td>
+							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt(this);"> Other Charges</td>
 						</tr>
 						<tr>
-							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="calculateTotal(this);" /></td>
-							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="calculateTotal(this);" /></td>
-							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="calculateTotal(this);" /></td>
+							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" /></td>
+							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt(this);" /></td>
+							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt(this);" /></td>
 							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name"  placeholder="Enter Charge Name" /></td>
-							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="calculateTotal(this);" /></td>
+							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="test_calculate_gt(this);" /></td>
+						</tr>
+					</table>
+					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
+						<tr>
+							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" onchange="calculateTotal(this);"> Roundoff Total</td>
+						</tr>
+						<tr>
+							<td><input type="text" class="form-control roundoff" id="roundoff" name="roundoff" /></td>
 						</tr>
 					</table>
 					<table class="table table-bordered" id="item_table2">
@@ -221,8 +231,8 @@ a:hover, a:link{
 							</td>
 						</tr>
 					</table>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -245,34 +255,34 @@ a:hover, a:link{
 								<input type="text" class="form-control" placeholder="Item Description" name="item_description" autofocus>
 							</div>
 							<div class="form-group">
-								<label for="item_type">Item Type:</label>
+								<label for="item_type">Item Type</label>
 								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
 							</div>
 							<div class="form-group">
-								<label for="code">Item/SKU Code:</label>
+								<label for="code">Item/SKU Code</label>
 								<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
 							</div>
 							<div class="form-group">
-								<label for="purpr">Purchase Price:</label>
+								<label for="purpr">Purchase Price</label>
 								<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="hsn">HSN/SAC Code:</label>
+								<label for="hsn">HSN/SAC Code</label>
 								<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
 							</div>
 							<div class="form-group">
-								<label for="unit">Unit:</label>
+								<label for="unit">Unit</label>
 								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
 							</div>
 							<div class="form-group">
-								<label for="selling">Selling Price:</label>
+								<label for="selling">Selling Price</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 							
 							<div class="form-group">
-								<label for="dis">Discount(%):</label>
+								<label for="dis">Discount</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>
@@ -281,7 +291,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Clear</button>
 			</div>
 		</div>
 	</div>
@@ -354,7 +364,7 @@ a:hover, a:link{
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
-		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control discount" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
 		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+

@@ -326,7 +326,7 @@ a:hover, a:link{
 							@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
 							<tr>
 								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > <!-- Advanced Settings --> Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
@@ -340,7 +340,7 @@ a:hover, a:link{
 							@else
 							<tr>
 								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>

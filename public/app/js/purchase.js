@@ -19,10 +19,11 @@ function cancelPurchaseInvoice(obj){
 		confirmButtonText: 'Yes'
 	}).then(function () {
 		var id = $(obj).attr('data-id');
+		var gstin_id = $(obj).attr('data-attr');
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelPurchaseInvoice/"+id,
+			"url": SERVER_NAME+"/api/cancelPurchaseInvoice/"+id+"/"+gstin_id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -73,10 +74,11 @@ function cancelVcdnote(obj){
 		confirmButtonText: 'Yes'
 	}).then(function () {
 		var id = $(obj).attr('data-id');
+		var gstin_id = $(obj).attr('data-attr');
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelVcdnote/"+id,
+			"url": SERVER_NAME+"/api/cancelVcdnote/"+id+"/"+gstin_id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",
@@ -127,10 +129,11 @@ function cancelAdvancePayment(obj){
 		confirmButtonText: 'Yes'
 	}).then(function () {
 		var id = $(obj).attr('data-id');
+		var gstin_id = $(obj).attr('data-attr');
 		$.ajax({
 			"async": true,
 			"crossDomain": true,
-			"url": SERVER_NAME+"/api/cancelAdvancePayment/"+id,
+			"url": SERVER_NAME+"/api/cancelAdvancePayment/"+id+"/"+gstin_id,
 			"method": "POST",
 			"headers": {
 				"cache-control": "no-cache",

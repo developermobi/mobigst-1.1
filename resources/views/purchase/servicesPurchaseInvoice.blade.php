@@ -86,7 +86,7 @@ a:hover, a:link{
 					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 				</div>
 			</div>
-			<h2 style="margin-top: 0px;">Create Goods Purchase Invoice</h2>
+			<h2 style="margin-top: 0px;">Create Services Purchase Invoice</h2>
 			<form id="invoiceForm" role="form">
 				<div class="table-responsive" style="padding-top: 20px;">
 					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['gstin_id']}}">
@@ -133,6 +133,7 @@ a:hover, a:link{
 							<table class="table table-bordered">
 								<tr>
 									<td>GSTIN</td>
+									<!-- <td>Place of Supply</td> -->
 								</tr>
 								<tr>
 									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" /></td>
@@ -210,21 +211,6 @@ a:hover, a:link{
 					</table>
 				</div>
 				<div class="table-responsive scroll_tab">
-					<table class="table table-bordered" id="item_table2">
-						<tr>
-							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);"> Freight Charges</td>
-							<td><input type="checkbox" name="is_lp_charge" id="is_lp_charge" onclick="test_calculate_gt(this);"> Loading and Packing Charges</td>
-							<td><input type="checkbox" name="is_insurance_charge" id="is_insurance_charge" onclick="test_calculate_gt(this);"> Insurance Charges</td>
-							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt(this);"> Other Charges</td>
-						</tr>
-						<tr>
-							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" /></td>
-							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt(this);" /></td>
-							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt(this);" /></td>
-							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name"  placeholder="Enter Charge Name" /></td>
-							<td><input type="text" class="form-control other_charge" id="other_charge" name="other_charge" onkeyup="test_calculate_gt(this);" /></td>
-						</tr>
-					</table>
 					<table class="table table-bordered" id="item_table2" style="width: 25%;float: right;">
 						<tr>
 							<td colspan="4"><input type="checkbox" name="is_roundoff" id="is_roundoff" onchange="calculateTotal(this);"> Roundoff Total</td>
@@ -324,7 +310,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addCustomer">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Clear</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -384,7 +370,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Clear</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -553,7 +539,7 @@ a:hover, a:link{
 	} 
 </script>
 
-<script src="{{URL::asset('app/js/purchaseinvoice.js')}}"></script>
+<script src="{{URL::asset('app/js/servicespurchaseinvoice.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
 @endsection

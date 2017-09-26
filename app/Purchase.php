@@ -194,22 +194,28 @@ class Purchase extends Model{
 
 
 
-	public static function cancelPurchaseInvoice($pi_id){
+	public static function cancelPurchaseInvoice($id,$gstin_id){
 
-		$data['status'] = '0';
 		$updateData = DB::table('purchase_invoice')
-		->where('pi_id', $pi_id)
-		->update($data);
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
 
-		return  $updateData;
+		$deleteData = DB::table('invoice_details')
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
+
+		return  $deleteData;
 	}
 
 
 
-	public static function getPurchaseInvoiceData($invoice_id){
+	public static function getPurchaseInvoiceData($invoice_id,$gstin_id){
 		
 		$getData = DB::table('purchase_invoice')
 		->where('invoice_no',$invoice_id)
+		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->get();
 
@@ -218,10 +224,11 @@ class Purchase extends Model{
 
 
 
-	public static function getInvoiceDetail($invoice_no){
+	public static function getInvoiceDetail($invoice_no,$gstin_id){
 		
 		$getData = DB::table('invoice_details')
 		->where('invoice_no',$invoice_no)
+		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->get();
 
@@ -383,22 +390,28 @@ class Purchase extends Model{
 
 
 
-	public static function cancelCdnote($cdn_id){
+	public static function cancelCdnote($id,$gstin_id){
 
-		$data['status'] = '0';
 		$updateData = DB::table('vendor_cd_note')
-		->where('vcdn_id', $cdn_id)
-		->update($data);
+		->where('note_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
 
-		return  $updateData;
+		$deleteData = DB::table('invoice_details')
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
+
+		return  $deleteData;
 	}
 
 
 
-	public static function getVcdnoteData($note_no){
+	public static function getVcdnoteData($note_no,$gstin_id){
 		
 		$getData = DB::table('vendor_cd_note')
 		->where('note_no',$note_no)
+		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->get();
 
@@ -500,22 +513,28 @@ class Purchase extends Model{
 
 
 
-	public static function cancelAdvancePayment($ar_id){
+	public static function cancelAdvancePayment($id,$gstin_id){
 
-		$data['status'] = '0';
 		$updateData = DB::table('advance_payment')
-		->where('ap_id', $ap_id)
-		->update($data);
+		->where('payment_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
 
-		return  $updateData;
+		$deleteData = DB::table('invoice_details')
+		->where('invoice_no', $id)
+		->where('gstin_id', $gstin_id)
+		->delete();
+
+		return  $deleteData;
 	}
 
 
 
-	public static function getAdvanceReceiptData($receipt_no){
+	public static function getAdvanceReceiptData($receipt_no,$gstin_id){
 		
 		$getData = DB::table('advance_payment')
 		->where('payment_no',$receipt_no)
+		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->get();
 
