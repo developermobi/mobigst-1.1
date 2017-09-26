@@ -1628,6 +1628,7 @@ class SalesController extends Controller{
 		$cdnoteData['sh_city'] = $input['sh_city'];
 		$cdnoteData['sh_state'] = $input['sh_state'];
 		$cdnoteData['sh_country'] = $input['sh_country'];
+		
 		$cdnoteData['total_discount'] = isset($input['total_discount']) ? $input['total_discount'] : "0";
 		$cdnoteData['total_cgst_amount'] = isset($input['total_cgst_amount']) ? $input['total_cgst_amount'] : "0";
 		$cdnoteData['total_sgst_amount'] = isset($input['total_sgst_amount']) ? $input['total_sgst_amount'] : "0";
