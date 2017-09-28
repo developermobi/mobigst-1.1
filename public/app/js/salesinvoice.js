@@ -16,18 +16,6 @@ $(function(){
 		}
 	});
 
-	$('.contact_name').keypress(function(e) {
-		if(e.keyCode == 13) {
-			$('#sh_country').focus();
-		}
-	});
-
-	$('.item_name').keypress(function(e) {
-		if(e.keyCode == 13) {
-			$('#hsn_sac_no').focus();
-		}
-	});
-
 	$('.rate').css('pointer-events','none');
 	$('.cgst_amount').css('pointer-events','none');
 	$('.sgst_amount').css('pointer-events','none');

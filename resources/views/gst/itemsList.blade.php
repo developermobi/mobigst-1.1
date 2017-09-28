@@ -56,7 +56,7 @@
 				</thead>
 				<tbody>
 					@if(!empty($data))
-					@foreach($data as $key => $value)
+					@foreach($data['data'] as $key => $value)
 					<tr>
 						<td>{{$value->item_description}}</td>
 						<td>{{$value->item_sku}}</td>

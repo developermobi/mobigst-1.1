@@ -145,6 +145,10 @@ $(function(){
 		saveServicesSalesInvoice();
 	});
 
+	$('#cancelItemButton').click(function(){
+		$('#itemForm').trigger("reset");
+	});
+
 	$('#update_invoice').click(function(){
 		updateServicesSalesInvoice();
 	});

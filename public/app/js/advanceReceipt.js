@@ -206,6 +206,10 @@ $(function(){
 		$('#customerForm').trigger("reset");
 	});
 
+	$('#cancelItemButton').click(function(){
+		$('#itemForm').trigger("reset");
+	});
+
 	$('#save_invoice').click(function(){
 		saveSalesInvoice();
 	});

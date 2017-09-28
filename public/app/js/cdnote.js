@@ -159,6 +159,10 @@ $(function(){
 		saveCdnote();
 	});
 
+	$('#cancelItemButton').click(function(){
+		$('#itemForm').trigger("reset");
+	});
+
 	$('#update_invoice').click(function(){
 		updateCdnote();
 	});

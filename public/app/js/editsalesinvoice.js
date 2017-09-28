@@ -189,6 +189,10 @@ $(function(){
 		saveSalesInvoice();
 	});
 
+	$('#cancelItemButton').click(function(){
+		$('#itemForm').trigger("reset");
+	});
+
 	$('#update_invoice').click(function(){
 		updateSalesInvoice();
 	});
@@ -974,6 +978,17 @@ function updateSalesInvoice(){
 
 	var flag = 1;
 	
+	if($("#contact_name").val() == '' && flag == 1){
+		flag = 0;
+		swal({
+			title: "Failed!",
+			text: "Please Select Contact",
+			type: "error",
+			confirmButtonText: "Close",
+		});
+		return false;
+	}
+
 	if($('.igst_percentage').prop('disabled')){
 	}else if(flag == 1){
 		$(".igst_percentage").each(function() {
