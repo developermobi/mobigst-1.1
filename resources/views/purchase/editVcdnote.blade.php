@@ -105,13 +105,12 @@ a:hover, a:link{
 							<table class="table table-bordered">
 								<tr>
 									<td>GSTIN</td>
-									<td>Place of Supply</td>
 								</tr>
 								<tr>
 									<td>
 										<input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" />
 									</td>
-									<td>
+									<td style="display: none;">
 										<input type="text" class="form-control" id="place_of_supply" placeholder="15 digit No." name="place_of_supply" value="{{$data['data']['invoice_data'][0]->place_of_supply}}" />
 									</td>
 									<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
@@ -335,38 +334,43 @@ a:hover, a:link{
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="item_description">Item Description<span>*</span> :</label>
+									<label for="item_description">Item Description</label>
 									<input type="text" class="form-control" placeholder="Item Description" name="item_description">
 								</div>
 								<div class="form-group">
-									<label for="item_type">Item Type:</label>
-									<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+									<label for="item_type">Item Type</label>
+									<select class="form-control item_type" name="item_type">
+										<option value="">Select Item Type</option>
+										<option value="Goods">Goods</option>
+										<option value="Services">Services</option>
+									</select>
 								</div>
 								<div class="form-group">
-									<label for="code">Item/SKU Code:</label>
+									<label for="code">Item/SKU Code</label>
 									<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
 								</div>
 								<div class="form-group">
-									<label for="purpr">Purchase Price:</label>
+									<label for="purpr">Purchase Price</label>
 									<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="hsn">HSN/SAC Code:</label>
+									<label for="hsn">HSN/SAC Code</label>
 									<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
 								</div>
 								<div class="form-group">
-									<label for="unit">Unit:</label>
-									<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+									<label for="unit">Unit</label>
+									<select class="form-control item_unit" name="item_unit">
+									</select>
 								</div>
 								<div class="form-group">
-									<label for="selling">Selling Price:</label>
+									<label for="selling">Selling Price</label>
 									<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 								</div>
 
 								<div class="form-group">
-									<label for="dis">Discount(%):</label>
+									<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 									<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 								</div>
 							</div>

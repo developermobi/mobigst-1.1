@@ -324,12 +324,16 @@ a:hover, a:link{
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="item_description">Item Description<span>*</span> :</label>
+									<label for="item_description">Item Description</label>
 									<input type="text" class="form-control" placeholder="Item Description" name="item_description">
 								</div>
 								<div class="form-group">
 									<label for="item_type">Item Type</label>
-									<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+									<select class="form-control item_type" name="item_type">
+										<option value="">Select Item Type</option>
+										<option value="Goods">Goods</option>
+										<option value="Services">Services</option>
+									</select>
 								</div>
 								<div class="form-group">
 									<label for="code">Item/SKU Code</label>
@@ -347,7 +351,8 @@ a:hover, a:link{
 								</div>
 								<div class="form-group">
 									<label for="unit">Unit</label>
-									<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+									<select class="form-control item_unit" name="item_unit">
+									</select>
 								</div>
 								<div class="form-group">
 									<label for="selling">Selling Price</label>
@@ -355,7 +360,7 @@ a:hover, a:link{
 								</div>
 
 								<div class="form-group">
-									<label for="dis">Discount</label>
+									<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 									<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 								</div>
 							</div>
@@ -418,71 +423,121 @@ a:hover, a:link{
 
 	<script>
 
-	function createView(){
+		function createView(){
 
-		var business_id = $("#business_id").val();
-		getItem(business_id);
+			var business_id = $("#business_id").val();
+			getItem(business_id);
 
-		var new_row= '<tr>'+
-		'<td>'+
-		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
-		'<td>'+
-		'<select class="form-control unit" name="unit" id="unit">'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
-		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
-		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
-		'<td>'+
-		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
-		'<option value="0" selected>0</option>'+
-		'<option value="0.25">0.25</option>'+
-		'<option value="3">3</option>'+
-		'<option value="5">5</option>'+
-		'<option value="9">9</option>'+
-		'<option value="12">12</option>'+
-		'<option value="18">18</option>'+
-		'<option value="28">28</option>'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
-		'<td>'+
-		'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
-		'<option value="0" selected>0</option>'+
-		'<option value="0.25">0.25</option>'+
-		'<option value="3">3</option>'+
-		'<option value="5">5</option>'+
-		'<option value="9">9</option>'+
-		'<option value="12">12</option>'+
-		'<option value="18">18</option>'+
-		'<option value="28">28</option>'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
-		'<td>'+
-		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
-		'<option value="0" selected>0</option>'+
-		'<option value="0.25">0.25</option>'+
-		'<option value="3">3</option>'+
-		'<option value="5">5</option>'+
-		'<option value="9">9</option>'+
-		'<option value="12">12</option>'+
-		'<option value="18">18</option>'+
-		'<option value="28">28</option>'+
-		'</select>'+
-		'</td>'+
-		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
-		'<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="0"/></td>'+
-		'<td><input type="text" class="form-control cess_amount" name="cess_amount" value="0"/></td>'+
-		'<td><input type="text" class="form-control total" name="total" id="total"/></td>'+
-		'<td><i class="fa fa-trash-o ibtnDel"></i></td>'+
-		'</tr>';
+			var new_row= '<tr>'+
+			'<td>'+
+			'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
+			'</select>'+
+			'</td>'+
+			'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
+			'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
+			'<td>'+
+			'<select class="form-control unit" name="unit" id="unit">'+
+			'</select>'+
+			'</td>'+
+			'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
+			'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
+			'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
+			'<td>'+
+			'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
+			'<option value="0" selected>0</option>'+
+			'<option value="0.25">0.25</option>'+
+			'<option value="3">3</option>'+
+			'<option value="5">5</option>'+
+			'<option value="9">9</option>'+
+			'<option value="12">12</option>'+
+			'<option value="18">18</option>'+
+			'<option value="28">28</option>'+
+			'</select>'+
+			'</td>'+
+			'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
+			'<td>'+
+			'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
+			'<option value="0" selected>0</option>'+
+			'<option value="0.25">0.25</option>'+
+			'<option value="3">3</option>'+
+			'<option value="5">5</option>'+
+			'<option value="9">9</option>'+
+			'<option value="12">12</option>'+
+			'<option value="18">18</option>'+
+			'<option value="28">28</option>'+
+			'</select>'+
+			'</td>'+
+			'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
+			'<td>'+
+			'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
+			'<option value="0" selected>0</option>'+
+			'<option value="0.25">0.25</option>'+
+			'<option value="3">3</option>'+
+			'<option value="5">5</option>'+
+			'<option value="9">9</option>'+
+			'<option value="12">12</option>'+
+			'<option value="18">18</option>'+
+			'<option value="28">28</option>'+
+			'</select>'+
+			'</td>'+
+			'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
+			'<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="0"/></td>'+
+			'<td><input type="text" class="form-control cess_amount" name="cess_amount" value="0"/></td>'+
+			'<td><input type="text" class="form-control total" name="total" id="total"/></td>'+
+			'<td><i class="fa fa-trash-o ibtnDel"></i></td>'+
+			'</tr>';
 
-		$("#t2").before(new_row); 
+			$("#t2").before(new_row); 
+
+			var place_of_supply = $("#place_of_supply").val();
+			var customer_state = $("#customer_state").val();
+
+			if(place_of_supply != customer_state){
+				$(".cgst_percentage").prop('disabled', true);
+				$(".cgst_amount").prop('disabled', true);
+				$(".sgst_percentage").prop('disabled', true);
+				$(".sgst_amount").prop('disabled', true);
+				$(".igst_percentage").prop('disabled', false);
+				$(".igst_amount").prop('disabled', false);
+			}else{
+				$(".cgst_percentage").prop('disabled', false);
+				$(".cgst_amount").prop('disabled', false);
+				$(".sgst_percentage").prop('disabled', false);
+				$(".sgst_amount").prop('disabled', false);
+				$(".igst_percentage").prop('disabled', true);
+				$(".igst_amount").prop('disabled', true);
+			}
+
+			$(document).ready(function() {
+				$(".item_name").select2();
+			});
+		}
+
+		$("table.order-list").on("click", ".ibtnDel", function (event) {
+			
+			var count = 0;
+			$('input[name=hsn_sac_no]').each(function(){
+				count++;
+			});
+			if(count == 1 || count < 1){
+				return false;
+			}
+			var result = confirm("Do you want to delete this item ?");
+			if (result) {
+				var id_no = $(this).closest('tr').find('.id_no').val();
+				deleteInvoiceDetail(id_no,this);
+
+				$(this).closest("tr").remove();
+				calCgstAmount(this);
+				calculateTotal(this);
+			}
+		});
+
+		
+
+		$(document).ready(function() {
+			$(".item_name").select2();
+		});
 
 		var place_of_supply = $("#place_of_supply").val();
 		var customer_state = $("#customer_state").val();
@@ -503,64 +558,14 @@ a:hover, a:link{
 			$(".igst_amount").prop('disabled', true);
 		}
 
-		$(document).ready(function() {
-			$(".item_name").select2();
-		});
-	}
+		$('#place_of_supply').css('pointer-events','none');
+		$('#tddd').css('pointer-events','none');
+		$('#contact_gstin').css('pointer-events','none');
+		$('.note_no').css('pointer-events','none');
+		$('.invoice_no').css('pointer-events','none');
+	</script>
 
-	$("table.order-list").on("click", ".ibtnDel", function (event) {
-		
-		var count = 0;
-		$('input[name=hsn_sac_no]').each(function(){
-			count++;
-		});
-		if(count == 1 || count < 1){
-			return false;
-		}
-		var result = confirm("Do you want to delete this item ?");
-		if (result) {
-			var id_no = $(this).closest('tr').find('.id_no').val();
-			deleteInvoiceDetail(id_no,this);
+	<script src="{{URL::asset('app/js/editadvancePayment.js')}}"></script>
+	<script src="{{URL::asset('app/js/createAll.js')}}"></script>
 
-			$(this).closest("tr").remove();
-			calCgstAmount(this);
-			calculateTotal(this);
-		}
-	});
-
-	
-
-	$(document).ready(function() {
-		$(".item_name").select2();
-	});
-
-	var place_of_supply = $("#place_of_supply").val();
-	var customer_state = $("#customer_state").val();
-
-	if(place_of_supply != customer_state){
-		$(".cgst_percentage").prop('disabled', true);
-		$(".cgst_amount").prop('disabled', true);
-		$(".sgst_percentage").prop('disabled', true);
-		$(".sgst_amount").prop('disabled', true);
-		$(".igst_percentage").prop('disabled', false);
-		$(".igst_amount").prop('disabled', false);
-	}else{
-		$(".cgst_percentage").prop('disabled', false);
-		$(".cgst_amount").prop('disabled', false);
-		$(".sgst_percentage").prop('disabled', false);
-		$(".sgst_amount").prop('disabled', false);
-		$(".igst_percentage").prop('disabled', true);
-		$(".igst_amount").prop('disabled', true);
-	}
-
-	$('#place_of_supply').css('pointer-events','none');
-	$('#tddd').css('pointer-events','none');
-	$('#contact_gstin').css('pointer-events','none');
-	$('.note_no').css('pointer-events','none');
-	$('.invoice_no').css('pointer-events','none');
-</script>
-
-<script src="{{URL::asset('app/js/editadvancePayment.js')}}"></script>
-<script src="{{URL::asset('app/js/createAll.js')}}"></script>
-
-@endsection
+	@endsection

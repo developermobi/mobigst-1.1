@@ -167,7 +167,8 @@
 		$('#example').DataTable({
 			bFilter: false,
 			bLengthChange: false,
-			bInfo: false
+			bInfo: false,
+			aaSorting: []
 		});
 	} );
 </script>

@@ -17,6 +17,7 @@ class Purchase extends Model{
 		->where('purchase_invoice.gstin_id',$gstin_id)
 		->where('purchase_invoice.status',1)
 		->whereBetween('purchase_invoice.created_date', [$from_date, $to_date])
+		->orderBy('pi_id', 'desc')
 		->get();
 
 		return $purchaseInvoiceData;
@@ -383,6 +384,7 @@ class Purchase extends Model{
 		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->whereBetween('created_date', [$from_date, $to_date])
+		->orderBy('vcdn_id', 'desc')
 		->get();
 
 		return $creditDebitNoteData;
@@ -506,6 +508,7 @@ class Purchase extends Model{
 		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->whereBetween('created_date', [$from_date, $to_date])
+		->orderBy('ap_id', 'desc')
 		->get();
 
 		return $advanceReceiptData;

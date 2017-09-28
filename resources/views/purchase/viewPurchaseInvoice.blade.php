@@ -93,16 +93,9 @@ a:hover, a:link{
 						<table class="table table-bordered">
 							<tr>
 								<td>GSTIN</td>
-								<td>Place of Supply</td>
 							</tr>
 							<tr>
 								<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" /></td>
-								<td>
-									<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
-										<option value="{{$data['data']['invoice_data'][0]->place_of_supply}}">{{$data['data']['invoice_data'][0]->place_of_supply}}</option>
-									</select>
-								</td>
-								<input type="hidden" id="customer_state" value="{{$data['state_name']}}">
 							</tr>
 						</table>
 					</div>

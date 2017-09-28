@@ -27,6 +27,7 @@ $(function(){
 
 	var gstin_id = $("#gstin_id").val();
 
+	getItemUnit();
 	getInvoice(gstin_id);
 
 	if (typeof $.cookie('token') === 'undefined' && typeof $.cookie('tokenId') === 'undefined'){
@@ -337,7 +338,7 @@ function getUnit(obj){
 					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
-			$(obj).closest("tr").find(".unit").append(option);
+			$(obj).closest("tr").find("#unit").append(option);
 		},
 		complete:function(){
 		}

@@ -286,7 +286,8 @@ a:hover, a:link{
 							</div>
 							<div class="form-group">
 								<label for="state">State</label>
-								<input type="text" class="form-control" placeholder="Enter State" name="state">
+								<select class="form-control state" name="state">
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="mob">Mobile No</label>
@@ -327,7 +328,11 @@ a:hover, a:link{
 							</div>
 							<div class="form-group">
 								<label for="item_type">Item Type</label>
-								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+								<select class="form-control item_type" name="item_type">
+									<option value="">Select Item Type</option>
+									<option value="Goods">Goods</option>
+									<option value="Services">Services</option>
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="code">Item/SKU Code</label>
@@ -345,7 +350,8 @@ a:hover, a:link{
 							</div>
 							<div class="form-group">
 								<label for="unit">Unit</label>
-								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+								<select class="form-control item_unit" name="item_unit">
+								</select>
 							</div>
 							<div class="form-group">
 								<label for="selling">Selling Price</label>
@@ -353,7 +359,7 @@ a:hover, a:link{
 							</div>
 							
 							<div class="form-group">
-								<label for="dis">Discount</label>
+								<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>

@@ -129,11 +129,10 @@ a:hover, a:link{
 							<table class="table table-bordered">
 								<tr>
 									<td>GSTIN</td>
-									<td>Place of Supply</td>
 								</tr>
 								<tr>
 									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" /></td>
-									<td>
+									<td style="display: none;">
 										<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
 											<option value="{{$data['data']['invoice_data'][0]->place_of_supply}}">{{$data['data']['invoice_data'][0]->place_of_supply}}</option>
 										</select>
@@ -153,7 +152,7 @@ a:hover, a:link{
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2">HSN <a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a> </th>
+								<th rowspan="2">HSN </th>
 								<th rowspan="2">QTY</th>
 								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
@@ -362,11 +361,15 @@ a:hover, a:link{
 								<input type="text" class="form-control" placeholder="Item Description" name="item_description">
 							</div>
 							<div class="form-group">
-								<label for="item_type">Item Type:</label>
-								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+								<label for="item_type">Item Type</label>
+								<select class="form-control item_type" name="item_type">
+									<option value="">Select Item Type</option>
+									<option value="Goods">Goods</option>
+									<option value="Services">Services</option>
+								</select>
 							</div>
 							<div class="form-group">
-								<label for="code">Item/SKU Code:</label>
+								<label for="code">Item/SKU Code</label>
 								<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
 							</div>
 							<div class="form-group">
@@ -376,20 +379,21 @@ a:hover, a:link{
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="hsn">HSN/SAC Code:</label>
+								<label for="hsn">HSN/SAC Code</label>
 								<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
 							</div>
 							<div class="form-group">
-								<label for="unit">Unit:</label>
-								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+								<label for="unit">Unit</label>
+								<select class="form-control item_unit" name="item_unit">
+								</select>
 							</div>
 							<div class="form-group">
-								<label for="selling">Selling Price:</label>
+								<label for="selling">Selling Price</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 
 							<div class="form-group">
-								<label for="dis">Discount(%):</label>
+								<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>

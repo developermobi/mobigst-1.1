@@ -249,7 +249,7 @@ function getContact(business_id){
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+"</option>";
+					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+" - "+data[i].city+"</option>";
 				});
 			}
 			$(".contact_name").append(option);

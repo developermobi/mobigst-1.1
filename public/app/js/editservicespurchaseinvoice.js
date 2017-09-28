@@ -151,7 +151,7 @@ function getContact(business_id){
 			var option = "";
 			if(data.length > 0){
 				$.each(data, function(i, item) {
-					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+"</option>";
+					option += "<option value='"+data[i].contact_name+"' data-attr='"+data[i].contact_id+"'>"+data[i].contact_name+" - "+data[i].city+"</option>";
 				});
 			}
 			$(".contact_name").append(option);
@@ -376,13 +376,13 @@ function getItemInfo(obj){
 			$("#subcity").html("");
 		},
 		success:function(response){
-			var unit = $(obj).closest("tr").find(".unit");
+			//var unit = $(obj).closest("tr").find(".unit");
 			var rate = $(obj).closest("tr").find("#rate");
 			var item_value = $(obj).closest("tr").find("#item_value");
 			var hsn_sac_no = $(obj).closest("tr").find("#hsn_sac_no");
 			var total = $(obj).closest("tr").find("#total");
 			if(response.code == 302){
-				$(unit).val(response.data[0].item_unit);
+				//$(unit).val(response.data[0].item_unit);
 				$(hsn_sac_no).val(response.data[0].item_hsn_sac);
 				$(rate).val(response.data[0].item_sale_price);
 				$(item_value).val(response.data[0].item_sale_price);

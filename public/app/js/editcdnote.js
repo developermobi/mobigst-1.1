@@ -8,6 +8,8 @@ $(function(){
 		window.location.href = SERVER_NAME;
 	}
 
+	getItemUnit();
+
 	$('.note_type').change(function(){
 		var note_no = ''; var new_note_no = '';
 		if ($('input[name=note_type]:checked').val() == 2){

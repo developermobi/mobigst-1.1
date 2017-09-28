@@ -133,7 +133,6 @@ a:hover, a:link{
 							<table class="table table-bordered">
 								<tr>
 									<td>GSTIN</td>
-									<!-- <td>Place of Supply</td> -->
 								</tr>
 								<tr>
 									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" /></td>
@@ -156,7 +155,7 @@ a:hover, a:link{
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2">HSN <a href=""><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a> </th>
+								<th rowspan="2">SAC </th>
 								<th rowspan="2">QTY</th>
 								<th rowspan="2" width="5%">UOM</th>
 								<th rowspan="2">Price</th>
@@ -263,45 +262,46 @@ a:hover, a:link{
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="custname">Customer Or Vendor Name:</label>
+								<label for="custname">Customer Or Vendor Name</label>
 								<input type="text" class="form-control" placeholder="Customer Or Vendor Name" name="contact_name" autofocus>
 							</div>
 							<div class="form-group">
-								<label for="gstin">GSTIN NO:</label>
+								<label for="gstin">GSTIN NO</label>
 								<input type="text" class="form-control" placeholder="15 digit" name="gstin_no" style="text-transform: uppercase;">
 							</div>
 							<div class="form-group">
-								<label for="country">Country:</label>
+								<label for="country">Country</label>
 								<input type="text" class="form-control" placeholder="Enter Country" name="country">
 							</div>
 							<div class="form-group">
-								<label for="conper">Contact Person:</label>
+								<label for="conper">Contact Person</label>
 								<input type="text" class="form-control" placeholder="Contact Person" name="contact_person">
 							</div>
 							<div class="form-group">
-								<label for="pin">Pincode:</label>
+								<label for="pin">Pincode</label>
 								<input type="text" class="form-control" placeholder="Enter Pincode" name="pincode">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="email">Email Id:</label>
+								<label for="email">Email Id</label>
 								<input type="email" class="form-control" placeholder="Email Id" name="email">
 							</div>
 							<div class="form-group">
-								<label for="pan">PAN:</label>
+								<label for="pan">PAN</label>
 								<input type="text" class="form-control" placeholder="Enter PAN" name="pan_no">
 							</div>
 							<div class="form-group">
-								<label for="state">State:</label>
-								<input type="text" class="form-control" placeholder="Enter State" name="state">
+								<label for="state">State</label>
+								<select class="form-control state" name="state">
+								</select>
 							</div>
 							<div class="form-group">
-								<label for="mob">Mobile No:</label>
+								<label for="mob">Mobile No</label>
 								<input type="text" class="form-control" placeholder="Enter Mobile No" name="mobile_no">
 							</div>
 							<div class="form-group">
-								<label for="city">City:</label>
+								<label for="city">City</label>
 								<input type="text" class="form-control" placeholder="Enter City" name="city">
 							</div>
 						</div>
@@ -310,7 +310,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addCustomer">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Clear</button>
 			</div>
 		</div>
 	</div>
@@ -330,38 +330,43 @@ a:hover, a:link{
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="item_description">Item Description<span>*</span> :</label>
+								<label for="item_description">Item Description</label>
 								<input type="text" class="form-control" placeholder="Item Description" name="item_description" autofocus>
 							</div>
 							<div class="form-group">
-								<label for="item_type">Item Type:</label>
-								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+								<label for="item_type">Item Type</label>
+								<select class="form-control item_type" name="item_type">
+									<option value="">Select Item Type</option>
+									<option value="Goods">Goods</option>
+									<option value="Services">Services</option>
+								</select>
 							</div>
 							<div class="form-group">
-								<label for="code">Item/SKU Code:</label>
+								<label for="code">Item/SKU Code</label>
 								<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
 							</div>
 							<div class="form-group">
-								<label for="purpr">Purchase Price:</label>
+								<label for="purpr">Purchase Price</label>
 								<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="hsn">HSN/SAC Code:</label>
+								<label for="hsn">HSN/SAC Code</label>
 								<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
 							</div>
 							<div class="form-group">
-								<label for="unit">Unit:</label>
-								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+								<label for="unit">Unit</label>
+								<select class="form-control item_unit" name="item_unit">
+								</select>
 							</div>
 							<div class="form-group">
-								<label for="selling">Selling Price:</label>
+								<label for="selling">Selling Price</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 							
 							<div class="form-group">
-								<label for="dis">Discount(%):</label>
+								<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>
@@ -370,7 +375,7 @@ a:hover, a:link{
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Cancel</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Clear</button>
 			</div>
 		</div>
 	</div>
@@ -432,63 +437,63 @@ a:hover, a:link{
 		getItem(business_id);
 
 		var new_row= '<tr>'+
-				'<td>'+
-				'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
-				'</select>'+
-				'</td>'+
-				'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-				'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
-				'<td>'+
-				'<select class="form-control unit" name="unit" id="unit">'+
-				'</select>'+
-				'</td>'+
-				'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
-				'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
-				'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
-				'<td>'+
-				'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
-				'<option value="0" selected>0</option>'+
-				'<option value="0.25">0.25</option>'+
-				'<option value="3">3</option>'+
-				'<option value="5">5</option>'+
-				'<option value="9">9</option>'+
-				'<option value="12">12</option>'+
-				'<option value="18">18</option>'+
-				'<option value="28">28</option>'+
-				'</select>'+
-				'</td>'+
-				'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
-				'<td>'+
-				'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
-				'<option value="0" selected>0</option>'+
-				'<option value="0.25">0.25</option>'+
-				'<option value="3">3</option>'+
-				'<option value="5">5</option>'+
-				'<option value="9">9</option>'+
-				'<option value="12">12</option>'+
-				'<option value="18">18</option>'+
-				'<option value="28">28</option>'+
-				'</select>'+
-				'</td>'+
-				'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
-				'<td>'+
-				'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
-				'<option value="0" selected>0</option>'+
-				'<option value="0.25">0.25</option>'+
-				'<option value="3">3</option>'+
-				'<option value="5">5</option>'+
-				'<option value="9">9</option>'+
-				'<option value="12">12</option>'+
-				'<option value="18">18</option>'+
-				'<option value="28">28</option>'+
-				'</select>'+
-				'</td>'+
-				'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
-				'<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="0"/></td>'+
-				'<td><input type="text" class="form-control cess_amount" name="cess_amount" value="0"/></td>'+
-				'<td><input type="text" class="form-control total" name="total" id="total"/></td>'+
-				'<td><i class="fa fa-trash-o ibtnDel"></i></td>'+
-				'</tr>';
+		'<td>'+
+		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
+		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
+		'<td>'+
+		'<select class="form-control unit" name="unit" id="unit">'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
+		'<td>'+
+		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
+		'<option value="0" selected>0</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
+		'<option value="9">9</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
+		'<td>'+
+		'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
+		'<option value="0" selected>0</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
+		'<option value="9">9</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
+		'<td>'+
+		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
+		'<option value="0" selected>0</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
+		'<option value="9">9</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
+		'<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="0"/></td>'+
+		'<td><input type="text" class="form-control cess_amount" name="cess_amount" value="0"/></td>'+
+		'<td><input type="text" class="form-control total" name="total" id="total"/></td>'+
+		'<td><i class="fa fa-trash-o ibtnDel"></i></td>'+
+		'</tr>';
 
 		$("#t2").before(new_row); 
 

@@ -129,11 +129,10 @@ a:hover, a:link{
 							<table class="table table-bordered">
 								<tr>
 									<td>GSTIN</td>
-									<td>Place of Supply</td>
 								</tr>
 								<tr>
 									<td><input type="text" class="form-control" id="contact_gstin" placeholder="15 digit No." name="contact_gstin" value="{{$data['data']['invoice_data'][0]->contact_gstin}}" /></td>
-									<td>
+									<td style="display: none;">
 										<select class="form-control place_of_supply" name="place_of_supply" id="place_of_supply">
 											<option value="{{$data['data']['invoice_data'][0]->place_of_supply}}">{{$data['data']['invoice_data'][0]->place_of_supply}}</option>
 										</select>
@@ -343,38 +342,43 @@ a:hover, a:link{
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="item_description">Item Description<span>*</span> :</label>
+								<label for="item_description">Item Description:</label>
 								<input type="text" class="form-control" placeholder="Item Description" name="item_description">
 							</div>
 							<div class="form-group">
-								<label for="item_type">Item Type:</label>
-								<input type="text" class="form-control" placeholder="Item Type" name="item_type">
+								<label for="item_type">Item Type</label>
+								<select class="form-control item_type" name="item_type">
+									<option value="">Select Item Type</option>
+									<option value="Goods">Goods</option>
+									<option value="Services">Services</option>
+								</select>
 							</div>
 							<div class="form-group">
-								<label for="code">Item/SKU Code:</label>
+								<label for="code">Item/SKU Code</label>
 								<input type="text" class="form-control" placeholder="Item/SKU Code" name="item_sku">
 							</div>
 							<div class="form-group">
-								<label for="purpr">Purchase Price:</label>
+								<label for="purpr">Purchase Price</label>
 								<input type="text" class="form-control" placeholder="Purchase Price" name="item_purchase_price">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label for="hsn">HSN/SAC Code:</label>
+								<label for="hsn">HSN/SAC Code</label>
 								<input type="text" class="form-control" placeholder="HSN/SAC Code" name="item_hsn_sac">
 							</div>
 							<div class="form-group">
-								<label for="unit">Unit:</label>
-								<input type="text" class="form-control" placeholder="Enter Unit" name="item_unit">
+								<label for="unit">Unit</label>
+								<select class="form-control item_unit" name="item_unit">
+								</select>
 							</div>
 							<div class="form-group">
-								<label for="selling">Selling Price:</label>
+								<label for="selling">Selling Price</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 
 							<div class="form-group">
-								<label for="dis">Discount(%):</label>
+								<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
 							</div>
 						</div>
@@ -443,46 +447,54 @@ a:hover, a:link{
 
 		var new_row= '<tr>'+
 		'<td>'+
-		'<select class="form-control item_name" name="item_name" onchange="getItemInfo(this);calculateTotal(this)">'+
+		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateQuantity(this)"/></td>'+
-		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0" onkeyup="calculateCost(this)"/><input type="hidden" class="form-control item_value" name="item_value" id="item_value" value="0"/></td>'+
-		'<td><input type="text" class="form-control discount" name="discount" id="discount" value="0" onkeyup="calculateDiscount(this)"/></td>'+
+		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
+		'<td>'+
+		'<select class="form-control unit" name="unit" id="unit">'+
+		'</select>'+
+		'</td>'+
+		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control cgst_amount" name="cgst_amount" id="cgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control sgst_percentage" name="sgst_percentage" id="sgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control sgst_amount" name="sgst_amount" id="sgst_amount" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control igst_percentage" name="igst_percentage" id="igst_percentage" onchange="calCgstAmount(this);" disabled>'+
 		'<option value="0" selected>0</option>'+
-		'<option value="0.125">0.125</option>'+
-		'<option value="1.5">1.5</option>'+
-		'<option value="2.5">2.5</option>'+
-		'<option value="6">6</option>'+
+		'<option value="0.25">0.25</option>'+
+		'<option value="3">3</option>'+
+		'<option value="5">5</option>'+
 		'<option value="9">9</option>'+
-		'<option value="14">14</option>'+
+		'<option value="12">12</option>'+
+		'<option value="18">18</option>'+
+		'<option value="28">28</option>'+
 		'</select>'+
 		'</td>'+
 		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+

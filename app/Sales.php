@@ -17,6 +17,7 @@ class Sales extends Model{
 		->where('sales_invoice.gstin_id',$gstin_id)
 		->where('sales_invoice.status',1)
 		->whereBetween('sales_invoice.created_date', [$from_date, $to_date])
+		->orderBy('si_id', 'desc')
 		->get();
 
 		return $salesInvoiceData;
@@ -395,6 +396,7 @@ class Sales extends Model{
 		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->whereBetween('created_date', [$from_date, $to_date])
+		->orderBy('cdn_id', 'desc')
 		->get();
 
 		return $creditDebitNoteData;
@@ -519,6 +521,7 @@ class Sales extends Model{
 		->where('gstin_id',$gstin_id)
 		->where('status',1)
 		->whereBetween('created_date', [$from_date, $to_date])
+		->orderBy('ar_id', 'desc')
 		->get();
 
 		return $advanceReceiptData;
