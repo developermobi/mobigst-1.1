@@ -552,17 +552,17 @@ $api->version('v1', function ($api) {
 
 /*Autocomplete*/
 $api->version('v1', function ($api) {
-    $api->get('contact_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@contact_serach');
+    $api->get('contact_serach/{data}/{business_id}', 'App\Http\Controllers\Api\V1\SalesController@contact_serach');
 });
 
 $api->version('v1', function ($api) {
-    $api->get('item_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@item_serach');
+    $api->get('item_serach/{data}/{business_id}', 'App\Http\Controllers\Api\V1\SalesController@item_serach');
 });
 
 $api->version('v1', function ($api) {
-    $api->get('purchase_invoice_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@purchase_invoice_serach');
+    $api->get('purchase_invoice_serach/{data}/{gstin_id}', 'App\Http\Controllers\Api\V1\SalesController@purchase_invoice_serach');
 });
 
 $api->version('v1', function ($api) {
-    $api->get('sales_invoice_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@sales_invoice_serach');
+    $api->get('sales_invoice_serach/{data}/{gstin_id}', 'App\Http\Controllers\Api\V1\SalesController@sales_invoice_serach');
 });

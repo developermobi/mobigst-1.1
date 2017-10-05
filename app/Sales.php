@@ -592,19 +592,29 @@ class Sales extends Model{
 
 
 
-	public static function contact_serach($data){
-		$contact = DB::table('contact')->select(DB::raw('CONCAT (contact_name, " - " ,city) AS LABEL'),'contact_id AS ID')
-		->where('contact_name', 'like', '%'.$data.'%')
-		->orWhere('city', 'like', '%'.$data.'%')
+	public static function contact_serach($data,$business_id){
+
+		$contact = DB::table('contact')
+		->select(DB::raw('CONCAT (contact_name, " - " ,city) AS LABEL'),'contact_id AS ID')
+		->orWhere(function ($query) use ($data) {
+			$query->where('contact_name', 'like', '%'.$data.'%')
+			->orWhere('city', 'like', '%'.$data.'%');
+		})
+		->where('business_id', $business_id)
 		->get();
+
 		return $contact;
 	}
 
 
 
-	public static function item_serach($data){
-		$item = DB::table('item')->select(DB::raw('CONCAT (item_description) AS LABEL'),'item_id AS ID')
+
+
+	public static function item_serach($data,$business_id){
+		$item = DB::table('item')
+		->select(DB::raw('CONCAT (item_description) AS LABEL'),'item_id AS ID')
 		->where('item_description', 'like', '%'.$data.'%')
+		->where('business_id', $business_id)
 		->get();
 		return $item;
 	}
@@ -612,8 +622,10 @@ class Sales extends Model{
 
 
 	public static function purchase_invoice_serach($data){
-		$invice = DB::table('purchase_invoice')->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'pi_id AS ID')
+		$invice = DB::table('purchase_invoice')
+		->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'pi_id AS ID')
 		->where('invoice_no', 'like', '%'.$data.'%')
+		->where('gstin_id', $gstin_id)
 		->get();
 		return $invice;
 	}
@@ -621,8 +633,10 @@ class Sales extends Model{
 
 
 	public static function sales_invoice_serach($data){
-		$invice = DB::table('sales_invoice')->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'si_id AS ID')
+		$invice = DB::table('sales_invoice')
+		->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'si_id AS ID')
 		->where('invoice_no', 'like', '%'.$data.'%')
+		->where('gstin_id', $gstin_id)
 		->get();
 		return $invice;
 	}

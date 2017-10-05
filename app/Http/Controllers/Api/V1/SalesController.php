@@ -2326,29 +2326,29 @@ class SalesController extends Controller{
 
 
 
-    public function contact_serach($request){
-        $data=Sales::contact_serach($request);
+    public function contact_serach($request,$business_id){
+        $data=Sales::contact_serach($request,$business_id);
         return $data;
     }
 
 
 
-    public function item_serach($request){
-        $data=Sales::item_serach($request);
+    public function item_serach($request,$business_id){
+        $data=Sales::item_serach($request,$business_id);
         return $data;
     }
 
 
 
-    public function purchase_invoice_serach($request){
-        $data=Sales::purchase_invoice_serach($request);
+    public function purchase_invoice_serach($request,$gstin_id){
+        $data=Sales::purchase_invoice_serach($request,$gstin_id);
         return $data;
     }
 
 
 
-    public function sales_invoice_serach($request){
-        $data=Sales::sales_invoice_serach($request);
+    public function sales_invoice_serach($request,$gstin_id){
+        $data=Sales::sales_invoice_serach($request,$gstin_id);
         return $data;
     }
 

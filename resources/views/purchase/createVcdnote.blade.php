@@ -487,13 +487,14 @@ a:hover, a:link{
 					$('.ui-autocomplete').css("display", "none");
 					return false;
 				}
+				var gstin_id = $("#gstin_id").val();
 				var formData = new FormData();
 				formData.append('search_value', request.term);
 				var data = {
 					search_val: request.term
 				};
 				$.ajax({
-					url: SERVER_NAME + "/api/purchase_invoice_serach/" + request.term,
+					url: SERVER_NAME + "/api/purchase_invoice_serach/" + request.term +"/"+ gstin_id ,
 					dataType: 'json',
 					success: function(data) {
 						console.log(data.length);

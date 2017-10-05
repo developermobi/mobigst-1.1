@@ -658,140 +658,142 @@ a:hover, a:link{
 </script>
 
 <script type="text/javascript">
-	$(function() {
-		$('#contact_name').autocomplete({
-			source: function(request, response) {
-				if (request.term == '') {
-					$('#contact_id').val('');
-					$('.ui-autocomplete').css("display", "none");
-					return false;
-				}
-				var formData = new FormData();
-				formData.append('search_value', request.term);
-				var data = {
-					search_val: request.term
-				};
-				$.ajax({
-					url: SERVER_NAME + "/api/contact_serach/" + request.term,
-					dataType: 'json',
-					success: function(data) {
-						console.log(data.length);
-						if (data.length != 0) {
-							if (data.length > 5) {
-								$('.ui-autocomplete').addClass('ul_scroll');
+		$(function() {
+			$('#contact_name').autocomplete({
+				source: function(request, response) {
+					if (request.term == '') {
+						$('#contact_id').val('');
+						$('.ui-autocomplete').css("display", "none");
+						return false;
+					}
+					var business_id = $("#business_id").val();
+					var formData = new FormData();
+					formData.append('search_value', request.term);
+					var data = {
+						search_val: request.term
+					};
+					$.ajax({
+						url: SERVER_NAME + "/api/contact_serach/" + request.term +"/"+ business_id ,
+						dataType: 'json',
+						success: function(data) {
+							console.log(data.length);
+							if (data.length != 0) {
+								if (data.length > 5) {
+									$('.ui-autocomplete').addClass('ul_scroll');
+								} else {
+									$('.ui-autocomplete').removeClass('ul_scroll');
+								}
+								response($.map(data, function(item) {
+									return {
+										value: item.LABEL,
+										label: item.LABEL,
+										c_id: item.ID
+									};
+								}));
 							} else {
 								$('.ui-autocomplete').removeClass('ul_scroll');
+								response($.map(data, function(item) {
+									return {
+										label: ''
+									};
+								}));
 							}
-							response($.map(data, function(item) {
-								return {
-									value: item.LABEL,
-									label: item.LABEL,
-									c_id: item.ID
-								};
-							}));
-						} else {
-							$('.ui-autocomplete').removeClass('ul_scroll');
-							response($.map(data, function(item) {
-								return {
-									label: ''
-								};
-							}));
 						}
+					});
+				},
+				select: function(event, ui) {
+					$('#contact_name').val(ui.item.label);
+					$('#contact_id').val(ui.item.c_id);
+					if ($('#contact_name').val() == '') {
+						return false;
+					}else{
+						getContactInfo();
 					}
-				});
-			},
-			select: function(event, ui) {
-				$('#contact_name').val(ui.item.label);
-				$('#contact_id').val(ui.item.c_id);
-				if ($('#contact_name').val() == '') {
-					return false;
-				}else{
-					getContactInfo();
+				},
+				minLength: 0
+			}).data("ui-autocomplete")._renderItem = function(ul, item) {
+				if (item.label == undefined || item.label == '') {
+					return $("<li></li>")
+					.append("<a>No Records Found</a>")
+					.appendTo(ul);
+				} else {
+					return $("<li></li>")
+					.data("item.autocomplete", item)
+					.append("<a style='font-size:12px' >" + item.label + "</a>")
+					.appendTo(ul);
 				}
-			},
-			minLength: 0
-		}).data("ui-autocomplete")._renderItem = function(ul, item) {
-			if (item.label == undefined || item.label == '') {
-				return $("<li></li>")
-				.append("<a>No Records Found</a>")
-				.appendTo(ul);
-			} else {
-				return $("<li></li>")
-				.data("item.autocomplete", item)
-				.append("<a style='font-size:12px' >" + item.label + "</a>")
-				.appendTo(ul);
-			}
-		};
-	});
+			};
+		});
 
-	function autoitem(d_id){
-		$('#item_name'+d_id).autocomplete({
-			source: function(request, response) {
-				if (request.term == '') {
-					$(this).closest('tr').find('.item_id').val('');
-					$('.ui-autocomplete').css("display", "none");
-					return false;
-				}
-				var formData = new FormData();
-				formData.append('search_value', request.term);
-				var data = {
-					search_val: request.term
-				};
-				$.ajax({
-					url: SERVER_NAME + "/api/item_serach/" + request.term,
-					dataType: 'json',
-					success: function(data) {
-						console.log(data.length);
-						if (data.length != 0) {
-							if (data.length > 5) {
-								$('.ui-autocomplete').addClass('ul_scroll');
+		function autoitem(d_id){
+			$('#item_name'+d_id).autocomplete({
+				source: function(request, response) {
+					if (request.term == '') {
+						$(this).closest('tr').find('.item_id').val('');
+						$('.ui-autocomplete').css("display", "none");
+						return false;
+					}
+					var gstin_id = $("#gstin_id").val();
+					var formData = new FormData();
+					formData.append('search_value', request.term);
+					var data = {
+						search_val: request.term
+					};
+					$.ajax({
+						url: SERVER_NAME + "/api/item_serach/" + request.term +"/"+ gstin_id ,
+						dataType: 'json',
+						success: function(data) {
+							console.log(data.length);
+							if (data.length != 0) {
+								if (data.length > 5) {
+									$('.ui-autocomplete').addClass('ul_scroll');
+								} else {
+									$('.ui-autocomplete').removeClass('ul_scroll');
+								}
+								response($.map(data, function(item) {
+									return {
+										value: item.LABEL,
+										label: item.LABEL,
+										i_id: item.ID
+									};
+								}));
 							} else {
 								$('.ui-autocomplete').removeClass('ul_scroll');
+								response($.map(data, function(item) {
+									return {
+										label: ''
+									};
+								}));
 							}
-							response($.map(data, function(item) {
-								return {
-									value: item.LABEL,
-									label: item.LABEL,
-									i_id: item.ID
-								};
-							}));
-						} else {
-							$('.ui-autocomplete').removeClass('ul_scroll');
-							response($.map(data, function(item) {
-								return {
-									label: ''
-								};
-							}));
 						}
+					});
+				},
+				select: function(event, ui) {
+					$('#item_name'+d_id).val(ui.item.label);
+					$('#item_id'+d_id).val(ui.item.i_id);
+					if ($('#item_id'+d_id).val() == '') {
+						return false;
+					}else{
+						getUnit(d_id);
+						getItemInfo(d_id);
+						calculateTotal();
 					}
-				});
-			},
-			select: function(event, ui) {
-				$('#item_name'+d_id).val(ui.item.label);
-				$('#item_id'+d_id).val(ui.item.i_id);
-				if ($('#item_id'+d_id).val() == '') {
-					return false;
-				}else{
-					getUnit(d_id);
-					getItemInfo(d_id);
-					calculateTotal();
+				},
+				minLength: 0
+			}).data("ui-autocomplete")._renderItem = function(ul, item) {
+				if (item.label == undefined || item.label == '') {
+					return $("<li></li>")
+					.append("<a>No Records Found</a>")
+					.appendTo(ul);
+				} else {
+					return $("<li></li>")
+					.data("item.autocomplete", item)
+					.append("<a style='font-size:12px' >" + item.label + "</a>")
+					.appendTo(ul);
 				}
-			},
-			minLength: 0
-		}).data("ui-autocomplete")._renderItem = function(ul, item) {
-			if (item.label == undefined || item.label == '') {
-				return $("<li></li>")
-				.append("<a>No Records Found</a>")
-				.appendTo(ul);
-			} else {
-				return $("<li></li>")
-				.data("item.autocomplete", item)
-				.append("<a style='font-size:12px' >" + item.label + "</a>")
-				.appendTo(ul);
-			}
-		};
-	}
-</script>
+			};
+		}
+	</script>
 
 <script src="{{URL::asset('app/js/editservicessalesinvoice.js')}}"></script>
 <script src="{{URL::asset('app/js/createAll.js')}}"></script>
