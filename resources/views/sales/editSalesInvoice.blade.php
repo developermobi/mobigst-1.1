@@ -30,17 +30,20 @@ a:hover, a:link{
 
 <input type="hidden" id="business_id" value="{{$data['business_id']}}">
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> 
 
-<script type="text/javascript">
-	var date=new Date();
-	var year=date.getFullYear();
-	var month=date.getMonth();
-	$(document).ready(function() {
-		$(".contact_name").select2();
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
+
+	<script type="text/javascript">
+		var date=new Date();
+		var year=date.getFullYear();
+		var month=date.getMonth();
+		$(document).ready(function() {
+		//$(".contact_name").select2();
 		$('.datepicker').datepicker({
 			format: 'yyyy-mm-dd',
 			startDate: new Date(year, month, '01'),
@@ -56,74 +59,76 @@ a:hover, a:link{
 		.on('hide', due_dateChanged);
 	});
 
-	function due_dateChanged(ev) {
-		var invoice_date = $(".datepicker").val();
-		if(invoice_date == ''){
-			$(".due_datepicker").val(" ");
-			alert('Please select Invoice date first');
-		}else{
-			var due_date = $(".due_datepicker").val();
-
-			if(invoice_date > due_date){
-				alert('Due date should greater than invoice date');
+		function due_dateChanged(ev) {
+			var invoice_date = $(".datepicker").val();
+			if(invoice_date == ''){
 				$(".due_datepicker").val(" ");
+				alert('Please select Invoice date first');
+			}else{
+				var due_date = $(".due_datepicker").val();
+
+				if(invoice_date > due_date){
+					alert('Due date should greater than invoice date');
+					$(".due_datepicker").val(" ");
+				}
 			}
 		}
-	}
-</script>
+	</script>
 
-<div class="content">
-	<div class="train w3-agile">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-10">
-					<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
-						<a href="../../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
-						<a href="../../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
+	<div class="content">
+		<div class="train w3-agile">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10">
+						<div class="breadcrumb btn-group btn-breadcrumb" style="float: left;">
+							<a href="../../../business" class="btn btn-default"><i class="glyphicon glyphicon-home"></i></a>
+							<a href="../../../sales/{{encrypt($data['data']['invoice_data'][0]->gstin_id)}}" class="btn btn-default"> Sales Invoices </a>
+						</div>
+					</div>
+					<div class="col-md-2" style="padding-top: 45px;">
+						<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
 					</div>
 				</div>
-				<div class="col-md-2" style="padding-top: 45px;">
-					<input type="button" class="btn btn-default" value="Quick Action" style="float: right;" data-toggle="modal" data-target="#quick">
-				</div>
-			</div>
-			<h2 style="margin-top: 0px;">Edit Goods Sales Invoice</h2>
-			<div class="table-responsive" style="padding-top: 20px;">
+				<h2 style="margin-top: 0px;">Edit Goods Sales Invoice</h2>
 				<form id="invoiceForm" role="form">
-					<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
-					<input type="hidden" name="si_id" id="si_id" value="{{$data['data']['invoice_data'][0]->si_id}}">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th>Invoice Number</th>
-								<th>Invoice date</th>
-								<th>REF. P.O</th>
-								<th>Due date</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><input type="text" class="form-control" name="invoice_no" id="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" style="text-align:center;"readonly /></td>
-								<td><input type="text" class="form-control datepicker" name="invoice_date" value="{{$data['data']['invoice_data'][0]->invoice_date}}" /></td>
-								<td><input type="text" class="form-control" name="reference" value="{{$data['data']['invoice_data'][0]->reference}}" /></td>
-								<td><input type="text" class="form-control due_datepicker" name="due_date" value="{{$data['data']['invoice_data'][0]->due_date}}" /></td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="row">
-						<div class="col-md-6">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Customer Name</th>
-									</tr> 
-								</thead>
-								<tbody>
-									<tr>
-										<td id="tddd">
-											<input type="hidden" name="" id="contact_name_hidden" value="{{$data['data']['invoice_data'][0]->contact_name}}">
+					<div class="table-responsive" style="padding-top: 20px;">
+						<input type="hidden" name="gstin_id" id="gstin_id" value="{{$data['data']['invoice_data'][0]->gstin_id}}">
+						<input type="hidden" name="si_id" id="si_id" value="{{$data['data']['invoice_data'][0]->si_id}}">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Invoice Number</th>
+									<th>Invoice date</th>
+									<th>REF. P.O</th>
+									<th>Due date</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><input type="text" class="form-control" name="invoice_no" id="invoice_no" value="{{$data['data']['invoice_data'][0]->invoice_no}}" style="text-align:center;"readonly /></td>
+									<td><input type="text" class="form-control datepicker" name="invoice_date" value="{{$data['data']['invoice_data'][0]->invoice_date}}" /></td>
+									<td><input type="text" class="form-control" name="reference" value="{{$data['data']['invoice_data'][0]->reference}}" /></td>
+									<td><input type="text" class="form-control due_datepicker" name="due_date" value="{{$data['data']['invoice_data'][0]->due_date}}" /></td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="row">
+							<div class="col-md-6">
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th>Customer Name</th>
+										</tr> 
+									</thead>
+									<tbody>
+										<tr>
+											<td id="tddd">
+											<!-- <input type="hidden" name="" id="contact_name_hidden" value="{{$data['data']['invoice_data'][0]->contact_name}}">
 											<select class="form-control contact_name" name="contact_name" onchange="getContactInfo(this);">
 												<option value="{{$data['data']['invoice_data'][0]->contact_name}}">{{$data['data']['invoice_data'][0]->contact_name}}</option>
-											</select>
+											</select> -->
+											<input type="text" class="form-control contact_name" id="contact_name" placeholder="Enter Customer Name" name="contact_name" value="{{$data['data']['invoice_data'][0]->contact_name}}">
+											<input type="hidden" class="form-control contact_id" id="contact_id" >
 										</td>
 									</tr>
 								</tbody>
@@ -206,7 +211,7 @@ a:hover, a:link{
 						</div>
 					</div>
 				</div>
-				<div class="table-responsive scroll_tab">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<table class="table table-bordered order-list">
 						<thead>
 							<tr>
@@ -215,9 +220,9 @@ a:hover, a:link{
 										<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 									</span>
 								</th>
-								<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN</th>
+								<th rowspan="2">HSN</th>
 								<th rowspan="2">QTY</th>
-								<th rowspan="2" width="5%">UOM</th>
+								<th rowspan="2" width="5%">Unit</th>
 								<th rowspan="2">Price</th>
 								<th rowspan="2" class="removeDiv"> Discount in <i class="fa fa-inr" aria-hidden="true"></i></th>
 								<th rowspan="2">Taxable Value</th>
@@ -326,7 +331,7 @@ a:hover, a:link{
 							@if($data['data']['invoice_data'][0]->tax_type_applied == '1')
 							<tr>
 								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied" checked > <!-- Advanced Settings --> Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
@@ -340,7 +345,7 @@ a:hover, a:link{
 							@else
 							<tr>
 								<td colspan="17">
-									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> Reverse Charge </p>
+									<p style="float: left;"><input type="checkbox" id="advance_setting" name="tax_type_applied"> <!-- Advanced Settings --> Reverse Charge </p>
 								</td>
 							</tr>
 							<tr>
@@ -355,7 +360,7 @@ a:hover, a:link{
 						</tbody>
 					</table>
 				</div>
-				<div class="table-responsive">
+				<div class="table-responsive" style="padding-top: 20px;">
 					<table class="table table-bordered" id="item_table2">
 						<tr>
 							<td><input type="checkbox" name="is_freight_charge" id="is_freight_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_freight_charge == '1'){echo "checked";}?> > Freight Charges</td>
@@ -364,11 +369,7 @@ a:hover, a:link{
 							<td colspan="2"><input type="checkbox" name="is_other_charge" id="is_other_charge" onclick="test_calculate_gt(this);" <?php if($data['data']['invoice_data'][0]->is_other_charge == '1'){echo "checked";}?> > Other Charges</td>
 						</tr>
 						<tr>
-							@if($data['data']['invoice_data'][0]->freight_charge > 0)
 							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->freight_charge}}" ></td>
-							@else
-							<td><input type="text" class="form-control freight_charge" id="freight_charge" name="freight_charge" onkeyup="test_calculate_gt(this);" value=" " ></td>
-							@endif
 							<td><input type="text" class="form-control lp_charge" id="lp_charge" name="lp_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->lp_charge}}" ></td>
 							<td><input type="text" class="form-control insurance_charge" name="insurance_charge" id="insurance_charge" onkeyup="test_calculate_gt(this);" value="{{$data['data']['invoice_data'][0]->insurance_charge}}"  ></td>
 							<td><input type="text" class="form-control" id="other_charge_name" name="other_charge_name" value="{{$data['data']['invoice_data'][0]->other_charge_name}}"  placeholder="Enter Charge Name" /></td>
@@ -459,17 +460,17 @@ a:hover, a:link{
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
 
-							<div class="form-group">
-								<label for="dis">Discount:</label>
+							<!-- <div class="form-group">
+								<label for="dis">Discount(%):</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-success" id="addItem">Add</button>
-				<button type="button" class="btn btn-default pull-left" id="cancelItemButton">Clear</button>
+				<button type="button" class="btn btn-default pull-left" id="cancelGstinButton">Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -521,29 +522,32 @@ a:hover, a:link{
 </div>
 
 <script>
-	/*$(document).ready(function() {
-		createView();
-	});*/
+	$(document).ready(function() {
+		dynamic_id = 1;
+	});
 
 	function createView(){
+
+		$.cookie("dynamic_id", dynamic_id);
+		var d_id = $.cookie('dynamic_id');
 
 		var business_id = $("#business_id").val();
 		getItem(business_id);
 
 		var new_row= '<tr>'+
 		'<td>'+
-		'<select class="form-control item_name" name="item_name" id="item_name"  onchange="getUnit(this);getItemInfo(this);calculateTotal(this)">'+
-		'</select>'+
+		'<input type="text" class="form-control item_name" id="item_name'+d_id+'" placeholder="Enter item Name" name="item_name" onkeypress="onItemNameChange(this,event);autoitem('+d_id+')" >'+
+		'<input type="hidden" class="form-control item_id" name="item_id" id="item_id'+d_id+'">'+
 		'</td>'+
-		'<td><input type="text" class="form-control" name="hsn_sac_no" id="hsn_sac_no"/></td>'+
-		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity" value="1" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control hsn_sac_no" name="hsn_sac_no" id="hsn_sac_no'+d_id+'"/></td>'+
+		'<td><input type="text" class="form-control quantity" name="quantity" id="quantity'+d_id+'" value="1" onkeyup="calculateNew(this)"/></td>'+
 		'<td>'+
-		'<select class="form-control unit" name="unit" id="unit">'+
+		'<select class="form-control unit" name="unit" id="unit'+d_id+'">'+
 		'</select>'+
 		'</td>'+
-		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value" value="0" onkeyup="calculateNew(this)"/></td>'+
-		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount" value="0" onkeyup="calculateNew(this)"/></td>'+
-		'<td><input type="text" class="form-control rate" name="rate" id="rate" value="0"/></td>'+
+		'<td><input type="text" class="form-control item_value" name="item_value" id="item_value'+d_id+'" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control discount removeDiv" name="discount" id="discount'+d_id+'" value="0" onkeyup="calculateNew(this)"/></td>'+
+		'<td><input type="text" class="form-control rate" name="rate" id="rate'+d_id+'" value="0"/></td>'+
 		'<td>'+
 		'<select class="form-control cgst_percentage" name="cgst_percentage" id="cgst_percentage" onchange="calCgstAmount(this);">'+
 		'<option value="0" selected>0</option>'+
@@ -585,9 +589,11 @@ a:hover, a:link{
 		'<td><input type="text" class="form-control igst_amount" name="igst_amount" id="igst_amount" value="0"  disabled/></td>'+
 		'<td><input type="text" class="form-control cess_percentage" name="cess_percentage" onkeyup="calculateCESS(this)" value="0"/></td>'+
 		'<td><input type="text" class="form-control cess_amount" name="cess_amount" value="0"/></td>'+
-		'<td><input type="text" class="form-control total" name="total" id="total"/></td>'+
+		'<td><input type="text" class="form-control total" name="total" id="total'+d_id+'"/></td>'+
 		'<td><i class="fa fa-trash-o ibtnDel"></i></td>'+
 		'</tr>';
+
+		dynamic_id++;
 
 		$("#t2").before(new_row); 
 
@@ -611,7 +617,7 @@ a:hover, a:link{
 		}
 
 		$(document).ready(function() {
-			$(".item_name").select2();
+			//$(".item_name").select2();
 		});
 	}
 
@@ -638,7 +644,7 @@ a:hover, a:link{
 	
 
 	$(document).ready(function() {
-		$(".item_name").select2();
+		//$(".item_name").select2();
 		$('input').attr('autocomplete', 'false');
 	});
 
@@ -664,6 +670,142 @@ a:hover, a:link{
 	//$('#place_of_supply').css('pointer-events','none');
 	//$('#tddd').css('pointer-events','none');
 	//$('#contact_gstin').css('pointer-events','none');
+</script>
+
+<script type="text/javascript">
+	$(function() {
+		$('#contact_name').autocomplete({
+			source: function(request, response) {
+				if (request.term == '') {
+					$('#contact_id').val('');
+					$('.ui-autocomplete').css("display", "none");
+					return false;
+				}
+				var formData = new FormData();
+				formData.append('search_value', request.term);
+				var data = {
+					search_val: request.term
+				};
+				$.ajax({
+					url: SERVER_NAME + "/api/contact_serach/" + request.term,
+					dataType: 'json',
+					success: function(data) {
+						console.log(data.length);
+						if (data.length != 0) {
+							if (data.length > 5) {
+								$('.ui-autocomplete').addClass('ul_scroll');
+							} else {
+								$('.ui-autocomplete').removeClass('ul_scroll');
+							}
+							response($.map(data, function(item) {
+								return {
+									value: item.LABEL,
+									label: item.LABEL,
+									c_id: item.ID
+								};
+							}));
+						} else {
+							$('.ui-autocomplete').removeClass('ul_scroll');
+							response($.map(data, function(item) {
+								return {
+									label: ''
+								};
+							}));
+						}
+					}
+				});
+			},
+			select: function(event, ui) {
+				$('#contact_name').val(ui.item.label);
+				$('#contact_id').val(ui.item.c_id);
+				if ($('#contact_name').val() == '') {
+					return false;
+				}else{
+					getContactInfo();
+				}
+			},
+			minLength: 0
+		}).data("ui-autocomplete")._renderItem = function(ul, item) {
+			if (item.label == undefined || item.label == '') {
+				return $("<li></li>")
+				.append("<a>No Records Found</a>")
+				.appendTo(ul);
+			} else {
+				return $("<li></li>")
+				.data("item.autocomplete", item)
+				.append("<a style='font-size:12px' >" + item.label + "</a>")
+				.appendTo(ul);
+			}
+		};
+	});
+
+	function autoitem(d_id){
+		$('#item_name'+d_id).autocomplete({
+			source: function(request, response) {
+				if (request.term == '') {
+					$(this).closest('tr').find('.item_id').val('');
+					$('.ui-autocomplete').css("display", "none");
+					return false;
+				}
+				var formData = new FormData();
+				formData.append('search_value', request.term);
+				var data = {
+					search_val: request.term
+				};
+				$.ajax({
+					url: SERVER_NAME + "/api/item_serach/" + request.term,
+					dataType: 'json',
+					success: function(data) {
+						console.log(data.length);
+						if (data.length != 0) {
+							if (data.length > 5) {
+								$('.ui-autocomplete').addClass('ul_scroll');
+							} else {
+								$('.ui-autocomplete').removeClass('ul_scroll');
+							}
+							response($.map(data, function(item) {
+								return {
+									value: item.LABEL,
+									label: item.LABEL,
+									i_id: item.ID
+								};
+							}));
+						} else {
+							$('.ui-autocomplete').removeClass('ul_scroll');
+							response($.map(data, function(item) {
+								return {
+									label: ''
+								};
+							}));
+						}
+					}
+				});
+			},
+			select: function(event, ui) {
+				$('#item_name'+d_id).val(ui.item.label);
+				$('#item_id'+d_id).val(ui.item.i_id);
+				if ($('#item_id'+d_id).val() == '') {
+					return false;
+				}else{
+					getUnit(d_id);
+					getItemInfo(d_id);
+					calculateTotal();
+				}
+			},
+			minLength: 0
+		}).data("ui-autocomplete")._renderItem = function(ul, item) {
+			if (item.label == undefined || item.label == '') {
+				return $("<li></li>")
+				.append("<a>No Records Found</a>")
+				.appendTo(ul);
+			} else {
+				return $("<li></li>")
+				.data("item.autocomplete", item)
+				.append("<a style='font-size:12px' >" + item.label + "</a>")
+				.appendTo(ul);
+			}
+		};
+	}
 </script>
 
 <script src="{{URL::asset('app/js/editsalesinvoice.js')}}"></script>

@@ -1,5 +1,33 @@
 $(function(){
 
+	jQuery.extend(jQuery.expr[':'], {
+		focusable: function (el, index, selector) {
+			return $(el).is('a, button, :input, [tabindex]');
+		}
+	});
+
+	$(document).on('keypress', 'input,select,checkbox', function (e) {
+		if (e.which == 13) {
+			e.preventDefault();
+			var $canfocus = $(':focusable');
+			var index = $canfocus.index(document.activeElement) + 1;
+			if (index >= $canfocus.length) index = 0;
+			$canfocus.eq(index).focus();
+		}
+	});
+
+	$('.contact_name').keypress(function(e) {
+		if(e.keyCode == 13) {
+			$('#same_address').focus();
+		}
+	});
+
+	$('.discount').keypress(function(e) {
+		if(e.keyCode == 13) {
+			$('#advance_setting').focus();
+		}
+	});
+
 	$('.rate').css('pointer-events','none');
 	$('.cgst_amount').css('pointer-events','none');
 	$('.sgst_amount').css('pointer-events','none');
@@ -221,6 +249,15 @@ $(function(){
 });
 
 
+
+function onItemNameChange(obj,e){
+	if(e.keyCode == 13) {		
+		$(obj).closest('tr').find('.hsn_sac_no').focus();
+	}
+}
+
+
+
 function getContact(business_id){
 
 	$.ajax({
@@ -337,7 +374,7 @@ function getStates(){
 
 
 
-function getUnit(obj){
+function getUnit(d_id,obj){
 
 	$.ajax({
 		"async": true,
@@ -360,7 +397,7 @@ function getUnit(obj){
 					option += "<option value='"+data[i].unit_name+"'>"+data[i].unit_name+"</option>";
 				});
 			}
-			$(obj).closest("tr").find(".unit").append(option);
+			$("#unit"+d_id).append(option);
 		},
 		complete:function(){
 		}
@@ -403,7 +440,8 @@ function getItemUnit(){
 
 function getContactInfo(obj){
 	
-	var contact_id = $(obj).find(':selected').attr('data-attr');
+	//var contact_id = $(obj).find(':selected').attr('data-attr');
+	var contact_id = $('#contact_id').val();
 	
 	$.ajax({
 		"async": false,
@@ -498,9 +536,8 @@ function getItem(business_id){
 
 
 
-function getItemInfo(obj){
-	
-	var item_id = $(obj).find(':selected').attr('data-attr');
+function getItemInfo(d_id,obj){
+	var item_id = $('#item_id'+d_id).val();
 	
 	$.ajax({
 		"async": true,
@@ -512,11 +549,11 @@ function getItemInfo(obj){
 			$("#subcity").html("");
 		},
 		success:function(response){
-			var unit = $(obj).closest("tr").find(".unit");
-			var rate = $(obj).closest("tr").find("#rate");
-			var item_value = $(obj).closest("tr").find("#item_value");
-			var hsn_sac_no = $(obj).closest("tr").find("#hsn_sac_no");
-			var total = $(obj).closest("tr").find("#total");
+			var unit = $('#unit'+d_id);
+			var rate = $('#rate'+d_id);
+			var item_value = $('#item_value'+d_id);
+			var hsn_sac_no = $('#hsn_sac_no'+d_id);
+			var total = $('#total'+d_id);
 			if(response.code == 302){
 				$(unit).val(response.data[0].item_unit);
 				$(hsn_sac_no).val(response.data[0].item_hsn_sac);

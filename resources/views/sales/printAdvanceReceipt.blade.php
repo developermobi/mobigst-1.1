@@ -70,7 +70,7 @@
 		</tr>
 		<tr>
 			<td width="5%">Sr. No.</td>
-			<td>Description</td>
+			<td>Item Description</td>
 			<td>HSN</td>
 			<td>Qty</td>
 			<td>UOM</td>

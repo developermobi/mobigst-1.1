@@ -122,7 +122,7 @@ a:hover, a:link{
 									<i class="fa fa-plus-circle fa-2x" title="Add New Item" aria-hidden="true" data-toggle="modal" data-target="#addItemModal"></i>
 								</span>
 							</th>
-							<th rowspan="2"><a href="javascript:void();"><i class="fa fa-question-circle-o" title="What is HSN/SAC code" aria-hidden="true"></i></a><br>HSN/SAC</th>
+							<th rowspan="2">HSN/SAC</th>
 							<th rowspan="2">QTY</th>
 							<th rowspan="2" width="5%">UOM</th>
 							<th rowspan="2">Price</th>

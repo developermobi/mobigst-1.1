@@ -388,6 +388,7 @@ class SalesController extends Controller{
 						$invoiceDetailData['unit'] = $input['unit'][$key];
 						$invoiceDetailData['item_name'] = $input['item_name'][$key];
 						$invoiceDetailData['item_value'] = $input['item_value'][$key];
+						$invoiceDetailData['real_value'] = $input['real_value'][$key];
 						$invoiceDetailData['item_type'] = "Goods";
 						$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'][$key];
 						$invoiceDetailData['quantity'] = $input['quantity'][$key];
@@ -416,6 +417,7 @@ class SalesController extends Controller{
 					$invoiceDetailData['unit'] = $input['unit'];
 					$invoiceDetailData['item_name'] = $input['item_name'];
 					$invoiceDetailData['item_value'] = $input['item_value'];
+					$invoiceDetailData['real_value'] = $input['real_value'];
 					$invoiceDetailData['item_type'] = "Goods";
 					$invoiceDetailData['hsn_sac_no'] = $input['hsn_sac_no'];
 					$invoiceDetailData['quantity'] = $input['quantity'];
@@ -2333,6 +2335,20 @@ class SalesController extends Controller{
 
     public function item_serach($request){
         $data=Sales::item_serach($request);
+        return $data;
+    }
+
+
+
+    public function purchase_invoice_serach($request){
+        $data=Sales::purchase_invoice_serach($request);
+        return $data;
+    }
+
+
+
+    public function sales_invoice_serach($request){
+        $data=Sales::sales_invoice_serach($request);
         return $data;
     }
 

@@ -960,8 +960,9 @@ class GstController extends Controller{
 				$key_value[$key]['item_unit'] = $res[$key][4];
 				$key_value[$key]['item_sale_price'] = $res[$key][5];
 				$key_value[$key]['item_purchase_price'] = $res[$key][6];
-				$key_value[$key]['item_discount'] = $res[$key][7];
-				$key_value[$key]['item_notes'] = $res[$key][8];
+				//$key_value[$key]['item_discount'] = $res[$key][7];
+				//$key_value[$key]['discount_price'] = $res[$key][5] - $res[$key][7];
+				$key_value[$key]['item_notes'] = $res[$key][7];
 				$key_value[$key]['created_at'] = date('Y-m-d H:i:s');
 			}
 			$key_value;

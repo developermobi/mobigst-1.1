@@ -417,7 +417,7 @@ class Gst extends Model{
 
 	public static function addItem($input){
 		$input['created_at'] = date('Y-m-d H:i:s');
-
+		//$input['discount_price'] = $input['item_sale_price'] - $input['item_discount'];
 		$addItem = DB::table('item')
 		->insert($input);
 

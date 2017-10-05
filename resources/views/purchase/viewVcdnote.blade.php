@@ -114,7 +114,7 @@ a:hover, a:link{
 							<th rowspan="2">QTY</th>
 							<th rowspan="2" width="5%">Unit</th>
 							<th rowspan="2">Price</th>
-							<th rowspan="2">Discount in %</th>
+							<th rowspan="2">Discount in  <i class="fa fa-inr" aria-hidden="true"></i></th>
 							<th rowspan="2">Taxable Value</th>
 							<th colspan="2">CGST</th>
 							<th colspan="2">SGST</th>

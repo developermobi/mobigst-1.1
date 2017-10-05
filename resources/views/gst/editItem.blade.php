@@ -81,14 +81,14 @@ a:hover, a:link{
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price" value="{{$data['data']['item_info'][0]->item_sale_price}}">
 							</div>
 							<div class="form-group">
+								<label for="note">Item Notes</label>
+								<textarea class="form-control" rows="5" placeholder="Enter Item Notes" name="item_notes">{{$data['data']['item_info'][0]->item_notes}}</textarea>
+							</div>
+							<!-- <div class="form-group">
 								<label for="dis">Discount(%)</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount" value="{{$data['data']['item_info'][0]->item_discount}}">
-							</div>
+							</div> -->
 						</div>
-					</div>
-					<div class="form-group">
-						<label for="note">Item Notes</label>
-						<textarea class="form-control" rows="5" placeholder="Enter Item Notes" name="item_notes">{{$data['data']['item_info'][0]->item_notes}}</textarea>
 					</div>
 					<button type="submit" class="btn btn-success" id="updateItem">Update</button>
 				</form>

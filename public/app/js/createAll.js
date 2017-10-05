@@ -99,7 +99,8 @@ function addCustomer(){
 					confirmButtonText: "OK",
 					width:'400px',
 				}).then(function () {
-					window.location.href = window.location.href;
+					//window.location.href = window.location.href;
+					$("#addContactModal").modal('hide');
 				});
 			}else{
 				swal({

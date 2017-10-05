@@ -93,7 +93,7 @@ class Sales extends Model{
 
 	public static function addItem($input){
 		$input['created_at'] = date('Y-m-d H:i:s');
-
+		//$input['discount_price'] = $input['item_sale_price'] - $input['item_discount'];
 		$addItem = DB::table('item')
 		->insertGetId($input);
 
@@ -607,6 +607,24 @@ class Sales extends Model{
 		->where('item_description', 'like', '%'.$data.'%')
 		->get();
 		return $item;
+	}
+
+
+
+	public static function purchase_invoice_serach($data){
+		$invice = DB::table('purchase_invoice')->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'pi_id AS ID')
+		->where('invoice_no', 'like', '%'.$data.'%')
+		->get();
+		return $invice;
+	}
+
+
+
+	public static function sales_invoice_serach($data){
+		$invice = DB::table('sales_invoice')->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'si_id AS ID')
+		->where('invoice_no', 'like', '%'.$data.'%')
+		->get();
+		return $invice;
 	}
 
 }

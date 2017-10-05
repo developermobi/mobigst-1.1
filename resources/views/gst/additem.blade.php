@@ -65,7 +65,6 @@
 								<label for="selling">Selling Price</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
-							
 							<div class="form-group">
 								<label for="dis">Discount(%)</label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">

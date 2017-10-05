@@ -5,17 +5,17 @@
 @section('content')
 
 <style type="text/css">
-	a:hover, a:link{
-		text-decoration: none;
-		color: #fff;
-	}
-	.error{
-		display: inline-block;
-		max-width: 100%;
-		margin-bottom: 5px;
-		font-weight: 400;
-		color: #d24c2d !important;
-	}
+a:hover, a:link{
+	text-decoration: none;
+	color: #fff;
+}
+.error{
+	display: inline-block;
+	max-width: 100%;
+	margin-bottom: 5px;
+	font-weight: 400;
+	color: #d24c2d !important;
+}
 </style>
 
 <div class="about-section w3-layouts">
@@ -79,16 +79,15 @@
 								<label for="selling">Selling Price</label>
 								<input type="text" class="form-control" placeholder="Enter Selling Price" name="item_sale_price">
 							</div>
-							
 							<div class="form-group">
+								<label for="note">Item Notes</label>
+								<textarea class="form-control" rows="5"  placeholder="Enter Item Notes" name="item_notes"></textarea>
+							</div>
+							<!-- <div class="form-group">
 								<label for="dis">Discount in <i class="fa fa-inr" aria-hidden="true"></i></label>
 								<input type="text" class="form-control" placeholder="Discount" name="item_discount">
-							</div>
+							</div> -->
 						</div>
-					</div>
-					<div class="form-group">
-						<label for="note">Item Notes</label>
-						<textarea class="form-control" rows="5"  placeholder="Enter Item Notes" name="item_notes"></textarea>
 					</div>
 					<button type="button" onclick="history.back();" class="btn btn-danger">Back</button>
 					<button type="submit" class="btn btn-success" id="addItem">Save</button>

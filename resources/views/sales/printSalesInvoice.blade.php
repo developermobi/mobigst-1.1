@@ -47,7 +47,7 @@
 			<td>
 				<strong><p>Invoice No : {{$data['data']['invoice_data'][0]->invoice_no}}</p></strong>
 				<strong><p>Invoice Date : {{$data['data']['invoice_data'][0]->invoice_date}}</p></strong>
-				<strong><p>Ref Po:</p></strong>
+				<strong><p>Ref Po: {{$data['data']['invoice_data'][0]->reference}}</p></strong>
 			</td>
 			
 			<td style="border-bottom:1px solid #000;">
@@ -76,7 +76,7 @@
 		</tr>
 		<tr>
 			<td width="5%">Sr. No.</td>
-			<td>Description</td>
+			<td>Item Description</td>
 			@if($data['data']['invoice_data'][0]->invoice_type == 1)
 			<td>HSN</td>
 			@else

@@ -558,3 +558,11 @@ $api->version('v1', function ($api) {
 $api->version('v1', function ($api) {
     $api->get('item_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@item_serach');
 });
+
+$api->version('v1', function ($api) {
+    $api->get('purchase_invoice_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@purchase_invoice_serach');
+});
+
+$api->version('v1', function ($api) {
+    $api->get('sales_invoice_serach/{data}', 'App\Http\Controllers\Api\V1\SalesController@sales_invoice_serach');
+});
