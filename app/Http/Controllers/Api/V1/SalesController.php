@@ -2091,7 +2091,7 @@ class SalesController extends Controller{
 
 
 	public function printAdvanceReceipt($id,$gstin_id){
-		$receipt_no = decrypt($id);
+		return $receipt_no = decrypt($id);
 		$gstin_id = decrypt($gstin_id);
 		$getData = Sales::getAdvanceReceiptData($receipt_no,$gstin_id);
 
@@ -2311,18 +2311,6 @@ class SalesController extends Controller{
 		}
 		return view('sales.uploadSalesInvoice')->with('data', $data);
 	}*/
-
-
-
-	/*public function autocomplete(Request $request){
-		//return $input = $request->all();
-        $data = DB::table('contact')
-        ->select("contact_name as name")
-        ->where("contact_name","LIKE","%{$request->input('query')}%")
-        ->where("city","LIKE","%{$request->input('query')}%")
-        ->get();
-        return response()->json($data);
-    }*/
 
 
 

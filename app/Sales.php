@@ -621,7 +621,7 @@ class Sales extends Model{
 
 
 
-	public static function purchase_invoice_serach($data){
+	public static function purchase_invoice_serach($data,$gstin_id){
 		$invice = DB::table('purchase_invoice')
 		->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'pi_id AS ID')
 		->where('invoice_no', 'like', '%'.$data.'%')
@@ -632,7 +632,7 @@ class Sales extends Model{
 
 
 
-	public static function sales_invoice_serach($data){
+	public static function sales_invoice_serach($data,$gstin_id){
 		$invice = DB::table('sales_invoice')
 		->select(DB::raw('CONCAT (invoice_no) AS LABEL'),'si_id AS ID')
 		->where('invoice_no', 'like', '%'.$data.'%')

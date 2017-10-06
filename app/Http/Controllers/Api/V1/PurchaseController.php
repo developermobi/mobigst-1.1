@@ -679,7 +679,7 @@ class PurchaseController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 
-		view()->share('data',$returnResponse);
+		/*view()->share('data',$returnResponse);
 		$pdf = PDF::loadView('purchase.printPurchaseInvoice');
 
 		if($request->has('download')){
@@ -687,7 +687,8 @@ class PurchaseController extends Controller{
 			return $pdf->download('PurchaseInvoice.pdf');
 		}
 		return $pdf->stream('PurchaseInvoice.pdf');
-		return view('purchase.printPurchaseInvoice');
+		return view('purchase.printPurchaseInvoice');*/
+		return view('purchase.printPurchaseInvoice')->with('data', $returnResponse);
 	}
 
 
@@ -1403,7 +1404,7 @@ class PurchaseController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 
-		view()->share('data',$returnResponse);
+		/*view()->share('data',$returnResponse);
 		$pdf = PDF::loadView('purchase.printVcdnote');
 
 		if($request->has('download')){
@@ -1411,7 +1412,8 @@ class PurchaseController extends Controller{
 			return $pdf->download('Vendor-Credit-Debit-Note.pdf');
 		}
 		return $pdf->stream('Vendor-Credit-Debit-Note.pdf');
-		return view('purchase.printVcdnote');
+		return view('purchase.printVcdnote');*/
+		return view('purchase.printVcdnote')->with('data', $returnResponse);
 	}
 
 
@@ -1872,8 +1874,9 @@ class PurchaseController extends Controller{
 
 
 	public function printAdvancePayment(Request $request,$id){
-		$note_no = decrypt($id);
-		$getData = Purchase::getVcdnoteData($note_no);
+		$receipt_no = decrypt($id);
+		$gstin_id = decrypt($gstin_id);
+		$getData = Purchase::getAdvanceReceiptData($receipt_no,$gstin_id);
 
 		if (sizeof($getData) > 0) {
 			$getInvoiceDetail = Purchase::getInvoiceDetail($getData[0]->note_no,$getData[0]->gstin_id);
@@ -1903,7 +1906,7 @@ class PurchaseController extends Controller{
 			$returnResponse['data'] = $getData;
 		}
 
-		view()->share('data',$returnResponse);
+		/*view()->share('data',$returnResponse);
 		$pdf = PDF::loadView('purchase.printAdvancePayment');
 
 		if($request->has('download')){
@@ -1911,7 +1914,8 @@ class PurchaseController extends Controller{
 			return $pdf->download('Advance-Payment.pdf');
 		}
 		return $pdf->stream('Advance-Payment.pdf');
-		return view('purchase.printAdvancePayment');
+		return view('purchase.printAdvancePayment');*/
+		return view('purchase.printAdvancePayment')->with('data', $returnResponse);
 	}
 
 
